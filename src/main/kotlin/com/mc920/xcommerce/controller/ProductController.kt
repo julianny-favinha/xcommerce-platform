@@ -1,16 +1,18 @@
 package com.mc920.xcommerce.controller
 
+import com.mc920.xcommerce.model.Product
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("cart")
-class CartController {
+@RequestMapping("product")
+class ProductController {
 
-    @GetMapping("/checkout")
-    fun checkout(): List<String> {
-        return listOf("A", "B")
+    @GetMapping("/highlights")
+    fun getHighlights() : List<Product> {
+        TODO()
     }
+
 
 }
