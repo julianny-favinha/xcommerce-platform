@@ -5,7 +5,7 @@ import java.util.UUID
 
 interface ProductClient {
 
-    fun listAllProducts(): List<ProductApi>
+    fun listAllProducts(highlight: Boolean): List<ProductApi>
 
     fun findProductById(id: UUID): ProductApi?
 }

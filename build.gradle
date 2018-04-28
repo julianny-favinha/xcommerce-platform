@@ -41,14 +41,13 @@ repositories {
 
 
 dependencies {
-	// compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-	// compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.jetbrains.kotlin:kotlin-reflect")
-	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-	// runtime('org.springframework.boot:spring-boot-devtools')
-	// runtime('org.postgresql:postgresql')
+	compile('org.flywaydb:flyway-core')
+	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 }
