@@ -2,10 +2,10 @@ package com.mc920.xcommerce.dao
 
 interface ProductDao {
 
-    fun findById(id: Long): Long?
+    fun findById(id: Long): String?
 
-    fun insertExternalId(externalId: Long): Long?
+    fun insertExternalId(externalId: String): Long?
 
-    fun findByExternalId(externalId: Long): Long?
+    fun findByExternalId(externalId: String): Long?
 
 }

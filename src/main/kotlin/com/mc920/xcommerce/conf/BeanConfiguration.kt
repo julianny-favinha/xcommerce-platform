@@ -45,15 +45,15 @@ class BeanConfiguration {
         return ProductDaoPostgres(jdbcTemplate)
     }
 
-    // Service
-    @Bean
-    fun productService(productClient: ProductClient): ProductService {
-        return ProductService(productClient)
-    }
-
     // Client
     @Bean
     fun productClient(): ProductClient {
         return ProductClientOkHttp()
+    }
+
+    // Service
+    @Bean
+    fun productService(productClient: ProductClient, productDao: ProductDao): ProductService {
+        return ProductService(productClient, productDao)
     }
 }

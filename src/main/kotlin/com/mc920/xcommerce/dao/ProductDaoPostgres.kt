@@ -13,22 +13,22 @@ class Queries {
 
 class ProductDaoPostgres(private val jdbcTemplate: JdbcTemplate) : ProductDao {
 
-    override fun findById(id: Long): Long? {
+    override fun findById(id: Long): String? {
         return jdbcTemplate.query(Queries.FIND_BY_ID, { rs, _ ->
-            rs.getLong("external_id")
+            rs.getString("external_id")
         }).firstOrNull()
 
     }
 
-    override fun insertExternalId(externalId: Long): Long? {
+    override fun insertExternalId(externalId: String): Long? {
         return jdbcTemplate.query(Queries.INSERT_EXTERNAL_ID,
             { ps: PreparedStatement ->
-                ps.setLong(1, externalId) },
+                ps.setString(1, externalId) },
             { rs, _ ->
                 rs.getLong("id") }).firstOrNull()
     }
 
-    override fun findByExternalId(externalId: Long): Long? {
+    override fun findByExternalId(externalId: String): Long? {
         return jdbcTemplate.query(Queries.FIND_BY_EXTERNAL_ID, { rs, _ ->
             rs.getLong("id")
         }).firstOrNull()
