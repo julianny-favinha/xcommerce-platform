@@ -1,10 +1,5 @@
 package com.mc920.xcommerce.model
 
-import java.net.URL
+data class Product(val id: Int, val name: String, val brand: String, val imageUrl: String?)
 
-data class Product(val id: Int,
-                   val name: String,
-                   val brand: String,
-                   val imageUrl: URL)
-
-data class Products(val products: List<Product>)
+data class Highlights(val highlights: List<Product>)
