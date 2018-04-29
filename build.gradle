@@ -67,7 +67,7 @@ dependencies {
 }
 
 flyway {
-    url = "jdbc:postgresql://localhost:5432/testdb"
-    user = "igorlema"
-    password = "secret"
+    url = ${SPRING_DATASOURCE_URL}
+    user = ${SPRING_DATASOURCE_USERNAME}
+    password = ${SPRING_DATASOURCE_PASSWORD}
 }
