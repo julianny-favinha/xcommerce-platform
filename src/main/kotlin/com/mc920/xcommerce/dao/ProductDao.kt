@@ -2,10 +2,10 @@ package com.mc920.xcommerce.dao
 
 interface ProductDao {
 
-    fun setRelation(id: Int, externalId: Int)
+    fun findById(id: Long): Long
 
-    fun getById(id: Int)
+    fun insertExternalId(externalId: Long): Long
 
-    fun getByExternalId(externalId: Int)
+    fun findByExternalId(externalId: Long): Long
 
 }

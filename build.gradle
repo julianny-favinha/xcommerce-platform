@@ -59,9 +59,10 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.jetbrains.kotlin:kotlin-reflect")
 	compile('org.flywaydb:flyway-core')
+	compile('org.springframework:spring-jdbc')
+    compile('com.zaxxer:HikariCP')
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-
 	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 }
 
