@@ -1,8 +1,9 @@
-package com.mc920.xcommerce.clients.product
+package com.mc920.xcommerce.clients.product_01
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.mc920.xcommerce.clients.product.api.ProductApi
+import com.mc920.xcommerce.clients.ProductClient
+import com.mc920.xcommerce.clients.product_01.api.ProductApi
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request

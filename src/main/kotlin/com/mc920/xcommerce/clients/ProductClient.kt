@@ -1,6 +1,6 @@
-package com.mc920.xcommerce.clients.product
+package com.mc920.xcommerce.clients
 
-import com.mc920.xcommerce.clients.product.api.ProductApi
+import com.mc920.xcommerce.clients.product_01.api.ProductApi
 import java.util.UUID
 
 interface ProductClient {
