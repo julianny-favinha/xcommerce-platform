@@ -6,21 +6,21 @@ BEGIN
       FROM   pg_catalog.pg_user
       WHERE  usename = 'xcom-user') THEN
 
-      CREATE USER xcom-user WITH password 'xcom-pass';
+      CREATE USER xcomuser WITH password 'xcom-pass';
    END IF;
 END
 $body$;
 
 CREATE SCHEMA IF NOT EXISTS xcommerce;
 
-GRANT USAGE ON SCHEMA xcommerce TO xcom-user;
+GRANT USAGE ON SCHEMA xcommerce TO xcomuser;
 
 ALTER DEFAULT PRIVILEGES
    IN SCHEMA xcommerce
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLES
-   TO xcom-user;
+   TO xcomuser;
 
 ALTER DEFAULT PRIVILEGES
    IN SCHEMA xcommerce
 GRANT USAGE ON SEQUENCES
-   TO xcom-user;
+   TO xcomuser;
