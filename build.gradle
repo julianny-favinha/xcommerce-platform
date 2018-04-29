@@ -67,7 +67,7 @@ dependencies {
 }
 
 flyway {
-    url = ${SPRING_DATASOURCE_URL}
-    user = ${SPRING_DATASOURCE_USERNAME}
-    password = ${SPRING_DATASOURCE_PASSWORD}
+    url = "$System.env.SPRING_DATASOURCE_URL"
+    user = "$System.env.SPRING_DATASOURCE_USERNAME"
+    password = "$System.env.SPRING_DATASOURCE_PASSWORD"
 }
