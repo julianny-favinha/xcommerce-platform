@@ -1,8 +1,8 @@
-package com.mc920.xcommerce.controller
+package com.mc851.xcommerce.controller
 
-import com.mc920.xcommerce.model.Highlights
-import com.mc920.xcommerce.model.Product
-import com.mc920.xcommerce.service.ProductService
+import com.mc851.xcommerce.model.Highlights
+import com.mc851.xcommerce.model.Product
+import com.mc851.xcommerce.service.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,10 +27,6 @@ class ProductController {
     fun getById(@PathVariable(name = "id", required = true) id: Long): ResponseEntity<Product> {
         val product = productService.getById(id)
         return handleResponse(product)
-    }
-
-    private fun <T> handleResponse(body: T?): ResponseEntity<T> {
-        return body?.let { ResponseEntity.ok(it) } ?: return ResponseEntity.notFound().build()
     }
 
 }

@@ -1,10 +1,10 @@
-package com.mc920.xcommerce.conf
+package com.mc851.xcommerce.conf
 
-import com.mc920.xcommerce.clients.ProductClient
-import com.mc920.xcommerce.clients.product01.ProductClientOkHttp
-import com.mc920.xcommerce.dao.ProductDao
-import com.mc920.xcommerce.dao.ProductDaoPostgres
-import com.mc920.xcommerce.service.ProductService
+import com.mc851.xcommerce.clients.ProductClient
+import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
+import com.mc851.xcommerce.dao.ProductDao
+import com.mc851.xcommerce.dao.ProductDaoPostgres
+import com.mc851.xcommerce.service.ProductService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean

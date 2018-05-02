@@ -1,4 +1,4 @@
-package com.mc920.xcommerce
+package com.mc851.xcommerce
 
 import org.junit.Test
 import org.junit.runner.RunWith

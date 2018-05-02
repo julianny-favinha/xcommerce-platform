@@ -1,19 +1,20 @@
-package com.mc920.xcommerce.clients.product01
+package com.mc851.xcommerce.clients.product01
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.mc920.xcommerce.clients.ProductClient
-import com.mc920.xcommerce.clients.product01.api.ProductApi
+import com.mc851.xcommerce.clients.ProductClient
+import com.mc851.xcommerce.clients.get
+import com.mc851.xcommerce.clients.product01.api.CategoryApi
+import com.mc851.xcommerce.clients.product01.api.ProductApi
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.UUID
 
 class ProductClientOkHttp : ProductClient {
-
     private val okHttpClient = OkHttpClient()
-    private val objectMapper = jacksonObjectMapper()
 
+    private val objectMapper = jacksonObjectMapper()
     override fun listAllProducts(highlight: Boolean): List<ProductApi> {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
         httpUrl.addQueryParameter("highlight", highlight.toString())
@@ -42,5 +43,13 @@ class ProductClientOkHttp : ProductClient {
         }
 
         return objectMapper.readValue(response.body()?.byteStream(), ProductApi::class.java)
+    }
+
+    override fun listAllCategory(): List<CategoryApi> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun findCategoryById(id: UUID): CategoryApi? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
