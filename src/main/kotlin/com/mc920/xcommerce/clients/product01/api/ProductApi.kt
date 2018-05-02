@@ -1,4 +1,4 @@
-package com.mc920.xcommerce.clients.product_01.api
+package com.mc920.xcommerce.clients.product01.api
 
 import java.math.BigDecimal
 

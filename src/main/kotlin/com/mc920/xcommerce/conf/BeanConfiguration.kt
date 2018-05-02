@@ -1,7 +1,7 @@
 package com.mc920.xcommerce.conf
 
 import com.mc920.xcommerce.clients.ProductClient
-import com.mc920.xcommerce.clients.product_01.ProductClientOkHttp
+import com.mc920.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc920.xcommerce.dao.ProductDao
 import com.mc920.xcommerce.dao.ProductDaoPostgres
 import com.mc920.xcommerce.service.ProductService
