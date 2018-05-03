@@ -35,10 +35,10 @@ class ProductService(val productClient: ProductClient,
         return convertProduct(id, product, category)
     }
 
-    private fun convertProduct(id: Long, productApi: ProductApi, category: Category): Product {
+    private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product {
         return Product(id = id.toInt(),
             name = productApi.name ?: throw IllegalStateException("Product doesn't have name"),
-            category = category.name,
+            category = category?.name ?: "",
             imageUrl = productApi.imageUrl,
             brand = productApi.brand ?: "",
             description = productApi.description ?: "",
