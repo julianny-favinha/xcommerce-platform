@@ -2,8 +2,11 @@ package com.mc851.xcommerce.conf
 
 import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
+import com.mc851.xcommerce.dao.category.CategoryDao
+import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
+import com.mc851.xcommerce.service.CategoryService
 import com.mc851.xcommerce.service.ProductService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,6 +44,11 @@ class BeanConfiguration {
 
     // DAO
     @Bean
+    fun categoryDao(jdbcTemplate: JdbcTemplate): CategoryDao {
+        return CategoryDaoPostgres(jdbcTemplate)
+    }
+
+    @Bean
     fun productDao(jdbcTemplate: JdbcTemplate): ProductDao {
         return ProductDaoPostgres(jdbcTemplate)
     }
@@ -53,7 +61,14 @@ class BeanConfiguration {
 
     // Service
     @Bean
-    fun productService(productClient: ProductClient, productDao: ProductDao): ProductService {
-        return ProductService(productClient, productDao)
+    fun categoryService(productClient: ProductClient, categoryDao: CategoryDao): CategoryService {
+        return CategoryService(productClient, categoryDao)
+    }
+
+    @Bean
+    fun productService(productClient: ProductClient,
+                       productDao: ProductDao,
+                       categoryService: CategoryService): ProductService {
+        return ProductService(productClient, productDao, categoryService)
     }
 }

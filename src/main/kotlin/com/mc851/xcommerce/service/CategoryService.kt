@@ -26,8 +26,8 @@ class CategoryService(val productClient: ProductClient, val categoryDao: Categor
     }
 
     private fun convertCategory(categoryApi: CategoryApi): Category {
-        val id =
-            categoryDao.insertExternalId(categoryApi.id) ?: throw IllegalStateException("Couldn't insert in database")
+        val id = categoryDao.findByExternalId(categoryApi.id) ?: categoryDao.insertExternalId(categoryApi.id)
+                 ?: throw IllegalStateException("Couldn't insert in database")
         return Category(id = id, name = categoryApi.name)
     }
 }
