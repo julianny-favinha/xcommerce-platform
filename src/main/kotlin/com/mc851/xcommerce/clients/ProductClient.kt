@@ -10,7 +10,7 @@ interface ProductClient {
 
     fun findProductById(id: UUID): ProductApi?
 
-    fun listAllCategory(): List<CategoryApi>
+    fun listAllCategories(): List<CategoryApi>
 
     fun findCategoryById(id: UUID): CategoryApi?
 }

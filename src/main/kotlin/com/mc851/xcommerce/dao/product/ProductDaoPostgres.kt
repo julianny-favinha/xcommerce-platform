@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.dao
+package com.mc851.xcommerce.dao.product
 
 import org.springframework.jdbc.core.JdbcTemplate
 

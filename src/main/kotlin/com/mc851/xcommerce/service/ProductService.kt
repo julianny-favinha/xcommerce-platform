@@ -2,7 +2,7 @@ package com.mc851.xcommerce.service
 
 import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.ProductApi
-import com.mc851.xcommerce.dao.ProductDao
+import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.model.Category
 import com.mc851.xcommerce.model.Highlights
 import com.mc851.xcommerce.model.Product
@@ -22,7 +22,7 @@ class ProductService(val productClient: ProductClient,
 
         return Highlights(highlights = productApi.map {
             val id = createRelation(it)
-            val category = categoryByExternalId[it.id] ?: throw IllegalStateException("WTFFFF")
+            val category = categoryByExternalId[it.id]!!
             convertProduct(id, it, category)
         })
     }
@@ -36,7 +36,13 @@ class ProductService(val productClient: ProductClient,
     }
 
     private fun convertProduct(id: Long, productApi: ProductApi, category: Category): Product {
-        return TODO()
+        return Product(id = id.toInt(),
+            name = productApi.name ?: throw IllegalStateException("Product doesn't have name"),
+            category = category.name,
+            imageUrl = productApi.imageUrl,
+            brand = productApi.brand ?: "",
+            description = productApi.description ?: "",
+            price = productApi.price?.toInt() ?: throw IllegalStateException("Product doesn't have price!"))
     }
 
     private fun createRelation(product: ProductApi): Long {

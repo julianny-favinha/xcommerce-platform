@@ -2,8 +2,8 @@ package com.mc851.xcommerce.conf
 
 import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
-import com.mc851.xcommerce.dao.ProductDao
-import com.mc851.xcommerce.dao.ProductDaoPostgres
+import com.mc851.xcommerce.dao.product.ProductDao
+import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.service.ProductService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
