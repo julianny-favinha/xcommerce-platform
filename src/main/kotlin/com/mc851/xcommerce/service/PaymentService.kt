@@ -23,6 +23,8 @@ class PaymentService(private val paymentClient: PaymentClient) {
 
         System.out.println(paymentResult.toString())
 
+        TODO("Must return paymentresult code to checkout")
+
         return PaymentResult.AUTHORIZED
     }
 
@@ -48,7 +50,7 @@ class PaymentService(private val paymentClient: PaymentClient) {
     }
 
     fun getPaymentStatus() {
-        TODO()
+        TODO("What to do for payment result")
     }
 
 }
