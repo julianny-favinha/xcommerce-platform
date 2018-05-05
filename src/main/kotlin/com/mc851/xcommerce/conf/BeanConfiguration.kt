@@ -1,5 +1,7 @@
 package com.mc851.xcommerce.conf
 
+import com.mc851.xcommerce.clients.payment.PaymentClient
+import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClient
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
@@ -7,6 +9,7 @@ import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
+import com.mc851.xcommerce.service.PaymentService
 import com.mc851.xcommerce.service.ProductService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,6 +62,11 @@ class BeanConfiguration {
         return ProductClientOkHttp()
     }
 
+    @Bean
+    fun paymentClient(): PaymentClient {
+        return PaymentClientOkHttp()
+    }
+
     // Service
     @Bean
     fun categoryService(productClient: ProductClient, categoryDao: CategoryDao): CategoryService {
@@ -70,5 +78,10 @@ class BeanConfiguration {
                        productDao: ProductDao,
                        categoryService: CategoryService): ProductService {
         return ProductService(productClient, productDao, categoryService)
+    }
+
+    @Bean
+    fun paymentService(paymentClient: PaymentClient): PaymentService {
+        return PaymentService(paymentClient)
     }
 }
