@@ -2,7 +2,6 @@ package com.mc851.xcommerce.clients.product01
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.clients.product01.api.ProductApi
 import okhttp3.HttpUrl
@@ -11,9 +10,10 @@ import okhttp3.Request
 import java.util.UUID
 
 class ProductClientOkHttp : ProductClient {
-    private val okHttpClient = OkHttpClient()
 
+    private val okHttpClient = OkHttpClient()
     private val objectMapper = jacksonObjectMapper()
+
     override fun listAllProducts(highlight: Boolean): List<ProductApi> {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
         httpUrl.addQueryParameter("highlight", highlight.toString())
