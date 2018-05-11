@@ -1,12 +1,17 @@
 package com.mc851.xcommerce.conf
 
+import com.mc851.xcommerce.clients.ClientesClient
 import com.mc851.xcommerce.clients.ProductClient
+import com.mc851.xcommerce.clients.clientes01.ClientesClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
+import com.mc851.xcommerce.dao.clientes.ClientesDao
+import com.mc851.xcommerce.dao.clientes.ClientesDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
+import com.mc851.xcommerce.service.ClientesService
 import com.mc851.xcommerce.service.ProductService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,10 +58,20 @@ class BeanConfiguration {
         return ProductDaoPostgres(jdbcTemplate)
     }
 
+    @Bean
+    fun clientesDao(jdbcTemplate: JdbcTemplate): ClientesDao {
+        return ClientesDaoPostgres(jdbcTemplate)
+    }
+
     // Client
     @Bean
     fun productClient(): ProductClient {
         return ProductClientOkHttp()
+    }
+
+    @Bean
+    fun clientesClient(): ClientesClient {
+        return ClientesClientOkHttp()
     }
 
     // Service
@@ -70,5 +85,10 @@ class BeanConfiguration {
                        productDao: ProductDao,
                        categoryService: CategoryService): ProductService {
         return ProductService(productClient, productDao, categoryService)
+    }
+
+    @Bean
+    fun clientesService(clientesClient: ClientesClient, clientesDao: ClientesDao): ClientesService {
+        return ClientesService(clientesClient, clientesDao)
     }
 }
