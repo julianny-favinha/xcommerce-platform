@@ -1,18 +1,18 @@
 package com.mc851.xcommerce.conf
 
-import com.mc851.xcommerce.clients.ClientesClient
 import com.mc851.xcommerce.clients.ProductClient
-import com.mc851.xcommerce.clients.clientes01.ClientesClientOkHttp
+import com.mc851.xcommerce.clients.UserClient
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
+import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
-import com.mc851.xcommerce.dao.clientes.ClientesDao
-import com.mc851.xcommerce.dao.clientes.ClientesDaoPostgres
+import com.mc851.xcommerce.dao.user.UserDao
+import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
-import com.mc851.xcommerce.service.ClientesService
 import com.mc851.xcommerce.service.ProductService
+import com.mc851.xcommerce.service.UserService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -59,8 +59,8 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun clientesDao(jdbcTemplate: JdbcTemplate): ClientesDao {
-        return ClientesDaoPostgres(jdbcTemplate)
+    fun userDao(jdbcTemplate: JdbcTemplate): UserDao {
+        return UserDaoPostgres(jdbcTemplate)
     }
 
     // Client
@@ -70,8 +70,8 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun clientesClient(): ClientesClient {
-        return ClientesClientOkHttp()
+    fun userClient(): UserClient {
+        return UserClientOkHttp()
     }
 
     // Service
@@ -88,7 +88,7 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun clientesService(clientesClient: ClientesClient, clientesDao: ClientesDao): ClientesService {
-        return ClientesService(clientesClient, clientesDao)
+    fun userService(userClient: UserClient, userDao: UserDao): UserService {
+        return UserService(userClient, userDao)
     }
 }

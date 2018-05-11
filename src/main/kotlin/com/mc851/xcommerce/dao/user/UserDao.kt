@@ -1,6 +1,6 @@
-package com.mc851.xcommerce.dao.clientes
+package com.mc851.xcommerce.dao.user
 
-interface ClientesDao {
+interface UserDao {
 
     fun findById(id: Long): String?
 
