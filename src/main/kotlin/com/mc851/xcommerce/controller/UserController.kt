@@ -22,7 +22,7 @@ class UserController {
         TODO()
     }
 
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     fun signUp(@RequestBody signUp: SignUp): ResponseEntity<User> {
         val response = userService.signUp(signUp)
         return handleResponse(response)

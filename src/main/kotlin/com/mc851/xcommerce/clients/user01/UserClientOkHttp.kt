@@ -14,14 +14,13 @@ import okhttp3.RequestBody
 class UserClientOkHttp : UserClient {
     private val okHttpClient = OkHttpClient()
     private val objectMapper = jacksonObjectMapper()
+    private val json = MediaType.parse("application/json")
 
     override fun register(registerAPI: RegisterAPI): String? {
-        val httpUrl =
-            HttpUrl.parse("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/register")!!.newBuilder()
+        val body = RequestBody.create(json, objectMapper.writeValueAsString(registerAPI))
 
-        val body = RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsString(registerAPI))
-
-        val request = Request.Builder().url(httpUrl.build().toString()).post(body).build()
+        val request = Request.Builder().url("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/register")
+            .addHeader("api_key", "abc").post(body).build()
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -29,8 +28,7 @@ class UserClientOkHttp : UserClient {
             return null
         }
 
-        return objectMapper.readValue<String>(response.body()!!.byteStream())
-
+        return response.body()?.string()
     }
 
     override fun getUserById(id: String): UserAPI? {
@@ -38,8 +36,9 @@ class UserClientOkHttp : UserClient {
             HttpUrl.parse("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/clients")!!.newBuilder()
         httpUrl.addPathSegment(id)
 
-        val request = Request.Builder().url(httpUrl.build().toString()).build()
+        val request = Request.Builder().url(httpUrl.build().toString()).addHeader("api_key", "abc").build()
 
+        System.out.println(request.body().toString())
         val response = okHttpClient.newCall(request).execute()
 
         if (!response.isSuccessful) {
