@@ -24,6 +24,8 @@ class UserService(val userClient: UserClient, val userDao: UserDao) {
         val id = userClient.register(register) ?: return null
         val userInfo = userClient.getUserById(id) ?: throw IllegalStateException("Couldn't find User created! Bizarre!")
 
+        // SignIn
+
         return convertUser(userInfo, id)
     }
 
