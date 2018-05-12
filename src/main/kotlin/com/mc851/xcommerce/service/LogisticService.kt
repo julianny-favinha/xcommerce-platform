@@ -1,26 +1,23 @@
 package com.mc851.xcommerce.service
 
-import com.mc851.xcommerce.clients.ProductClient
+import com.mc851.xcommerce.clients.LogisticClient
 import com.mc851.xcommerce.clients.product01.api.ProductApi
-import com.mc851.xcommerce.dao.product.ProductDao
-import com.mc851.xcommerce.model.Category
-import com.mc851.xcommerce.model.Highlights
+import com.mc851.xcommerce.dao.logistic.LogisticDao
+import com.mc851.xcommerce.model.Shipment
 import com.mc851.xcommerce.model.Product
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class LogisticService(val productClient: ProductClient,
-                     val productDao: ProductDao,
-                     val categoryService: CategoryService) {
+class LogisticService(val logisticClient: LogisticClient,
+                     val logisticDao: LogisticDao,
+                     val logisticService: LogisticService) {
 
-    fun getHighlights(): Highlights? {
-        val productApi = productClient.listAllProducts(true)
+    fun getShipment(): Shipment? {
+        val productApi = logisticClient.listAllProducts(true)
         if (productApi.isEmpty()) return null
 
-        val categoryByExternalId = categoryService.getByIds(productApi.map { it.categoryId })
-
-        return Highlights(highlights = productApi.map {
+            return Highlights(highlights = productApi.map {
             val id = createRelation(it)
             val category = categoryByExternalId[it.id]!!
             convertProduct(id, it, category)
@@ -35,15 +32,6 @@ class LogisticService(val productClient: ProductClient,
         return convertProduct(id, product, category)
     }
 
-    private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product {
-        return Product(id = id.toInt(),
-                name = productApi.name ?: throw IllegalStateException("Product doesn't have name"),
-                category = category?.name ?: "",
-                imageUrl = productApi.imageUrl,
-                brand = productApi.brand ?: "",
-                description = productApi.description ?: "",
-                price = productApi.price?.toInt() ?: throw IllegalStateException("Product doesn't have price!"))
-    }
 
     private fun createRelation(product: ProductApi): Long {
         val externalId = product.id

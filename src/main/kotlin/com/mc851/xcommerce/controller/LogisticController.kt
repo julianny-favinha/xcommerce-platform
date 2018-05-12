@@ -1,9 +1,8 @@
 package com.mc851.xcommerce.controller
 
-import com.mc851.xcommerce.model.Highlights
+import com.mc851.xcommerce.model.Shipment
 import com.mc851.xcommerce.model.Product
 import com.mc851.xcommerce.service.LogisticService
-import com.mc851.xcommerce.service.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,8 +17,8 @@ class LogisticController {
     @Autowired
     lateinit var logisticService: LogisticService
 
-    @GetMapping("/shipping")
-    fun getHighlights(): ResponseEntity<Highlights> {
+    @GetMapping("/shipment")
+    fun getShipmentPrice(): ResponseEntity<S> {
         val highlights = productService.getHighlights()
         return handleResponse(highlights)
     }
