@@ -8,7 +8,6 @@ import com.mc851.xcommerce.model.SignUp
 import com.mc851.xcommerce.model.User
 import org.springframework.stereotype.Service
 
-@Service
 class UserService(val userClient: UserClient, val userDao: UserDao) {
 
     fun signUp(signUp: SignUp): User? {
@@ -22,6 +21,7 @@ class UserService(val userClient: UserClient, val userDao: UserDao) {
             telephone = signUp.telephone)
 
         val id = userClient.register(register) ?: return null
+        System.out.println(id)
         val userInfo = userClient.getUserById(id) ?: throw IllegalStateException("Couldn't find User created! Bizarre!")
 
         // SignIn

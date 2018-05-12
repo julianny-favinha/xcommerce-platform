@@ -9,7 +9,6 @@ import com.mc851.xcommerce.model.Product
 import org.springframework.stereotype.Service
 import java.util.UUID
 
-@Service
 class ProductService(val productClient: ProductClient,
                      val productDao: ProductDao,
                      val categoryService: CategoryService) {
