@@ -13,4 +13,6 @@ interface ProductClient {
     fun listAllCategories(): List<CategoryApi>
 
     fun findCategoryById(id: UUID): CategoryApi?
+
+    fun search(text: String): List<ProductApi>
 }

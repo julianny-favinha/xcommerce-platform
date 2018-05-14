@@ -73,4 +73,19 @@ class ProductClientOkHttp : ProductClient {
 
         return objectMapper.readValue<CategoryApi>(response.body()!!.byteStream())
     }
+
+    override fun search(text: String): List<ProductApi> {
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products/search")!!.newBuilder()
+        httpUrl.addPathSegment(text)
+        System.out.println(httpUrl.toString())
+        val request = Request.Builder().url(httpUrl.build().toString()).build()
+        System.out.println(request.toString())
+        val response = okHttpClient.newCall(request).execute()
+        System.out.println(response.toString())
+        if (!response.isSuccessful) {
+            return emptyList()
+        }
+
+        return objectMapper.readValue<List<ProductApi>>(response.body()!!.byteStream())
+    }
 }
