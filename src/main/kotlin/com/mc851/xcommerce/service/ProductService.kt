@@ -18,11 +18,11 @@ class ProductService(val productClient: ProductClient,
         val productApi = productClient.listAllProducts(true)
         if (productApi.isEmpty()) return null
 
-        val categoryByExternalId = categoryService.getByIds(productApi.map { it.categoryId })
+        val categoryByExternalId = categoryService.getByIds(productApi.mapNotNull { it.categoryId })
 
         return Highlights(highlights = productApi.map {
             val id = createRelation(it)
-            val category = categoryByExternalId[it.id]!!
+            val category = categoryByExternalId[it.id]
             convertProduct(id, it, category)
         })
     }
@@ -30,19 +30,19 @@ class ProductService(val productClient: ProductClient,
     fun getById(id: Long): Product? {
         val externalId = productDao.findById(id) ?: return null
         val product = productClient.findProductById(UUID.fromString(externalId)) ?: return null
-        val category = categoryService.getById(product.categoryId)
+        val category = product.categoryId?.let { categoryService.getById(product.categoryId) }
 
         return convertProduct(id, product, category)
     }
 
     private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product {
         return Product(id = id.toInt(),
-            name = productApi.name ?: throw IllegalStateException("Product doesn't have name"),
-            category = category?.name ?: "",
+            name = productApi.name,
+            category = category?.name,
             imageUrl = productApi.imageUrl,
-            brand = productApi.brand ?: "",
-            description = productApi.description ?: "",
-            price = productApi.price?.toInt() ?: throw IllegalStateException("Product doesn't have price!"))
+            brand = productApi.brand ?: "Sem Marca",
+            description = productApi.description,
+            price = productApi.price.toInt())
     }
 
     private fun createRelation(product: ProductApi): Long {

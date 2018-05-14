@@ -17,6 +17,7 @@ class ProductClientOkHttp : ProductClient {
     override fun listAllProducts(highlight: Boolean): List<ProductApi> {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
         httpUrl.addQueryParameter("highlight", highlight.toString())
+        httpUrl.addQueryParameter("groupId", "credito")
 
         val request = Request.Builder().url(httpUrl.build().toString()).build()
 
