@@ -12,8 +12,8 @@ import java.util.UUID
 
 class ProductClientOkHttp : ProductClient {
     private val okHttpClient = OkHttpClient()
-
     private val objectMapper = jacksonObjectMapper()
+
     override fun listAllProducts(highlight: Boolean): List<ProductApi> {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
         httpUrl.addQueryParameter("highlight", highlight.toString())
