@@ -7,6 +7,7 @@ import com.mc851.xcommerce.model.Category
 import com.mc851.xcommerce.model.Highlights
 import com.mc851.xcommerce.model.Product
 import com.mc851.xcommerce.model.Search
+import com.sun.org.apache.xpath.internal.operations.Bool
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.util.UUID
@@ -50,7 +51,7 @@ class ProductService(val productClient: ProductClient,
     }
 
     private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product {
-        return Product(id = id.toInt(),
+        return Product(id = id,
             name = productApi.name,
             category = category?.name,
             imageUrl = productApi.imageUrl,
@@ -64,5 +65,40 @@ class ProductService(val productClient: ProductClient,
 
         return productDao.findByExternalId(externalId) ?: productDao.insertExternalId(externalId)
                ?: throw IllegalStateException("Can't create relation between ids!")
+    }
+
+    fun reserveProducts(productsByQuantity: Map<Product, Int>): Boolean {
+        // para cada produto, reservar a quantidade definida.
+        // se der algum erro, deve desreservar os que deram certo anteriormente
+        val successfulProducts: MutableMap<Product, Int> = emptyMap<Product, Int>().toMutableMap()
+
+        for (entry in productsByQuantity) {
+            val externalId = productDao.findById(entry.key.id)
+            val result = productClient.reserve(UUID.fromString(externalId), entry.value)
+
+            if (!result) {
+                break
+            }
+
+            successfulProducts[entry.key] = entry.value
+        }
+
+        if (productsByQuantity == successfulProducts) {
+           return true
+        }
+
+        // desreservar
+        releaseProducts(successfulProducts)
+
+        return false
+    }
+
+    fun releaseProducts(productsByQuantity: Map<Product, Int>): Boolean {
+        productsByQuantity.map {
+            val externalId = productDao.findById(it.key.id)
+            productClient.reserve(UUID.fromString(externalId), it.value)
+        }
+
+        return true
     }
 }
