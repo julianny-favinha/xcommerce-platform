@@ -96,7 +96,7 @@ class ProductService(val productClient: ProductClient,
     fun releaseProducts(productsByQuantity: Map<Product, Int>): Boolean {
         productsByQuantity.map {
             val externalId = productDao.findById(it.key.id)
-            productClient.reserve(UUID.fromString(externalId), it.value)
+            productClient.release(UUID.fromString(externalId), it.value)
         }
 
         return true

@@ -88,4 +88,12 @@ class ProductClientOkHttp : ProductClient {
 
         return objectMapper.readValue<List<ProductApi>>(response.body()!!.byteStream())
     }
+
+    override fun release(id: UUID, quantity: Int): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun reserve(id: UUID, quantity: Int): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
