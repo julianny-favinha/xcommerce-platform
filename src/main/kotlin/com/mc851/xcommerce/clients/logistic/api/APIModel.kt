@@ -1,5 +1,6 @@
 package com.mc851.xcommerce.clients.logistic.api
 
-import java.math.BigDecimal
 
-data class ProductApi(val price: BigDecimal?)
+data class LogisticPriceInApi()
+
+data class LogisticPriceOutAPI(val price: Int?)

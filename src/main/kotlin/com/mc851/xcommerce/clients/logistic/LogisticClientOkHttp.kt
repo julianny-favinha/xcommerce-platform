@@ -3,10 +3,11 @@ package com.mc851.xcommerce.clients.logistic
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.LogisticClient
+import com.mc851.xcommerce.clients.logistic.api.LogisticApi
+import com.mc851.xcommerce.clients.logistic.api.LogisticPriceOutAPI
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.util.UUID
 
 class LogisticClientOkHttp : LogisticClient {
     private val okHttpClient = OkHttpClient()
@@ -21,7 +22,7 @@ class LogisticClientOkHttp : LogisticClient {
             packType: String,
             packLen: Double,
             packHeight: Double,
-            packWidth: Double): Integer {
+            packWidth: Double): LogisticPriceOutAPI? {
 
         val httpUrl = HttpUrl.parse("https://hidden-basin-50728.herokuapp.com/calculafrete")!!.newBuilder()
 
@@ -42,50 +43,8 @@ class LogisticClientOkHttp : LogisticClient {
             return null
         }
 
-        return objectMapper.readValue<LogisticApi>(response.body()!!.byteStream())
+        return objectMapper.readValue(response.body()!!.byteStream())
     }
 
-    override fun findProductById(id: UUID): ProductApi? {
-        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
-        httpUrl.addPathSegment(id.toString())
 
-        val request = Request.Builder().url(httpUrl.build().toString()).build()
-
-        val response = okHttpClient.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            return null
-        }
-
-        return objectMapper.readValue<ProductApi>(response.body()!!.byteStream())
-    }
-
-    override fun listAllCategories(): List<CategoryApi> {
-        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/categories")!!.newBuilder()
-
-        val request = Request.Builder().url(httpUrl.build().toString()).build()
-
-        val response = okHttpClient.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            return emptyList()
-        }
-
-        return objectMapper.readValue<List<CategoryApi>>(response.body()!!.byteStream())
-    }
-
-    override fun findCategoryById(id: UUID): CategoryApi? {
-        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/categories")!!.newBuilder()
-        httpUrl.addPathSegment(id.toString())
-
-        val request = Request.Builder().url(httpUrl.build().toString()).build()
-
-        val response = okHttpClient.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            return null
-        }
-
-        return objectMapper.readValue<CategoryApi>(response.body()!!.byteStream())
-    }
 }

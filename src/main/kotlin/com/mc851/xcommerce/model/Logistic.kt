@@ -1,3 +1,5 @@
 package com.mc851.xcommerce.model
 
-data class Shipment(val price: Double)
+data class ShipmentOut(val price: Int)
+
+data class ShipmentIn(val cep: String, val products: List<Product>)
