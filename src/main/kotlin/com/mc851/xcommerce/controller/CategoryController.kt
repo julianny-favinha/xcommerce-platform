@@ -16,7 +16,7 @@ class CategoryController {
     lateinit var categoryService: CategoryService
 
     @GetMapping("/")
-    fun getHighlights(): ResponseEntity<Categories> {
+    fun getAll(): ResponseEntity<Categories> {
         val categories = categoryService.getAll()
         return handleResponse(categories)
     }

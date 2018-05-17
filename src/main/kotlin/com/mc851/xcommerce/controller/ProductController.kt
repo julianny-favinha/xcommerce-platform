@@ -2,13 +2,11 @@ package com.mc851.xcommerce.controller
 
 import com.mc851.xcommerce.model.Highlights
 import com.mc851.xcommerce.model.Product
+import com.mc851.xcommerce.model.Search
 import com.mc851.xcommerce.service.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("product")
@@ -29,4 +27,9 @@ class ProductController {
         return handleResponse(product)
     }
 
+    @PostMapping("/search")
+    fun search(@RequestBody text: String): ResponseEntity<Search> {
+        val result = productService.search(text)
+        return handleResponse(result)
+    }
 }

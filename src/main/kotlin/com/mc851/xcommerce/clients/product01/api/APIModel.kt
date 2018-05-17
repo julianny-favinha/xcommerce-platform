@@ -1,27 +1,23 @@
 package com.mc851.xcommerce.clients.product01.api
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.math.BigDecimal
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class ProductApi(val id: String,
-                      val status: String?,
-                      val additionalInfo: Map<String, String>?,
-                      val name: String?,
-                      val description: String?,
-                      val price: BigDecimal?,
-                      val stock: BigDecimal?,
+                      val name: String,
+                      val description: String,
+                      val price: BigDecimal,
+                      val stock: BigDecimal,
                       val brand: String?,
-                      val highlight: Boolean?,
-                      val categoryId: String,
                       val imageUrl: String?,
-                      val tags: List<String>?,
-                      val createdAt: Long?,
-                      val updatedAt: Long?)
+                      val categoryId: String?,
+                      val weight: Long,
+                      val length: Long,
+                      val width: Long,
+                      val height: Long)
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class CategoryApi(val id: String,
                        val name: String,
-                       val description: String?,
-                       val parentId: String?,
-                       val additionalInfo: Map<String, String>?,
-                       val status: String?,
-                       val createdAt: Long?,
-                       val updatedAt: Long?)
+                       val description: String?)

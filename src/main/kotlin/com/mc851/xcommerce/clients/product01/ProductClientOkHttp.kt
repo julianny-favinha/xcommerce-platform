@@ -12,11 +12,12 @@ import java.util.UUID
 
 class ProductClientOkHttp : ProductClient {
     private val okHttpClient = OkHttpClient()
-
     private val objectMapper = jacksonObjectMapper()
+
     override fun listAllProducts(highlight: Boolean): List<ProductApi> {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
         httpUrl.addQueryParameter("highlight", highlight.toString())
+        httpUrl.addQueryParameter("groupId", "endereco")
 
         val request = Request.Builder().url(httpUrl.build().toString()).build()
 
@@ -71,5 +72,28 @@ class ProductClientOkHttp : ProductClient {
         }
 
         return objectMapper.readValue<CategoryApi>(response.body()!!.byteStream())
+    }
+
+    override fun search(text: String): List<ProductApi> {
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products/search")!!.newBuilder()
+        httpUrl.addPathSegment(text)
+        System.out.println(httpUrl.toString())
+        val request = Request.Builder().url(httpUrl.build().toString()).build()
+        System.out.println(request.toString())
+        val response = okHttpClient.newCall(request).execute()
+        System.out.println(response.toString())
+        if (!response.isSuccessful) {
+            return emptyList()
+        }
+
+        return objectMapper.readValue<List<ProductApi>>(response.body()!!.byteStream())
+    }
+
+    override fun release(id: UUID, quantity: Int): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun reserve(id: UUID, quantity: Int): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
