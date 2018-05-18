@@ -1,6 +1,7 @@
 package com.mc851.xcommerce.service
 
 import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.user01.api.LoginAPI
 import com.mc851.xcommerce.clients.user01.api.RegisterAPI
 import com.mc851.xcommerce.clients.user01.api.UpdateAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
@@ -88,7 +89,9 @@ class UserService(val userClient: UserClient, val userDao: UserDao) {
     }
 
     fun signIn(signIn: SignIn): User {
-        val id = userClient.login(signIn) ?:  throw IllegalStateException("User not found!")
+        val loginInfo = LoginAPI(email = signIn.email, password = signIn.password)
+
+        val id = userClient.login(loginInfo) ?:  throw IllegalStateException("User not found!")
 
         val userInfo = userClient.getUserById(id) ?: throw IllegalStateException("User not found!")
 
