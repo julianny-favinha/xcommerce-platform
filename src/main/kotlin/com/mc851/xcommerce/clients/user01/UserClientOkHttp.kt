@@ -5,6 +5,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.UserClient
 import com.mc851.xcommerce.clients.user01.api.RegisterAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
+import com.mc851.xcommerce.clients.user01.api.UpdateAPI
+import com.mc851.xcommerce.model.SignIn
 import okhttp3.HttpUrl
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -38,7 +40,6 @@ class UserClientOkHttp : UserClient {
 
         val request = Request.Builder().url(httpUrl.build().toString()).addHeader("api_key", "abc").build()
 
-        System.out.println(request.body().toString())
         val response = okHttpClient.newCall(request).execute()
 
         if (!response.isSuccessful) {
@@ -48,50 +49,37 @@ class UserClientOkHttp : UserClient {
         return objectMapper.readValue<UserAPI>(response.body()!!.byteStream())
     }
 
-    //
-    //    override fun changePassword(id: UUID, password: String, samePass: String): Boolean {
-    //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    //        return true
-    //    }
-    //
-    //    override fun addAddress(id: UUID, cep: String, address: String): Boolean {
-    //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    //        return true
-    //    }
-    //
-    //    // TODO: Como são feitos os requests aqui?
-    //    // Diferente dos já feitos, aqui são gets, não parsers
-    //    // Possivelmente: https://github.com/square/okhttp/wiki/Recipes
-    //    // em suma, montar um corpo e mandar
-    //    override fun updateCliente(
-    //            id: UUID,
-    //            name: String?,
-    //            email: String?,
-    //            password: String?,
-    //            samePass: String?,
-    //            birthDate: String?,
-    //            cpf: String?,
-    //            gender: String?,
-    //            telephone: String?
-    //    ): String {
-    //        TODO()
-    //    }
-    //
-    //    override fun signUp(
-    //            name: String,
-    //            email: String,
-    //            password: String,
-    //            samePass: String,
-    //            birthDate: String?,
-    //            cpf: String,
-    //            gender: String?,
-    //            telephone: String?
-    //    ): String {
-    //        TODO()
-    //    }
-    //
-    //    override fun getCliente(id: UUID): User {
-    //        TODO()
-    //    }
+    override fun update(id: String, updateAPI: UpdateAPI): String? {
+        val body = RequestBody.create(json, objectMapper.writeValueAsString(updateAPI))
+
+        val request = Request.Builder().url("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/update")
+                .addPathSegment(id).addHeader("api_key", "abc").put(body).build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            return null
+        }
+
+        return response.code().toString()
+    }
+
+    override fun login(signIn: SignIn): String? {
+        val body = RequestBody.create(json, objectMapper.writeValueAsString(SignIn))
+
+        val httpUrl = HttpUrl.parse("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/login")!!
+                .newBuilder()
+
+        val request = Request.Builder().url(httpUrl.build().toString()).addHeader("api_key", "abc")
+                .get(body).build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            return null
+        }
+
+        return response.body()?.string()
+    }
 
 }
