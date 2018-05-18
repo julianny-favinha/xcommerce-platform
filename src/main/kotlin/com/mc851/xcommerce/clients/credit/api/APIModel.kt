@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.clients.credit
+package com.mc851.xcommerce.clients.credit.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

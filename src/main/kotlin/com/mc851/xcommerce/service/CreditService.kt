@@ -6,11 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreditService(val creditClient: CreditClient) {
-    fun getScoreByCpf(cpf: String): Int {
-
-    }
-
-    fun payment(cpf: String, totalPaid: Long, totalValue: Long) {
-
+    fun validateUser() {
+        creditClient.getScoreByCpf()
     }
 }
