@@ -17,7 +17,7 @@ class UserController {
     lateinit var userService: UserService
 
     @PutMapping("/update/{id}")
-    fun update(@PathVariable id: String, @RequestBody update: Update): ResponseEntity<User> {
+    fun update(@PathVariable id: Long, @RequestBody update: Update): ResponseEntity<User> {
         val response = userService.update(id, update)
         return handleResponse(response)
     }
@@ -34,11 +34,4 @@ class UserController {
         return handleResponse(response)
     }
 
-    // addAddress
-
-    @GetMapping("/login")
-    fun signIn(@RequestBody login: SignIn): ResponseEntity<User> {
-        val response = userService.signIn(login)
-        return handleResponse(response)
-    }
 }

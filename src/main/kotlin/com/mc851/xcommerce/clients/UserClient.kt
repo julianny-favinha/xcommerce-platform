@@ -11,7 +11,6 @@ interface UserClient {
 
     fun getUserById(id: String): UserAPI?
 
-    fun update(id: String, updateAPI: UpdateAPI): String?
+    fun update(id: String, updateAPI: UpdateAPI)
 
-    fun login(signIn: LoginAPI): String?
 }

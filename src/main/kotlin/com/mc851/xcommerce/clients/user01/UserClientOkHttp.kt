@@ -3,11 +3,9 @@ package com.mc851.xcommerce.clients.user01
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.UserClient
-import com.mc851.xcommerce.clients.user01.api.LoginAPI
 import com.mc851.xcommerce.clients.user01.api.RegisterAPI
-import com.mc851.xcommerce.clients.user01.api.UserAPI
 import com.mc851.xcommerce.clients.user01.api.UpdateAPI
-import com.mc851.xcommerce.model.SignIn
+import com.mc851.xcommerce.clients.user01.api.UserAPI
 import okhttp3.HttpUrl
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -50,38 +48,14 @@ class UserClientOkHttp : UserClient {
         return objectMapper.readValue<UserAPI>(response.body()!!.byteStream())
     }
 
-    override fun update(id: String, updateAPI: UpdateAPI): String? {
+    override fun update(id: String, updateAPI: UpdateAPI) {
         val body = RequestBody.create(json, objectMapper.writeValueAsString(updateAPI))
 
-        val request = Request.Builder().url("""http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/update/$id""")
+        val request =
+            Request.Builder().url("""http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/update/$id""")
                 .addHeader("api_key", "abc").put(body).build()
-        // TODO: como passar o ID?
 
-        val response = okHttpClient.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            return null
-        }
-
-        return response.code().toString()
-    }
-
-    override fun login(signIn: LoginAPI): String? {
-        val httpUrl = HttpUrl.parse("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/login")!!
-                .newBuilder()
-
-        val request = Request.Builder().url(httpUrl.build().toString())
-                .addHeader("api_key", "abc")
-                .addHeader("email", signIn.email)
-                .addHeader("password", signIn.password).build() // TODO confirmar Get Request
-
-        val response = okHttpClient.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            return null
-        }
-
-        return response.body()?.string()
+        okHttpClient.newCall(request).execute()
     }
 
 }
