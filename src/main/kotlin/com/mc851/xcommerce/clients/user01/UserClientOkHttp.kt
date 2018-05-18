@@ -3,6 +3,7 @@ package com.mc851.xcommerce.clients.user01
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.user01.api.LoginAPI
 import com.mc851.xcommerce.clients.user01.api.RegisterAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
 import com.mc851.xcommerce.clients.user01.api.UpdateAPI
@@ -52,8 +53,9 @@ class UserClientOkHttp : UserClient {
     override fun update(id: String, updateAPI: UpdateAPI): String? {
         val body = RequestBody.create(json, objectMapper.writeValueAsString(updateAPI))
 
-        val request = Request.Builder().url("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/update")
-                .addPathSegment(id).addHeader("api_key", "abc").put(body).build()
+        val request = Request.Builder().url("""http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/update/$id""")
+                .addHeader("api_key", "abc").put(body).build()
+        // TODO: como passar o ID?
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -64,14 +66,14 @@ class UserClientOkHttp : UserClient {
         return response.code().toString()
     }
 
-    override fun login(signIn: SignIn): String? {
-        val body = RequestBody.create(json, objectMapper.writeValueAsString(SignIn))
-
+    override fun login(signIn: LoginAPI): String? {
         val httpUrl = HttpUrl.parse("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/login")!!
                 .newBuilder()
 
-        val request = Request.Builder().url(httpUrl.build().toString()).addHeader("api_key", "abc")
-                .get(body).build()
+        val request = Request.Builder().url(httpUrl.build().toString())
+                .addHeader("api_key", "abc")
+                .addHeader("email", signIn.email)
+                .addHeader("password", signIn.password).build() // TODO confirmar Get Request
 
         val response = okHttpClient.newCall(request).execute()
 
