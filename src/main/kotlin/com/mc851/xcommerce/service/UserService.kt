@@ -31,22 +31,8 @@ class UserService(val userClient: UserClient, val userDao: UserDao) {
         return convertUser(userInfo, id)
     }
 
-    private fun convertUser(userAPI: UserAPI, externalId: String): User {
-        val id =
-            userDao.findByExternalId(externalId) ?: userDao.insertExternalId(externalId) ?: throw IllegalStateException(
-                "Can't insert user!")
-        return User(id = id.toInt(),
-            name = userAPI.name,
-            email = userAPI.email,
-            birthDate = userAPI.birthDate,
-            cpf = userAPI.cpf,
-            gender = userAPI.gender,
-            telephone = userAPI.telephone)
-    }
-
-    fun update(id:String, update: Update): User {
-        // TODO: confirmar se id usado aqui está correto
-        val externalId = userDao.findById(id.toLong()) ?: throw IllegalStateException("User not found!")
+    fun update(id:Long, update: Update): User {
+        val externalId = userDao.findById(id) ?: throw IllegalStateException("User not found!")
 
         val updateInfo = UpdateAPI(name = update.name,
                 password = update.password,
@@ -55,17 +41,10 @@ class UserService(val userClient: UserClient, val userDao: UserDao) {
                 gender = update.gender,
                 telephone = update.telephone)
 
-        val status = userClient.update(externalId, updateInfo)
-        // TODO: checagem de erros?
-        // 200 - atualização bem sucedida
-        // outros - algum problema ocorreu
-        // Ronaldo mencionou que considera que na resposta há um parâmetro que indica que foi bem sucedida ou não.
-        // TODO: Onde colocar? Criar novo objeto que possui tal parâmetro?
-        // TODO: Tipo um UserResponse que é um user com esse parâmetro extra?
-
+        userClient.update(externalId, updateInfo)
         val userInfo = userClient.getUserById(externalId) ?: throw IllegalStateException("Updated user not found!")
 
-        return convertUser(userInfo, id)
+        return convertUser(userInfo, externalId)
     }
 
     // usa update
@@ -88,13 +67,17 @@ class UserService(val userClient: UserClient, val userDao: UserDao) {
         return convertUser(newUserInfo, id)
     }
 
-    fun signIn(signIn: SignIn): User {
-        val loginInfo = LoginAPI(email = signIn.email, password = signIn.password)
 
-        val id = userClient.login(loginInfo) ?:  throw IllegalStateException("User not found!")
-
-        val userInfo = userClient.getUserById(id) ?: throw IllegalStateException("User not found!")
-
-        return convertUser(userInfo, id)
+    private fun convertUser(userAPI: UserAPI, externalId: String): User {
+        val id =
+            userDao.findByExternalId(externalId) ?: userDao.insertExternalId(externalId) ?: throw IllegalStateException(
+                "Can't insert user!")
+        return User(id = id.toInt(),
+            name = userAPI.name,
+            email = userAPI.email,
+            birthDate = userAPI.birthDate,
+            cpf = userAPI.cpf,
+            gender = userAPI.gender,
+            telephone = userAPI.telephone)
     }
 }
