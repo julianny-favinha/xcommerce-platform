@@ -1,7 +1,10 @@
 package com.mc851.xcommerce.clients
 
-interface CreditClient {
-    fun getScoreByCpf(cpf: String): Int
+import com.mc851.xcommerce.clients.credit.api.CreditApi
+import com.mc851.xcommerce.clients.credit.api.PaymentApi
 
-    fun payment(cpf: String, totalPaid: Long, totalValue: Long)
+interface CreditClient {
+    fun getScoreByCpf(cpf: String): CreditApi?
+
+    fun payment(cpf: String, paymentApi: PaymentApi)
 }

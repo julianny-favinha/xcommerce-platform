@@ -4,4 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CreditApi(val score: Int,
-                     val document: Long) // TODO na documentacao, document é "number" (?)
+                     val document: String)
+
+data class PaymentApi(val totalPaid: Long,
+                      val totalValue: Long)

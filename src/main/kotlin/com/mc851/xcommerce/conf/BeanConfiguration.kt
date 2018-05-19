@@ -1,7 +1,9 @@
 package com.mc851.xcommerce.conf
 
+import com.mc851.xcommerce.clients.CreditClient
 import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
@@ -11,6 +13,7 @@ import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
+import com.mc851.xcommerce.service.CreditService
 import com.mc851.xcommerce.service.ProductService
 import com.mc851.xcommerce.service.UserService
 import com.zaxxer.hikari.HikariDataSource
@@ -74,6 +77,11 @@ class BeanConfiguration {
         return UserClientOkHttp()
     }
 
+    @Bean
+    fun creditClient(): CreditClient {
+        return CreditClientOkHttp()
+    }
+
     // Service
     @Bean
     fun categoryService(productClient: ProductClient, categoryDao: CategoryDao): CategoryService {
@@ -90,5 +98,10 @@ class BeanConfiguration {
     @Bean
     fun userService(userClient: UserClient, userDao: UserDao): UserService {
         return UserService(userClient, userDao)
+    }
+
+    @Bean
+    fun creditService(creditClient: CreditClient): CreditService {
+        return CreditService(creditClient)
     }
 }
