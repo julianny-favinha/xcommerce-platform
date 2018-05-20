@@ -1,6 +1,5 @@
 package com.mc851.xcommerce.dao.user
 
-import com.mc851.xcommerce.dao.credential.Queries
 import org.springframework.jdbc.core.JdbcTemplate
 
 class Queries {

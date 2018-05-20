@@ -6,12 +6,15 @@ import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
-import com.mc851.xcommerce.dao.user.UserDao
-import com.mc851.xcommerce.dao.credential.UserDaoPostgres
+import com.mc851.xcommerce.dao.credential.UserCredentialDao
+import com.mc851.xcommerce.dao.credential.UserCredentialDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
+import com.mc851.xcommerce.dao.user.UserDao
+import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
 import com.mc851.xcommerce.service.ProductService
+import com.mc851.xcommerce.service.user.UserCredentialService
 import com.mc851.xcommerce.service.user.UserService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -63,6 +66,11 @@ class BeanConfiguration {
         return UserDaoPostgres(jdbcTemplate)
     }
 
+    @Bean
+    fun userCredentialDao(jdbcTemplate: JdbcTemplate): UserCredentialDao {
+        return UserCredentialDaoPostgres(jdbcTemplate)
+    }
+
     // Client
     @Bean
     fun productClient(): ProductClient {
@@ -88,7 +96,15 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun userService(userClient: UserClient, userDao: UserDao): UserService {
-        return UserService(userClient, userDao)
+    fun userCredentialService(userCredentialDao: UserCredentialDao): UserCredentialService {
+        return UserCredentialService(userCredentialDao)
     }
+
+    @Bean
+    fun userService(userClient: UserClient,
+                    userDao: UserDao,
+                    userCredentialService: UserCredentialService): UserService {
+        return UserService(userClient, userDao, userCredentialService)
+    }
+
 }

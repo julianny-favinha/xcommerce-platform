@@ -5,10 +5,9 @@ import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.model.Categories
 import com.mc851.xcommerce.model.Category
-import org.springframework.stereotype.Service
 import java.util.UUID
 
-class CategoryService(val productClient: ProductClient, val categoryDao: CategoryDao) {
+class CategoryService(private val productClient: ProductClient, private val categoryDao: CategoryDao) {
 
     fun getAll(): Categories {
         return Categories(productClient.listAllCategories().map { convertCategory(it) })
