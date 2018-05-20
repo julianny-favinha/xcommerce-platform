@@ -7,12 +7,12 @@ import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
 import com.mc851.xcommerce.dao.user.UserDao
-import com.mc851.xcommerce.dao.user.UserDaoPostgres
+import com.mc851.xcommerce.dao.credential.UserDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
 import com.mc851.xcommerce.service.ProductService
-import com.mc851.xcommerce.service.UserService
+import com.mc851.xcommerce.service.user.UserService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
