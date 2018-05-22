@@ -57,6 +57,10 @@ class ProductService(val productClient: ProductClient,
             imageUrl = productApi.imageUrl,
             brand = productApi.brand ?: "Sem Marca",
             description = productApi.description,
+            height =  productApi.height,
+            weight = productApi.weight,
+            width = productApi.width,
+            length = productApi.length,
             price = (productApi.price.multiply(BigDecimal.valueOf(100L))).toInt())
     }
 
