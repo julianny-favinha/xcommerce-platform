@@ -31,7 +31,8 @@ data class LogisticTrackOutApi(     val status:  String,
                                     val tipoPacote: String,
                                     val altura: Double,
                                     val largura: Double,
-                                    val comprimento: Double)
+                                    val comprimento: Double,
+                                    val history: List<History>)
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)

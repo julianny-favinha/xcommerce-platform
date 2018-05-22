@@ -12,11 +12,14 @@ import com.mc851.xcommerce.clients.logistic.api.LogisticRegisterOutApi
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.MediaType
 
 class LogisticClientOkHttp : LogisticClient {
-    private val okHttpClient = OkHttpClient()
 
+    private val okHttpClient = OkHttpClient()
     private val objectMapper = jacksonObjectMapper()
+    private val json = MediaType.parse("application/json")
 
     override fun calculateShipment(logisticPriceIn: LogisticPriceInApi): LogisticPriceOutAPI? {
 
@@ -42,13 +45,12 @@ class LogisticClientOkHttp : LogisticClient {
         return objectMapper.readValue(response.body()!!.byteStream())
     }
 
+
     override fun register(logisticRegisterIn: LogisticRegisterInApi): LogisticRegisterOutApi? {
 
-        val httpUrl = HttpUrl.parse("https://hidden-basin-50728.herokuapp.com/cadastrarentrega")!!.newBuilder()
+        val body = RequestBody.create(json, objectMapper.writeValueAsString(logisticRegisterIn))
 
-//        httpUrl.addPathSegment(logisticTrackIn.trackCode)
-
-        val request = Request.Builder().url(httpUrl.build().toString()).build()
+        val request = Request.Builder().url("https://hidden-basin-50728.herokuapp.com/cadastrarentrega").post(body).build()
 
         val response = okHttpClient.newCall(request).execute()
 

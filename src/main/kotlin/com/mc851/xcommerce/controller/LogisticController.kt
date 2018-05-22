@@ -44,7 +44,7 @@ class LogisticController {
     /**
      * Register a product
      * @param request pedidos a serem inseridos
-     * TODO: enviar post como usuário, carregar histórico e inserir no banco
+     * TODO: inserir no banco
      * **/
     @PostMapping("/register")
     fun Register(@RequestBody request: OrderIn): ResponseEntity<LogisticRegisterOutApi> {
@@ -55,6 +55,7 @@ class LogisticController {
     /**
      * Track an order
      * @param request Order track code
+     * TODO: carregar histórico
      * **/
     @GetMapping("/track/{cod}")
     fun Register(@PathVariable(name = "cod", required=true) cod: String): ResponseEntity<LogisticTrackOutApi> {
