@@ -8,7 +8,6 @@ import com.mc851.xcommerce.model.Category
 import org.springframework.stereotype.Service
 import java.util.UUID
 
-@Service
 class CategoryService(val productClient: ProductClient, val categoryDao: CategoryDao) {
 
     fun getAll(): Categories {

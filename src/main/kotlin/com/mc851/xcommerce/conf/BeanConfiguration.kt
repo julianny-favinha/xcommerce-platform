@@ -3,14 +3,22 @@ package com.mc851.xcommerce.conf
 import com.mc851.xcommerce.clients.payment.PaymentClient
 import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClient
+import com.mc851.xcommerce.clients.CreditClient
+import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
+import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
+import com.mc851.xcommerce.dao.user.UserDao
+import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
 import com.mc851.xcommerce.service.PaymentService
+import com.mc851.xcommerce.service.CreditService
 import com.mc851.xcommerce.service.ProductService
+import com.mc851.xcommerce.service.UserService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -56,6 +64,11 @@ class BeanConfiguration {
         return ProductDaoPostgres(jdbcTemplate)
     }
 
+    @Bean
+    fun userDao(jdbcTemplate: JdbcTemplate): UserDao {
+        return UserDaoPostgres(jdbcTemplate)
+    }
+
     // Client
     @Bean
     fun productClient(): ProductClient {
@@ -65,6 +78,15 @@ class BeanConfiguration {
     @Bean
     fun paymentClient(): PaymentClient {
         return PaymentClientOkHttp()
+    }
+
+    fun userClient(): UserClient {
+        return UserClientOkHttp()
+    }
+
+    @Bean
+    fun creditClient(): CreditClient {
+        return CreditClientOkHttp()
     }
 
     // Service
@@ -83,5 +105,14 @@ class BeanConfiguration {
     @Bean
     fun paymentService(paymentClient: PaymentClient): PaymentService {
         return PaymentService(paymentClient)
+    }
+
+    fun userService(userClient: UserClient, userDao: UserDao): UserService {
+        return UserService(userClient, userDao)
+    }
+
+    @Bean
+    fun creditService(creditClient: CreditClient): CreditService {
+        return CreditService(creditClient)
     }
 }

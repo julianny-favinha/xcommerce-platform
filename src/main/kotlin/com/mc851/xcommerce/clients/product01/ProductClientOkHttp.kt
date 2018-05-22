@@ -4,9 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.clients.product01.api.ProductApi
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import java.util.UUID
 
 class ProductClientOkHttp : ProductClient {
@@ -17,6 +15,7 @@ class ProductClientOkHttp : ProductClient {
     override fun listAllProducts(highlight: Boolean): List<ProductApi> {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
         httpUrl.addQueryParameter("highlight", highlight.toString())
+        httpUrl.addQueryParameter("groupId", "endereco")
 
         val request = Request.Builder().url(httpUrl.build().toString()).build()
 
@@ -71,5 +70,54 @@ class ProductClientOkHttp : ProductClient {
         }
 
         return objectMapper.readValue<CategoryApi>(response.body()!!.byteStream())
+    }
+
+    override fun search(text: String): List<ProductApi> {
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products/search")!!.newBuilder()
+        httpUrl.addPathSegment(text)
+        System.out.println(httpUrl.toString())
+        val request = Request.Builder().url(httpUrl.build().toString()).build()
+        System.out.println(request.toString())
+        val response = okHttpClient.newCall(request).execute()
+        System.out.println(response.toString())
+        if (!response.isSuccessful) {
+            return emptyList()
+        }
+
+        return objectMapper.readValue<List<ProductApi>>(response.body()!!.byteStream())
+    }
+
+    override fun release(id: UUID, quantity: Int): Boolean {
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/reservation/release")!!.newBuilder()
+        httpUrl.addPathSegment(id.toString())
+
+        val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), quantity.toString())
+
+        val request = Request.Builder().url(httpUrl.build().toString()).put(requestBody).build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            return false
+        }
+
+        return true
+    }
+
+    override fun reserve(id: UUID, quantity: Int): Boolean {
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/reservation/reserve")!!.newBuilder()
+        httpUrl.addPathSegment(id.toString())
+
+        val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), quantity.toString())
+
+        val request = Request.Builder().url(httpUrl.build().toString()).put(requestBody).build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            return false
+        }
+
+        return true
     }
 }
