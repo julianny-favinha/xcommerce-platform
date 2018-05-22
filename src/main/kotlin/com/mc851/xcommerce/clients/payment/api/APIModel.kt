@@ -9,7 +9,7 @@ data class PaymentInCreditCard(val clientCardName: String,
                                val value: String,
                                val installments: String)
 
-data class PaymentOutCreditCard(val errorMessage: String?, val operationHash: String, val result: String)
+data class PaymentOutCreditCard(val operationHash: String, val result: String)
 
 data class PaymentInBoleto(val clientName: String,
                            val cpf: String,
