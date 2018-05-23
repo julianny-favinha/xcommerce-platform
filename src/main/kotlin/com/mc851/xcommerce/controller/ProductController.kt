@@ -64,16 +64,4 @@ class ProductController {
         return handleResponse(result)
     }
 
-    @GetMapping("/test")
-    fun pay(): Boolean {
-
-        val creditCardPayment = CreditCardPayment(CreditCardInfo("IGOR", 2L, 2017L, 737, 1111222233334444),
-            UserInfo("39392645805", "Igor", "Rua Augusto", "13465700"),
-            1000L,
-            0L)
-        val result = paymentService.payCreditCard(creditCardPayment)
-        if (result == PaymentResult.AUTHORIZED)
-            return true
-        return false
-    }
 }
