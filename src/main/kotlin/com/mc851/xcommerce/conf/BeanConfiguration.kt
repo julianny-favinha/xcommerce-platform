@@ -1,7 +1,11 @@
 package com.mc851.xcommerce.conf
 
-import com.mc851.xcommerce.clients.ProductClient
+import com.mc851.xcommerce.clients.payment.PaymentClient
+import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
+import com.mc851.xcommerce.clients.product01.ProductClient
+import com.mc851.xcommerce.clients.CreditClient
 import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
@@ -16,6 +20,8 @@ import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.filters.TokenManager
 import com.mc851.xcommerce.service.CategoryService
+import com.mc851.xcommerce.service.PaymentService
+import com.mc851.xcommerce.service.CreditService
 import com.mc851.xcommerce.service.ProductService
 import com.mc851.xcommerce.service.user.UserCredentialService
 import com.mc851.xcommerce.service.user.UserService
@@ -92,8 +98,18 @@ class BeanConfiguration {
     }
 
     @Bean
+    fun paymentClient(): PaymentClient {
+        return PaymentClientOkHttp()
+    }
+
+    @Bean
     fun userClient(): UserClient {
         return UserClientOkHttp()
+    }
+
+    @Bean
+    fun creditClient(): CreditClient {
+        return CreditClientOkHttp()
     }
 
     // Service
@@ -119,6 +135,16 @@ class BeanConfiguration {
                     userDao: UserDao,
                     userCredentialService: UserCredentialService): UserService {
         return UserService(userClient, userDao, userCredentialService)
+    }
+
+    @Bean
+    fun paymentService(paymentClient: PaymentClient): PaymentService {
+        return PaymentService(paymentClient)
+    }
+
+    @Bean
+    fun creditService(creditClient: CreditClient): CreditService {
+        return CreditService(creditClient)
     }
 
 }
