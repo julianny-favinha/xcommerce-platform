@@ -1,6 +1,7 @@
 package com.mc851.xcommerce.controller
 
 import com.mc851.xcommerce.model.SignIn
+import com.mc851.xcommerce.model.SignInResponse
 import com.mc851.xcommerce.model.SignUp
 import com.mc851.xcommerce.model.User
 import com.mc851.xcommerce.model.Update
@@ -24,25 +25,15 @@ class UserController {
     }
 
     @PostMapping("/signup")
-    fun signUp(@RequestBody signUp: SignUp): ResponseEntity<User> {
+    fun signUp(@RequestBody signUp: SignUp): ResponseEntity<SignInResponse> {
         val response = userService.signUp(signUp)
         return handleErrorResponse(response)
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody signIn: SignIn): ResponseEntity<User> {
+    fun login(@RequestBody signIn: SignIn): ResponseEntity<SignInResponse> {
         val response = userService.signIn(signIn)
         return handleErrorResponse(response)
     }
-
-//    @GetMapping("/test")
-//    fun test(httpSession: HttpSession): ResponseEntity<Boolean> {
-//        System.out.println(httpSession.servletContext.toString())
-//        val attribute = httpSession.getAttribute("a")
-//        if(attribute == "abc"){
-//            return handleResponse(true)
-//        }
-//        return handleResponse(false)
-//    }
 
 }

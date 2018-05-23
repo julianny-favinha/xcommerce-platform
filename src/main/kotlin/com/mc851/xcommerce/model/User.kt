@@ -23,3 +23,5 @@ data class Update(val name: String,
                   val telephone: String?)
 
 data class SignIn(val email: String, val password: String)
+
+data class SignInResponse(val user: User, val token: String)

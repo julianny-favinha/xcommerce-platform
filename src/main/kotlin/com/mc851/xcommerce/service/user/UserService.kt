@@ -6,6 +6,7 @@ import com.mc851.xcommerce.clients.user01.api.UpdateAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
 import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.model.SignIn
+import com.mc851.xcommerce.model.SignInResponse
 import com.mc851.xcommerce.model.SignUp
 import com.mc851.xcommerce.model.Update
 import com.mc851.xcommerce.model.User
@@ -14,7 +15,7 @@ class UserService(private val userClient: UserClient,
                   private val userDao: UserDao,
                   private val userCredentialService: UserCredentialService) {
 
-    fun signUp(signUp: SignUp): User? {
+    fun signUp(signUp: SignUp): SignInResponse? {
         val register = RegisterAPI(name = signUp.name,
             email = signUp.email,
             password = "private",
@@ -30,16 +31,19 @@ class UserService(private val userClient: UserClient,
         val userId = createUserRelation(id)
         userCredentialService.addCredential(signUp.email, signUp.password, userId)
 
-        return convertUser(userInfo, userId)
+        val user = convertUser(userInfo, userId)
+        val token = userCredentialService.createToken(userId)
+        return SignInResponse(user, token)
     }
 
-    fun signIn(signIn: SignIn): User? {
+    fun signIn(signIn: SignIn): SignInResponse? {
         val userId = userCredentialService.verifyCredential(signIn.email, signIn.password) ?: return null
         val externalId = userDao.findById(userId) ?: throw IllegalStateException("Credential found but no relation")
         val userInfo = userClient.getUserById(externalId) ?: throw IllegalStateException("User not found!")
 
-
-        return convertUser(userInfo, userId)
+        val user = convertUser(userInfo, userId)
+        val token = userCredentialService.createToken(userId)
+        return SignInResponse(user, token)
     }
 
     fun update(id: Long, update: Update): User {

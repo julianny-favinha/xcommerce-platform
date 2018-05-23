@@ -10,8 +10,11 @@ import com.mc851.xcommerce.dao.credential.UserCredentialDao
 import com.mc851.xcommerce.dao.credential.UserCredentialDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
+import com.mc851.xcommerce.dao.token.TokenDao
+import com.mc851.xcommerce.dao.token.TokenDaoPostgres
 import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.dao.user.UserDaoPostgres
+import com.mc851.xcommerce.filters.TokenManager
 import com.mc851.xcommerce.service.CategoryService
 import com.mc851.xcommerce.service.ProductService
 import com.mc851.xcommerce.service.user.UserCredentialService
@@ -31,6 +34,12 @@ class BeanConfiguration {
 
     @Autowired
     lateinit var environment: Environment
+
+    // Adapter
+    @Bean
+    fun tokenManager(userCredentialService: UserCredentialService): TokenManager {
+        return TokenManager(userCredentialService)
+    }
 
     // DataSource
     @Bean
@@ -71,6 +80,11 @@ class BeanConfiguration {
         return UserCredentialDaoPostgres(jdbcTemplate)
     }
 
+    @Bean
+    fun tokenDao(jdbcTemplate: JdbcTemplate): TokenDao {
+        return TokenDaoPostgres(jdbcTemplate)
+    }
+
     // Client
     @Bean
     fun productClient(): ProductClient {
@@ -96,8 +110,8 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun userCredentialService(userCredentialDao: UserCredentialDao): UserCredentialService {
-        return UserCredentialService(userCredentialDao)
+    fun userCredentialService(userCredentialDao: UserCredentialDao, tokenDao: TokenDao): UserCredentialService {
+        return UserCredentialService(userCredentialDao, tokenDao)
     }
 
     @Bean
