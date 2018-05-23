@@ -80,6 +80,7 @@ class BeanConfiguration {
         return PaymentClientOkHttp()
     }
 
+    @Bean
     fun userClient(): UserClient {
         return UserClientOkHttp()
     }
@@ -107,6 +108,7 @@ class BeanConfiguration {
         return PaymentService(paymentClient)
     }
 
+    @Bean
     fun userService(userClient: UserClient, userDao: UserDao): UserService {
         return UserService(userClient, userDao)
     }

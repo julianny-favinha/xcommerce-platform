@@ -18,11 +18,11 @@ class PaymentClientOkHttp : PaymentClient {
     private val okHttpClient = OkHttpClient()
     private val objectMapper = jacksonObjectMapper()
 
-    override fun creditCardPayment(request: PaymentInCreditCard): PaymentOutCreditCard? {
+    override fun creditCardPayment(paymentIn: PaymentInCreditCard): PaymentOutCreditCard? {
         val httpUrl = HttpUrl.parse("https://payment-server-mc851.herokuapp.com/payments/creditCard")!!.newBuilder()
 
-        val jsonType = MediaType.parse("application/json; charset=utf-8")
-        val requestBody = RequestBody.create(jsonType, objectMapper.writeValueAsString(request))
+        val jsonType = MediaType.parse("application/json")
+        val requestBody = RequestBody.create(jsonType, objectMapper.writeValueAsString(paymentIn))
 
         val request = Request.Builder().post(requestBody).url(httpUrl.build().toString()).build()
         val response = okHttpClient.newCall(request).execute()
@@ -34,11 +34,11 @@ class PaymentClientOkHttp : PaymentClient {
         return objectMapper.readValue<PaymentOutCreditCard>(response.body()!!.byteStream())
     }
 
-    override fun boletoPayment(request: PaymentInBoleto): PaymentOutBoleto? {
+    override fun boletoPayment(paymentIn: PaymentInBoleto): PaymentOutBoleto? {
         val httpUrl = HttpUrl.parse("https://payment-server-mc851.herokuapp.com/payments/bankTicket")!!.newBuilder()
 
-        val jsonType = MediaType.parse("application/json; charset=utf-8")
-        val requestBody = RequestBody.create(jsonType, objectMapper.writeValueAsString(request))
+        val jsonType = MediaType.parse("application/json")
+        val requestBody = RequestBody.create(jsonType, objectMapper.writeValueAsString(paymentIn))
 
         val request = Request.Builder().post(requestBody).url(httpUrl.build().toString()).build()
         val response = okHttpClient.newCall(request).execute()
@@ -53,6 +53,7 @@ class PaymentClientOkHttp : PaymentClient {
     override fun statusBoletoPayment(code: String): StatusBoleto? {
         val httpUrl = HttpUrl.parse("https://payment-server-mc851.herokuapp.com/bankTicket")!!.newBuilder()
         httpUrl.addPathSegment(code)
+        httpUrl.addPathSegment("/status")
 
         val request = Request.Builder().url(httpUrl.build().toString()).build()
         val response = okHttpClient.newCall(request).execute()

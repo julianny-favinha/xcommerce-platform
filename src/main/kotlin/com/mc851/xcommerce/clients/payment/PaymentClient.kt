@@ -8,9 +8,9 @@ import com.mc851.xcommerce.clients.payment.api.StatusBoleto
 
 interface PaymentClient {
 
-    fun creditCardPayment(request: PaymentInCreditCard): PaymentOutCreditCard?
+    fun creditCardPayment(paymentIn: PaymentInCreditCard): PaymentOutCreditCard?
 
-    fun boletoPayment(request: PaymentInBoleto): PaymentOutBoleto?
+    fun boletoPayment(paymentIn: PaymentInBoleto): PaymentOutBoleto?
 
     fun statusBoletoPayment(code: String): StatusBoleto?
 

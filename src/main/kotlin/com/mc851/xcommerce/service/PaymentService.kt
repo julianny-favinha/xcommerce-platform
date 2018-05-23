@@ -3,6 +3,7 @@ package com.mc851.xcommerce.service
 import com.mc851.xcommerce.clients.payment.PaymentClient
 import com.mc851.xcommerce.clients.payment.api.PaymentInBoleto
 import com.mc851.xcommerce.clients.payment.api.PaymentInCreditCard
+import com.mc851.xcommerce.clients.payment.api.StatusBoleto
 import com.mc851.xcommerce.model.BoletoPayment
 import com.mc851.xcommerce.model.CreditCardPayment
 import com.mc851.xcommerce.model.PaymentResult
@@ -19,13 +20,12 @@ class PaymentService(private val paymentClient: PaymentClient) {
             userInfo.cep,
             (boletoPayment.value / 100.0).toString())
 
-        val paymentResult = paymentClient.boletoPayment(paymentIn) ?: PaymentResult.ERROR
+        val paymentResult = paymentClient.boletoPayment(paymentIn) ?: return PaymentResult.ERROR
 
         System.out.println(paymentResult.toString())
 
-        TODO("Must return paymentresult code to checkout")
-
         return PaymentResult.AUTHORIZED
+
     }
 
     fun payCreditCard(creditCardPayment: CreditCardPayment): PaymentResult {
@@ -40,17 +40,16 @@ class PaymentService(private val paymentClient: PaymentClient) {
             creditCard.year.toString(),
             creditCard.cvv.toString(),
             (creditCardPayment.value / 100.0).toString(),
-            creditCardPayment.installments.toString())
+            creditCardPayment.instalments.toString())
 
         val paymentResult = paymentClient.creditCardPayment(paymentIn) ?: return PaymentResult.ERROR
-
-        System.out.println(paymentResult.toString())
 
         return PaymentResult.AUTHORIZED
     }
 
-    fun getPaymentStatus() {
-        TODO("What to do for payment result")
+    fun getPaymentStatus(code: String): StatusBoleto {
+        val statusBoletoPayment = paymentClient.statusBoletoPayment(code)
+        TODO("then what?")
     }
 
 }

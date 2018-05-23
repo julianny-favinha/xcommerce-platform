@@ -1,6 +1,6 @@
 package com.mc851.xcommerce.model
 
-data class CreditCardPayment(val creditCard: CreditCardInfo, val userInfo: UserInfo, val value: Long, val installments: Long)
+data class CreditCardPayment(val creditCard: CreditCardInfo, val userInfo: UserInfo, val value: Long, val instalments: Long)
 
 data class BoletoPayment(val userInfo: UserInfo, val value: Long)
 
