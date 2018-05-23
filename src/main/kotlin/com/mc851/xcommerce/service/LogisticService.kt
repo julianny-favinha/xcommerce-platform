@@ -28,11 +28,11 @@ class LogisticService(val logisticClient: LogisticClient,
         val prices= emptyMap<String, Int>().toMutableMap()
 
         logisticApiPac?.let {
-            prices["PAC"] = it.price * 100
+            prices["PAC"] = it.preco * 100
         }
 
         logisticApiSedex?.let {
-            prices["Sedex"] = it.price * 100
+            prices["Sedex"] = it.preco * 100
         }
 
         return ShipmentOut(prices)
@@ -40,10 +40,11 @@ class LogisticService(val logisticClient: LogisticClient,
 
 
     //  Register a track
-    fun register(product: Product, cepDst: String): LogisticRegisterOutApi? {
+    fun register(product: Product, cepDst: String): String {
         var registerIn = LogisticRegisterInApi(product.id.toInt(), "PAC", "13465-450", cepDst, product.weight.toDouble(), "Caixa", product.height.toDouble(), product.width.toDouble(), product.length.toDouble())
-        val logisticApiRegister = logisticClient.register(registerIn)
-        return logisticApiRegister
+        val logisticApiRegister = logisticClient.register(registerIn) ?: throw IllegalStateException("Shipment registration was not possible.")
+        logisticDao.insertExternalId(logisticApiRegister.codigoRastreio)
+        return logisticApiRegister.codigoRastreio
     }
 
 

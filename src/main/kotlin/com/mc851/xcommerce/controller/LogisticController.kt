@@ -23,28 +23,18 @@ class LogisticController {
     /**
      * Calculate the price of shipment by given item
      * @param request Product to be calculated
-     * TODO: efetuar requisição de fato
      * **/
-    @GetMapping("/calculate/{typeShip}/{cepFrom}/{cepDst}/{weight}/{typePack}/{length}/{height}/{width}")
-    fun calculateShipmentPrice(@PathVariable(name = "typeShip", required=true) typeShip: String,
-                               @PathVariable(name = "cepFrom", required=true) cepFrom: String,
-                               @PathVariable(name = "cepDst", required=true) cepDst: String,
-                               @PathVariable(name = "weight", required=true) weight: Long,
-                               @PathVariable(name = "typePack", required=true) typePack: String,
-                               @PathVariable(name = "length", required=true) length: Long,
-                               @PathVariable(name = "height", required=true) height: Long,
-                               @PathVariable(name = "width", required=true) width: Long
-                               ): ResponseEntity<ShipmentOut> {
-
-        val prod = ShipmentIn(typeShip, cepFrom, cepDst, weight, typePack, length, height, width)
+    @PostMapping("/calculate")
+    fun calculateShipmentPrice(@RequestBody request:ShipmentIn): ResponseEntity<ShipmentOut> {
+        val prod = ShipmentIn(request.typeShip, request.cepFrom, request.cepDst, request.weight, request.typePack, request.length, request.height, request.width)
         val price = logisticService.getShipmentPrice(prod)
         return handleResponse(price)
     }
 
+
     /**
-     * Register a product
-     * @param request pedidos a serem inseridos
-     * TODO: inserir no banco
+     * Register a product shipment
+     * @param request Product to be inserted
      * **/
     @PostMapping("/register")
     fun Register(@RequestBody request: OrderIn): ResponseEntity<LogisticRegisterOutApi> {
@@ -52,10 +42,10 @@ class LogisticController {
         return handleResponse(reg)
     }
 
+
     /**
      * Track an order
      * @param request Order track code
-     * TODO: carregar histórico
      * **/
     @GetMapping("/track/{cod}")
     fun Register(@PathVariable(name = "cod", required=true) cod: String): ResponseEntity<LogisticTrackOutApi> {

@@ -13,10 +13,10 @@ data class LogisticPriceInApi(val shipType: String,
     val cepFrom = "13465-450"
 }
 
-data class LogisticPriceOutAPI(val price: Int)
+data class LogisticPriceOutAPI(val preco: Int)
 
 
-data class History(val hora: String, val local: String, val msg: String)
+data class History(val hora: String, val local: String, val mensagem: String)
 
 data class LogisticTrackInApi(val trackCode: String, val apiKey: String)
 
@@ -32,7 +32,7 @@ data class LogisticTrackOutApi(     val status:  String,
                                     val altura: Double,
                                     val largura: Double,
                                     val comprimento: Double,
-                                    val history: List<History>)
+                                    val historicoRastreio: List<History>)
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
