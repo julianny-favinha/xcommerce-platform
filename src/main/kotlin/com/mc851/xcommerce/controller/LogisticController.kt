@@ -37,7 +37,7 @@ class LogisticController {
      * @param request Product to be inserted
      * **/
     @PostMapping("/register")
-    fun Register(@RequestBody request: OrderIn): ResponseEntity<LogisticRegisterOutApi> {
+    fun Register(@RequestBody request: OrderIn): ResponseEntity<String> {
         val reg = logisticService.register(request.product, request.cepDst)
         return handleResponse(reg)
     }
