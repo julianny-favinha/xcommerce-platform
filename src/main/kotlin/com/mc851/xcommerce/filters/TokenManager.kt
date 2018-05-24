@@ -17,13 +17,22 @@ class TokenManager(private val userCredentialService: UserCredentialService) : H
         }
 
         return when {
-            userCredentialService.verifyToken(header) -> true
+            checkAuth(header, request) -> true
             else -> {
                 response.status = HttpStatus.UNAUTHORIZED.value()
                 false
             }
         }
 
+    }
+
+    private fun checkAuth(header: String, request: HttpServletRequest): Boolean {
+        val auth = userCredentialService.verifyToken(header)
+        val context = RequestContext(userId = userCredentialService.retrieveUser(header))
+
+        request.setAttribute(RequestContext.CONTEXT, context)
+
+        return auth
     }
 
 }

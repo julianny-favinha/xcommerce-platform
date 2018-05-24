@@ -32,7 +32,7 @@ class UserService(private val userClient: UserClient,
         userCredentialService.addCredential(signUp.email, signUp.password, userId)
 
         val user = convertUser(userInfo, userId)
-        val token = userCredentialService.createToken(userId)
+        val token = userCredentialService.retrieveToken(userId)
         return SignInResponse(user, token)
     }
 
@@ -42,7 +42,7 @@ class UserService(private val userClient: UserClient,
         val userInfo = userClient.getUserById(externalId) ?: throw IllegalStateException("User not found!")
 
         val user = convertUser(userInfo, userId)
-        val token = userCredentialService.createToken(userId)
+        val token = userCredentialService.retrieveToken(userId)
         return SignInResponse(user, token)
     }
 

@@ -12,10 +12,19 @@ class Queries {
             """INSERT INTO xcommerce.user_token(user_id, expire_at, token) VALUES (?, ?, ?) RETURNING token"""
         const val FIND_TOKEN_BY_USER = """SELECT token FROM xcommerce.user_token WHERE user_id = ?"""
         const val CHECK_TOKEN = """SELECT token FROM xcommerce.user_token WHERE token = ? AND expire_at > ?"""
+        const val FIND_USER_BY_TOKEN = """SELECT user_id FROM xcommerce.user_token WHERE token = ?"""
     }
 }
 
 class TokenDaoPostgres(val jdbcTemplate: JdbcTemplate) : TokenDao {
+    override fun findUserIdByToken(token: String): Long? {
+        return jdbcTemplate.query(Queries.FIND_USER_BY_TOKEN, { ps ->
+            ps.setString(1, token)
+        }, { rs, _ ->
+            rs.getLong("user_id")
+        }).firstOrNull()
+    }
+
     override fun createToken(token: UUID, userId: Long, expireTime: LocalDateTime): String? {
         return jdbcTemplate.query(Queries.INSERT_TOKEN, { ps ->
             ps.setLong(1, userId)

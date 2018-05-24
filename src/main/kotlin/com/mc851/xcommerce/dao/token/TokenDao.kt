@@ -9,5 +9,7 @@ interface TokenDao {
 
     fun findTokenByUserId(userId: Long): String?
 
+    fun findUserIdByToken(token: String): Long?
+
     fun checkToken(token: String): Boolean
 }

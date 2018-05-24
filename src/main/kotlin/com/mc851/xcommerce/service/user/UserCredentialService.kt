@@ -30,7 +30,11 @@ class UserCredentialService(private val userCredentialDao: UserCredentialDao, pr
         return if (checkpw(password, userCredential.password)) userCredential.userId else null
     }
 
-    fun createToken(userId: Long): String {
+    fun retrieveUser(token: String): Long {
+        return tokenDao.findUserIdByToken(token) ?: throw IllegalStateException("Couldn't found user for token")
+    }
+
+    fun retrieveToken(userId: Long): String {
         return tokenDao.findTokenByUserId(userId) ?: tokenDao.createToken(UUID.randomUUID(), userId, EXPIRE_TIME)
                ?: throw IllegalStateException("Couldn't create token for user!")
     }
