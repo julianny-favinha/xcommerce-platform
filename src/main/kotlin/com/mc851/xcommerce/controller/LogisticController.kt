@@ -26,8 +26,7 @@ class LogisticController {
      * **/
     @PostMapping("/calculate")
     fun calculateShipmentPrice(@RequestBody request:ShipmentIn): ResponseEntity<ShipmentOut> {
-        val prod = ShipmentIn(request.typeShip, request.cepFrom, request.cepDst, request.weight, request.typePack, request.length, request.height, request.width)
-        val price = logisticService.getShipmentPrice(prod)
+        val price = logisticService.getShipmentPriceAll(request)
         return handleResponse(price)
     }
 
