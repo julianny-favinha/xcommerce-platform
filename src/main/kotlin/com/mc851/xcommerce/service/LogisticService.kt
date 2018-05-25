@@ -9,6 +9,7 @@ import com.mc851.xcommerce.clients.logistic.api.LogisticTrackOutApi
 import com.mc851.xcommerce.dao.logistic.LogisticDao
 import com.mc851.xcommerce.model.Product
 import com.mc851.xcommerce.model.ShipmentIn
+import com.mc851.xcommerce.model.ShipmentInIndividual
 import com.mc851.xcommerce.model.ShipmentOut
 import org.springframework.stereotype.Service
 import java.util.*
@@ -17,10 +18,25 @@ import java.util.*
 class LogisticService(val logisticClient: LogisticClient,
                      val logisticDao: LogisticDao) {
 
-    fun getShipmentPrice(product: ShipmentIn): ShipmentOut? {
+    fun getShipmentPrice(shipment: ShipmentInIndividual): ShipmentOut {
 
-        val val_pac = LogisticPriceInApi(shipType = "PAC", cepDst = product.cepDst, packWeight = product.weight, packType = "Caixa", packLen = product.length.toDouble(), packHeight = product.height.toDouble(), packWidth = product.width.toDouble())
-        val val_sedex = LogisticPriceInApi(shipType = "Sedex", cepDst = product.cepDst, packWeight = product.weight, packType = "Caixa", packLen = product.length.toDouble(), packHeight = product.height.toDouble(), packWidth = product.width.toDouble())
+        val val_pac = LogisticPriceInApi(
+                shipType = "PAC",
+                cepDst = shipment.cepDst,
+                packWeight = shipment.product.weight,
+                packType = "Caixa",
+                packLen = shipment.product.length.toDouble(),
+                packHeight = shipment.product.height.toDouble(),
+                packWidth = shipment.product.width.toDouble())
+
+        val val_sedex = LogisticPriceInApi(
+                shipType = "Sedex",
+                cepDst = shipment.cepDst,
+                packWeight = shipment.product.weight,
+                packType = "Caixa",
+                packLen = shipment.product.length.toDouble(),
+                packHeight = shipment.product.height.toDouble(),
+                packWidth = shipment.product.width.toDouble())
 
         val logisticApiPac = logisticClient.calculateShipment(val_pac)
         val logisticApiSedex = logisticClient.calculateShipment(val_sedex)
@@ -36,6 +52,29 @@ class LogisticService(val logisticClient: LogisticClient,
         }
 
         return ShipmentOut(prices)
+    }
+
+    fun getShipmentPriceAll(shipments: ShipmentIn): ShipmentOut? {
+
+        var totalPrices= emptyMap<String, Int>().toMutableMap()
+        totalPrices["PAC"] = 0
+        totalPrices["Sedex"] = 0
+
+
+        // calculate total sum
+        for (prod in shipments.products) {
+
+            val shipIn = ShipmentInIndividual(prod, shipments.cepFrom, shipments.cepDst)
+            val ret = getShipmentPrice(shipIn)
+
+            if (ret != null) {
+                totalPrices["PAC"] = totalPrices["PAC"]!! + ret.prices["PAC"]!!
+                totalPrices["Sedex"] = totalPrices["Sedex"]!! + ret.prices["Sedex"]!!
+            }
+
+        }
+
+        return ShipmentOut(totalPrices)
     }
 
 
