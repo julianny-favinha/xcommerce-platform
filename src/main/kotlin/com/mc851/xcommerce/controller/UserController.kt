@@ -1,5 +1,6 @@
 package com.mc851.xcommerce.controller
 
+import com.mc851.xcommerce.filters.RequestContext
 import com.mc851.xcommerce.model.SignIn
 import com.mc851.xcommerce.model.SignInResponse
 import com.mc851.xcommerce.model.SignUp
@@ -35,5 +36,12 @@ class UserController {
         val response = userService.signIn(signIn)
         return handleErrorResponse(response)
     }
+
+    @GetMapping("")
+    fun getUser(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext): ResponseEntity<User> {
+        val response = userService.findByUserId(context.userId)
+        return handleErrorResponse(response)
+    }
+
 
 }
