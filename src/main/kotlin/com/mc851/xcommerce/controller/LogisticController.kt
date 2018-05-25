@@ -26,8 +26,7 @@ class LogisticController {
      * **/
     @PostMapping("/calculate")
     fun calculateShipmentPrice(@RequestBody request:ShipmentIn): ResponseEntity<ShipmentOut> {
-        val prod = ShipmentIn(request.typeShip, request.cepFrom, request.cepDst, request.weight, request.typePack, request.length, request.height, request.width)
-        val price = logisticService.getShipmentPrice(prod)
+        val price = logisticService.getShipmentPriceAll(request)
         return handleResponse(price)
     }
 
@@ -37,7 +36,7 @@ class LogisticController {
      * @param request Product to be inserted
      * **/
     @PostMapping("/register")
-    fun Register(@RequestBody request: OrderIn): ResponseEntity<LogisticRegisterOutApi> {
+    fun Register(@RequestBody request: OrderIn): ResponseEntity<String> {
         val reg = logisticService.register(request.product, request.cepDst)
         return handleResponse(reg)
     }
