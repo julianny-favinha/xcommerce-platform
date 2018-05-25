@@ -2,15 +2,13 @@ package com.mc851.xcommerce.clients.product01
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.clients.product01.api.ProductApi
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import java.util.UUID
 
 class ProductClientOkHttp : ProductClient {
+
     private val okHttpClient = OkHttpClient()
     private val objectMapper = jacksonObjectMapper()
 
@@ -90,10 +88,36 @@ class ProductClientOkHttp : ProductClient {
     }
 
     override fun release(id: UUID, quantity: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/reservation/release")!!.newBuilder()
+        httpUrl.addPathSegment(id.toString())
+
+        val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), quantity.toString())
+
+        val request = Request.Builder().url(httpUrl.build().toString()).put(requestBody).build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            return false
+        }
+
+        return true
     }
 
     override fun reserve(id: UUID, quantity: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/reservation/reserve")!!.newBuilder()
+        httpUrl.addPathSegment(id.toString())
+
+        val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), quantity.toString())
+
+        val request = Request.Builder().url(httpUrl.build().toString()).put(requestBody).build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            return false
+        }
+
+        return true
     }
 }

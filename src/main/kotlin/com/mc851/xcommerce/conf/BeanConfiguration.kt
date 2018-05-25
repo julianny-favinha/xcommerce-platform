@@ -1,17 +1,29 @@
 package com.mc851.xcommerce.conf
 
-import com.mc851.xcommerce.clients.ProductClient
+import com.mc851.xcommerce.clients.payment.PaymentClient
+import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
+import com.mc851.xcommerce.clients.product01.ProductClient
+import com.mc851.xcommerce.clients.CreditClient
+import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
+
+import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.clients.LogisticClient
 import com.mc851.xcommerce.clients.logistic.LogisticClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
+import com.mc851.xcommerce.dao.user.UserDao
+import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.logistic.LogisticDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.dao.logistic.LogisticDaoPostgres
 import com.mc851.xcommerce.service.CategoryService
+import com.mc851.xcommerce.service.PaymentService
+import com.mc851.xcommerce.service.CreditService
 import com.mc851.xcommerce.service.ProductService
+import com.mc851.xcommerce.service.UserService
 import com.mc851.xcommerce.service.LogisticService
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,11 +71,16 @@ class BeanConfiguration {
         return ProductDaoPostgres(jdbcTemplate)
     }
 
+    @Bean
+    fun userDao(jdbcTemplate: JdbcTemplate): UserDao {
+        return UserDaoPostgres(jdbcTemplate)
+    }
 
     @Bean
     fun logisticDao(jdbcTemplate: JdbcTemplate): LogisticDao {
         return LogisticDaoPostgres(jdbcTemplate)
     }
+
     // Client
     @Bean
     fun productClient(): ProductClient {
@@ -71,6 +88,20 @@ class BeanConfiguration {
     }
 
     @Bean
+    fun paymentClient(): PaymentClient {
+        return PaymentClientOkHttp()
+    }
+
+    @Bean
+    fun userClient(): UserClient {
+        return UserClientOkHttp()
+    }
+
+    @Bean
+    fun creditClient(): CreditClient {
+        return CreditClientOkHttp()
+    }
+
     fun logisticClient(): LogisticClient {
         return LogisticClientOkHttp()
     }
@@ -89,6 +120,20 @@ class BeanConfiguration {
     }
 
     @Bean
+    fun paymentService(paymentClient: PaymentClient): PaymentService {
+        return PaymentService(paymentClient)
+    }
+
+    @Bean
+    fun userService(userClient: UserClient, userDao: UserDao): UserService {
+        return UserService(userClient, userDao)
+    }
+
+    @Bean
+    fun creditService(creditClient: CreditClient): CreditService {
+        return CreditService(creditClient)
+    }
+
     fun logisticService(logisticClient: LogisticClient,
                        logisticDao: LogisticDao): LogisticService {
         return LogisticService(logisticClient, logisticDao)
