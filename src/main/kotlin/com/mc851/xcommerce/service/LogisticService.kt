@@ -64,14 +64,13 @@ class LogisticService(val logisticClient: LogisticClient,
         // calculate total sum
         for (prod in shipments.products) {
 
-            val shipIn = ShipmentInIndividual(prod, shipments.cepFrom, shipments.cepDst)
+            val shipIn = ShipmentInIndividual(prod, shipments.cepDst)
             val ret = getShipmentPrice(shipIn)
 
             if (ret != null) {
                 totalPrices["PAC"] = totalPrices["PAC"]!! + ret.prices["PAC"]!!
                 totalPrices["Sedex"] = totalPrices["Sedex"]!! + ret.prices["Sedex"]!!
             }
-
         }
 
         return ShipmentOut(totalPrices)
