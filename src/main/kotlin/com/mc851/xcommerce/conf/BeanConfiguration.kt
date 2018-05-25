@@ -20,6 +20,7 @@ import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.dao.user.UserDaoPostgres
+import com.mc851.xcommerce.service.AddressService
 import com.mc851.xcommerce.service.CategoryService
 import com.mc851.xcommerce.service.CreditService
 import com.mc851.xcommerce.service.LogisticService
@@ -141,7 +142,7 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun AddressService(addressClient: AddressClient): AddressService {
+    fun addressService(addressClient: AddressClient): AddressService {
         return AddressService(addressClient)
     }
 
