@@ -5,6 +5,8 @@ import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClient
 import com.mc851.xcommerce.clients.CreditClient
 import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.address.AddressClient
+import com.mc851.xcommerce.clients.address.AddressClientOkHttp
 import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
@@ -14,11 +16,7 @@ import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
-import com.mc851.xcommerce.service.CategoryService
-import com.mc851.xcommerce.service.PaymentService
-import com.mc851.xcommerce.service.CreditService
-import com.mc851.xcommerce.service.ProductService
-import com.mc851.xcommerce.service.UserService
+import com.mc851.xcommerce.service.*
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -90,6 +88,11 @@ class BeanConfiguration {
         return CreditClientOkHttp()
     }
 
+    @Bean
+    fun addressClient(): AddressClient {
+        return AddressClientOkHttp()
+    }
+
     // Service
     @Bean
     fun categoryService(productClient: ProductClient, categoryDao: CategoryDao): CategoryService {
@@ -116,5 +119,10 @@ class BeanConfiguration {
     @Bean
     fun creditService(creditClient: CreditClient): CreditService {
         return CreditService(creditClient)
+    }
+
+    @Bean
+    fun AddressService(addressClient: AddressClient): AddressService {
+        return AddressService(addressClient)
     }
 }
