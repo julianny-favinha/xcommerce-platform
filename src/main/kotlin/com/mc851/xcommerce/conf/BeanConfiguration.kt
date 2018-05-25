@@ -1,17 +1,21 @@
 package com.mc851.xcommerce.conf
 
+import com.mc851.xcommerce.clients.CreditClient
+import com.mc851.xcommerce.clients.LogisticClient
+import com.mc851.xcommerce.clients.UserClient
+import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
+import com.mc851.xcommerce.clients.logistic.LogisticClientOkHttp
 import com.mc851.xcommerce.clients.payment.PaymentClient
 import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClient
-import com.mc851.xcommerce.clients.CreditClient
-import com.mc851.xcommerce.clients.UserClient
-import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
 import com.mc851.xcommerce.dao.credential.UserCredentialDao
 import com.mc851.xcommerce.dao.credential.UserCredentialDaoPostgres
+import com.mc851.xcommerce.dao.logistic.LogisticDao
+import com.mc851.xcommerce.dao.logistic.LogisticDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.dao.token.TokenDao
@@ -20,8 +24,9 @@ import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.filters.TokenManager
 import com.mc851.xcommerce.service.CategoryService
-import com.mc851.xcommerce.service.PaymentService
 import com.mc851.xcommerce.service.CreditService
+import com.mc851.xcommerce.service.LogisticService
+import com.mc851.xcommerce.service.PaymentService
 import com.mc851.xcommerce.service.ProductService
 import com.mc851.xcommerce.service.user.UserCredentialService
 import com.mc851.xcommerce.service.user.UserService
@@ -91,6 +96,11 @@ class BeanConfiguration {
         return TokenDaoPostgres(jdbcTemplate)
     }
 
+    @Bean
+    fun logisticDao(jdbcTemplate: JdbcTemplate): LogisticDao {
+        return LogisticDaoPostgres(jdbcTemplate)
+    }
+
     // Client
     @Bean
     fun productClient(): ProductClient {
@@ -110,6 +120,11 @@ class BeanConfiguration {
     @Bean
     fun creditClient(): CreditClient {
         return CreditClientOkHttp()
+    }
+
+    @Bean
+    fun logisticClient(): LogisticClient {
+        return LogisticClientOkHttp()
     }
 
     // Service
@@ -147,4 +162,8 @@ class BeanConfiguration {
         return CreditService(creditClient)
     }
 
+    @Bean
+    fun logisticService(logisticClient: LogisticClient, logisticDao: LogisticDao): LogisticService {
+        return LogisticService(logisticClient, logisticDao)
+    }
 }

@@ -48,7 +48,19 @@ class ProductController {
 
     @GetMapping("/reserve")
     fun reserve(): ResponseEntity<Boolean> {
-        val product: Map<Product, Int> = mapOf(Product(2, "Nome", "Marca", 100, "Categoria", "Descricao", "") to 2)
+        val product: Map<Product, Int> = mapOf(
+                Product(
+                2,
+                "Nome",
+                "Marca",
+                100,
+                2L,
+                1L,
+                1L,
+                1L,
+                "Categoria",
+                "Descrição",
+                "") to 2)
 
         val result = productService.reserveProducts(product)
 
@@ -57,7 +69,19 @@ class ProductController {
 
     @GetMapping("/release")
     fun release(): ResponseEntity<Boolean> {
-        val product: Map<Product, Int> = mapOf(Product(2, "Nome", "Marca", 100, "Categoria", "Descricao", "") to 2)
+        val product: Map<Product, Int> = mapOf(
+                Product(
+                2,
+                "Nome",
+                "Marca",
+                100,
+                2L,
+                1L,
+                1L,
+                1L,
+                "Categoria",
+                "Descrição",
+                "") to 2)
 
         val result = productService.releaseProducts(product)
 
