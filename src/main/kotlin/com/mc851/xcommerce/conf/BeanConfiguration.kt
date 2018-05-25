@@ -1,27 +1,36 @@
 package com.mc851.xcommerce.conf
 
-import com.mc851.xcommerce.clients.payment.PaymentClient
-import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
-import com.mc851.xcommerce.clients.product01.ProductClient
 import com.mc851.xcommerce.clients.CreditClient
+import com.mc851.xcommerce.clients.LogisticClient
 import com.mc851.xcommerce.clients.UserClient
 import com.mc851.xcommerce.clients.address.AddressClient
 import com.mc851.xcommerce.clients.address.AddressClientOkHttp
 import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
+import com.mc851.xcommerce.clients.logistic.LogisticClientOkHttp
+import com.mc851.xcommerce.clients.payment.PaymentClient
+import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
+import com.mc851.xcommerce.clients.product01.ProductClient
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
-import com.mc851.xcommerce.dao.user.UserDao
-import com.mc851.xcommerce.dao.user.UserDaoPostgres
+import com.mc851.xcommerce.dao.logistic.LogisticDao
+import com.mc851.xcommerce.dao.logistic.LogisticDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
-import com.mc851.xcommerce.service.*
+import com.mc851.xcommerce.dao.user.UserDao
+import com.mc851.xcommerce.dao.user.UserDaoPostgres
+import com.mc851.xcommerce.service.CategoryService
+import com.mc851.xcommerce.service.CreditService
+import com.mc851.xcommerce.service.LogisticService
+import com.mc851.xcommerce.service.PaymentService
+import com.mc851.xcommerce.service.ProductService
+import com.mc851.xcommerce.service.UserService
 import com.zaxxer.hikari.HikariDataSource
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.PropertySource
+import org.springframework.beans.factory.annotation .Autowired
+import org.springframework.context.annotation .Bean
+import org.springframework.context.annotation .Configuration
+import org.springframework.context.annotation .PropertySource
 import org.springframework.core.env.Environment
 import org.springframework.jdbc.core.JdbcTemplate
 import javax.sql.DataSource
@@ -67,6 +76,11 @@ class BeanConfiguration {
         return UserDaoPostgres(jdbcTemplate)
     }
 
+    @Bean
+    fun logisticDao(jdbcTemplate: JdbcTemplate): LogisticDao {
+        return LogisticDaoPostgres(jdbcTemplate)
+    }
+
     // Client
     @Bean
     fun productClient(): ProductClient {
@@ -91,6 +105,11 @@ class BeanConfiguration {
     @Bean
     fun addressClient(): AddressClient {
         return AddressClientOkHttp()
+    }
+
+    @Bean
+    fun logisticClient(): LogisticClient {
+        return LogisticClientOkHttp()
     }
 
     // Service
@@ -124,5 +143,10 @@ class BeanConfiguration {
     @Bean
     fun AddressService(addressClient: AddressClient): AddressService {
         return AddressService(addressClient)
+    }
+
+    @Bean
+    fun logisticService(logisticClient: LogisticClient, logisticDao: LogisticDao): LogisticService {
+        return LogisticService(logisticClient, logisticDao)
     }
 }
