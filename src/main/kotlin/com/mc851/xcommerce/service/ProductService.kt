@@ -1,13 +1,12 @@
 package com.mc851.xcommerce.service
 
-import com.mc851.xcommerce.clients.product01.ProductClient
+import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.ProductApi
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.model.Category
 import com.mc851.xcommerce.model.Highlights
 import com.mc851.xcommerce.model.Product
 import com.mc851.xcommerce.model.Search
-import com.sun.org.apache.xpath.internal.operations.Bool
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.util.UUID

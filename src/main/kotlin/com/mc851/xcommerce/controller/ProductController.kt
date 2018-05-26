@@ -25,9 +25,6 @@ class ProductController {
     @Autowired
     lateinit var productService: ProductService
 
-    @Autowired
-    lateinit var paymentService: PaymentService
-
     @GetMapping("/highlights")
     fun getHighlights(): ResponseEntity<Highlights> {
         val highlights = productService.getHighlights()

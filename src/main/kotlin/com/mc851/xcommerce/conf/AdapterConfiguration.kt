@@ -13,7 +13,7 @@ class AdapterConfiguration : WebMvcConfigurer {
     lateinit var tokenManager: TokenManager
 
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(tokenManager) // TODO("Add path where it need security")
+        registry.addInterceptor(tokenManager).addPathPatterns("/checkout/**")
         super.addInterceptors(registry)
     }
 }

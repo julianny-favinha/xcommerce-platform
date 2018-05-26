@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.clients.payment
+package com.mc851.xcommerce.clients
 
 import com.mc851.xcommerce.clients.payment.api.PaymentInBoleto
 import com.mc851.xcommerce.clients.payment.api.PaymentInCreditCard

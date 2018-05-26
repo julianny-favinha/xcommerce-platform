@@ -1,6 +1,6 @@
 package com.mc851.xcommerce.service
 
-import com.mc851.xcommerce.clients.payment.PaymentClient
+import com.mc851.xcommerce.clients.PaymentClient
 import com.mc851.xcommerce.clients.payment.api.PaymentInBoleto
 import com.mc851.xcommerce.clients.payment.api.PaymentInCreditCard
 import com.mc851.xcommerce.clients.payment.api.StatusBoleto

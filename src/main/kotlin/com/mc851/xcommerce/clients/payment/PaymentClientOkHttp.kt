@@ -2,6 +2,7 @@ package com.mc851.xcommerce.clients.payment
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.mc851.xcommerce.clients.PaymentClient
 import com.mc851.xcommerce.clients.payment.api.PaymentInBoleto
 import com.mc851.xcommerce.clients.payment.api.PaymentInCreditCard
 import com.mc851.xcommerce.clients.payment.api.PaymentOutBoleto
