@@ -91,7 +91,7 @@ class ProductClientOkHttp : ProductClient {
         return objectMapper.readValue<List<ProductApi>>(response.body()!!.byteStream())
     }
 
-    override fun release(id: UUID, quantity: Int): Boolean {
+    override fun release(id: UUID, quantity: Long): Boolean {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/reservation/release")!!.newBuilder()
         httpUrl.addPathSegment(id.toString())
 
@@ -108,7 +108,7 @@ class ProductClientOkHttp : ProductClient {
         return true
     }
 
-    override fun reserve(id: UUID, quantity: Int): Boolean {
+    override fun reserve(id: UUID, quantity: Long): Boolean {
         val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/reservation/reserve")!!.newBuilder()
         httpUrl.addPathSegment(id.toString())
 

@@ -39,24 +39,4 @@ class ProductController {
         return handleResponse(result)
     }
 
-    @GetMapping("/reserve")
-    fun reserve(): ResponseEntity<Boolean> {
-        val product: Map<Product, Int> =
-            mapOf(Product(2, "Nome", "Marca", 100, 2L, 1L, 1L, 1L, "Categoria", "Descrição", "") to 2)
-
-        val result = productService.reserveProducts(product)
-
-        return handleResponse(result)
-    }
-
-    @GetMapping("/release")
-    fun release(): ResponseEntity<Boolean> {
-        val product: Map<Product, Int> =
-            mapOf(Product(2, "Nome", "Marca", 100, 2L, 1L, 1L, 1L, "Categoria", "Descrição", "") to 2)
-
-        val result = productService.releaseProducts(product)
-
-        return handleResponse(result)
-    }
-
 }

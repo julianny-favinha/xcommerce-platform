@@ -70,10 +70,10 @@ class ProductService(val productClient: ProductClient,
                ?: throw IllegalStateException("Can't create relation between ids!")
     }
 
-    fun reserveProducts(productsByQuantity: Map<Product, Int>): Boolean {
+    fun reserveProducts(productsByQuantity: Map<Product, Long>): Boolean {
         // para cada produto, reservar a quantidade definida.
         // se der algum erro, deve desreservar os que deram certo anteriormente
-        val successfulProducts: MutableMap<Product, Int> = emptyMap<Product, Int>().toMutableMap()
+        val successfulProducts: MutableMap<Product, Long> = emptyMap<Product, Long>().toMutableMap()
 
         for (entry in productsByQuantity) {
             val externalId = productDao.findById(entry.key.id)
@@ -96,7 +96,7 @@ class ProductService(val productClient: ProductClient,
         return false
     }
 
-    fun releaseProducts(productsByQuantity: Map<Product, Int>): Boolean {
+    fun releaseProducts(productsByQuantity: Map<Product, Long>): Boolean {
         productsByQuantity.map {
             val externalId = productDao.findById(it.key.id)
             productClient.release(UUID.fromString(externalId), it.value)
