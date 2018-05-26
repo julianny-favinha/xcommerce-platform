@@ -1,6 +1,6 @@
 package com.mc851.xcommerce.service
 
-import com.mc851.xcommerce.clients.product01.ProductClient
+import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.model.Categories

@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.clients.product01
+package com.mc851.xcommerce.clients
 
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.clients.product01.api.ProductApi

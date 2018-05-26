@@ -16,7 +16,7 @@ class AddressController {
     @Autowired
     lateinit var addressService: AddressService
 
-    @GetMapping("/checkCep")
+    @GetMapping("check/{cep}")
     fun checkCep(@PathVariable(name = "cep", required = true) cep: String): ResponseEntity<Address> {
         val address = addressService.checkCep(cep)
         return handleResponse(address)

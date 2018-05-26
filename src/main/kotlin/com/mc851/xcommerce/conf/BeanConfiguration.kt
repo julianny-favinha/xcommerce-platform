@@ -7,9 +7,9 @@ import com.mc851.xcommerce.clients.address.AddressClient
 import com.mc851.xcommerce.clients.address.AddressClientOkHttp
 import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.logistic.LogisticClientOkHttp
-import com.mc851.xcommerce.clients.payment.PaymentClient
+import com.mc851.xcommerce.clients.PaymentClient
 import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
-import com.mc851.xcommerce.clients.product01.ProductClient
+import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao

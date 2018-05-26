@@ -2,6 +2,7 @@ package com.mc851.xcommerce.clients.product01
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.clients.product01.api.ProductApi
 import okhttp3.*
