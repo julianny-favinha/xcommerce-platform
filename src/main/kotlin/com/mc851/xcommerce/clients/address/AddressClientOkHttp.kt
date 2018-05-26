@@ -21,7 +21,7 @@ class AddressClientOkHttp : AddressClient {
     private val objectMapper = jacksonObjectMapper()
 
     override fun findByCep(cep: String): AddressApi? {
-        val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/cep/")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("http://node.thiagoelg.com/paises/br/cep/")!!.newBuilder()
         httpUrl.addPathSegment(cep)
 
         val request = Request.Builder().url(httpUrl.build().toString()).addHeader("x-api-key", xapikey).build()
@@ -36,7 +36,7 @@ class AddressClientOkHttp : AddressClient {
     }
 
     override fun insertCep(cep: String, logradouro: String, bairro: String, idCidade: String): CepApi? {
-        val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/cep/")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("http://node.thiagoelg.com/paises/br/cep/")!!.newBuilder()
 
         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("cep", cep)
             .addFormDataPart("logradouro", logradouro).addFormDataPart("bairro", bairro)
@@ -55,7 +55,7 @@ class AddressClientOkHttp : AddressClient {
     }
 
     override fun listCities(uf: String, query: String): List<CityApi> {
-        val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/estados/$uf/cidades/")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("http://node.thiagoelg.com/paises/br/estados/$uf/cidades/")!!.newBuilder()
         httpUrl.addPathSegment(query)
 
         val request = Request.Builder().url(httpUrl.build().toString()).addHeader("x-api-key", xapikey).build()
@@ -70,7 +70,7 @@ class AddressClientOkHttp : AddressClient {
     }
 
     override fun insertCity(uf: String, nome: String): IdApi? {
-        val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/estados/$uf/cidades")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("http://node.thiagoelg.com/paises/br/estados/$uf/cidades")!!.newBuilder()
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), nome)
 
@@ -87,7 +87,7 @@ class AddressClientOkHttp : AddressClient {
     }
 
     override fun listStates(): List<StateApi> {
-        val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/estados/")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("http://node.thiagoelg.com/paises/br/estados/")!!.newBuilder()
 
         val request = Request.Builder().url(httpUrl.build().toString()).addHeader("x-api-key", xapikey).build()
 
@@ -101,7 +101,7 @@ class AddressClientOkHttp : AddressClient {
     }
 
     override fun insertState(uf: String, nome: String): IdApi? {
-        val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/estados/")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("http://node.thiagoelg.com/paises/br/estados/")!!.newBuilder()
 
         val requestBody =
             MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("uf", uf).addFormDataPart("nome", nome)
