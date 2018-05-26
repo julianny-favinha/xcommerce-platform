@@ -22,6 +22,8 @@ class ProductService(val productClient: ProductClient,
 
         val categoryByExternalId = categoryService.getByIds(productApi.mapNotNull { it.categoryId })
 
+        System.out.println("products" + productApi.toString())
+
         return Highlights(highlights = productApi.map {
             val id = createRelation(it)
             val category = categoryByExternalId[it.id]

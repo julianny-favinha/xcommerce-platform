@@ -1,13 +1,8 @@
 package com.mc851.xcommerce.controller
 
-import com.mc851.xcommerce.model.CreditCardInfo
-import com.mc851.xcommerce.model.CreditCardPayment
 import com.mc851.xcommerce.model.Highlights
-import com.mc851.xcommerce.model.PaymentResult
 import com.mc851.xcommerce.model.Product
 import com.mc851.xcommerce.model.Search
-import com.mc851.xcommerce.model.UserInfo
-import com.mc851.xcommerce.service.PaymentService
 import com.mc851.xcommerce.service.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -45,19 +40,8 @@ class ProductController {
 
     @GetMapping("/reserve")
     fun reserve(): ResponseEntity<Boolean> {
-        val product: Map<Product, Int> = mapOf(
-                Product(
-                2,
-                "Nome",
-                "Marca",
-                100,
-                2L,
-                1L,
-                1L,
-                1L,
-                "Categoria",
-                "Descrição",
-                "") to 2)
+        val product: Map<Product, Int> =
+            mapOf(Product(2, "Nome", "Marca", 100, 2L, 1L, 1L, 1L, "Categoria", "Descrição", "") to 2)
 
         val result = productService.reserveProducts(product)
 
@@ -66,19 +50,8 @@ class ProductController {
 
     @GetMapping("/release")
     fun release(): ResponseEntity<Boolean> {
-        val product: Map<Product, Int> = mapOf(
-                Product(
-                2,
-                "Nome",
-                "Marca",
-                100,
-                2L,
-                1L,
-                1L,
-                1L,
-                "Categoria",
-                "Descrição",
-                "") to 2)
+        val product: Map<Product, Int> =
+            mapOf(Product(2, "Nome", "Marca", 100, 2L, 1L, 1L, 1L, "Categoria", "Descrição", "") to 2)
 
         val result = productService.releaseProducts(product)
 

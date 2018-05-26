@@ -14,9 +14,8 @@ class ProductClientOkHttp : ProductClient {
     private val objectMapper = jacksonObjectMapper()
 
     override fun listAllProducts(highlight: Boolean): List<ProductApi> {
-        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("https://ftt-catalog.herokuapp.com/products/group/endereco")!!.newBuilder()
         httpUrl.addQueryParameter("highlight", highlight.toString())
-        httpUrl.addQueryParameter("groupId", "endereco")
 
         val request = Request.Builder().url(httpUrl.build().toString()).build()
 
