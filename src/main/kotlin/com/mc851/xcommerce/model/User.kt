@@ -18,6 +18,7 @@ data class SignUp(val name: String,
 
 data class Update(val name: String,
                   val password: String,
+                  val birthDate: String?,
                   val gender: String?,
                   val telephone: String?)
 
