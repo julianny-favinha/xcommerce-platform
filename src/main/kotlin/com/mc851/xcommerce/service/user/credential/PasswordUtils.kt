@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.service.user
+package com.mc851.xcommerce.service.user.credential
 
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets

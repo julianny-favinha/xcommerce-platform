@@ -5,7 +5,11 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.clients.product01.api.ProductApi
-import okhttp3.*
+import okhttp3.HttpUrl
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import java.util.UUID
 
 class ProductClientOkHttp : ProductClient {

@@ -5,15 +5,15 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.LogisticClient
 import com.mc851.xcommerce.clients.logistic.api.LogisticPriceInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticPriceOutAPI
-import com.mc851.xcommerce.clients.logistic.api.LogisticTrackInApi
-import com.mc851.xcommerce.clients.logistic.api.LogisticTrackOutApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticRegisterInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticRegisterOutApi
+import com.mc851.xcommerce.clients.logistic.api.LogisticTrackInApi
+import com.mc851.xcommerce.clients.logistic.api.LogisticTrackOutApi
 import okhttp3.HttpUrl
+import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.MediaType
 
 class LogisticClientOkHttp : LogisticClient {
 
@@ -45,12 +45,12 @@ class LogisticClientOkHttp : LogisticClient {
         return objectMapper.readValue(response.body()!!.byteStream())
     }
 
-
     override fun register(logisticRegisterIn: LogisticRegisterInApi): LogisticRegisterOutApi? {
 
         val body = RequestBody.create(json, objectMapper.writeValueAsString(logisticRegisterIn))
 
-        val request = Request.Builder().url("https://hidden-basin-50728.herokuapp.com/cadastrarentrega").post(body).build()
+        val request =
+            Request.Builder().url("https://hidden-basin-50728.herokuapp.com/cadastrarentrega").post(body).build()
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -60,8 +60,6 @@ class LogisticClientOkHttp : LogisticClient {
 
         return objectMapper.readValue(response.body()!!.byteStream())
     }
-
-
 
     override fun trackOrder(logisticTrackIn: LogisticTrackInApi): LogisticTrackOutApi? {
 
@@ -80,6 +78,5 @@ class LogisticClientOkHttp : LogisticClient {
 
         return objectMapper.readValue(response.body()!!.byteStream())
     }
-
 
 }

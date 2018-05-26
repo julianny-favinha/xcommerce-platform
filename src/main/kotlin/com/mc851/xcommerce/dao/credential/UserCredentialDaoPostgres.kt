@@ -1,11 +1,12 @@
 package com.mc851.xcommerce.dao.credential
 
-import com.mc851.xcommerce.model.UserCredential
+import com.mc851.xcommerce.model.internal.UserCredential
 import org.springframework.jdbc.core.JdbcTemplate
 
 class Queries {
     companion object {
-        const val INSERT_CREDENTIAL = """INSERT INTO xcommerce.user_credential(password, email, user_id) VALUES (?, ?, ?) RETURNING id"""
+        const val INSERT_CREDENTIAL =
+            """INSERT INTO xcommerce.user_credential(password, email, user_id) VALUES (?, ?, ?) RETURNING id"""
         const val FIND_BY_EMAIL = """SELECT user_id, email, password FROM xcommerce.user_credential WHERE email = ?"""
     }
 }

@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.dao.token
+package com.mc851.xcommerce.dao.user.token
 
 import java.time.LocalDateTime
 import java.util.UUID

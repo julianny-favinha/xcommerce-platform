@@ -5,7 +5,11 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.CreditClient
 import com.mc851.xcommerce.clients.credit.api.CreditApi
 import com.mc851.xcommerce.clients.credit.api.PaymentApi
-import okhttp3.*
+import okhttp3.HttpUrl
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 
 class CreditClientOkHttp : CreditClient {
     private val okHttpClient = OkHttpClient()
@@ -16,8 +20,7 @@ class CreditClientOkHttp : CreditClient {
         val httpUrl = HttpUrl.parse("https://glacial-brook-98386.herokuapp.com/score")!!.newBuilder()
         httpUrl.addPathSegment(cpf)
 
-        val request = Request.Builder().url(httpUrl.build().toString())
-                .addHeader("x-api-key", "tmvcgvc").build()
+        val request = Request.Builder().url(httpUrl.build().toString()).addHeader("x-api-key", "tmvcgvc").build()
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -37,9 +40,8 @@ class CreditClientOkHttp : CreditClient {
 
         val body = RequestBody.create(json, objectMapper.writeValueAsString(paymentApi))
 
-
-        val request = Request.Builder().url(httpUrl.build().toString()).post(body)
-                .addHeader("x-api-key", "tmvcgvc").build()
+        val request =
+            Request.Builder().url(httpUrl.build().toString()).post(body).addHeader("x-api-key", "tmvcgvc").build()
 
         okHttpClient.newCall(request).execute()
     }

@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.controller
+package com.mc851.xcommerce.controller.utils
 
 import org.springframework.http.ResponseEntity
 

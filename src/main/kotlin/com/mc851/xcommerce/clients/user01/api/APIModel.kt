@@ -20,11 +20,10 @@ data class RegisterAPI(val name: String,
                        val telephone: String?)
 
 data class UpdateAPI(val name: String,
-                       val password: String,
-                       val samePass: String,
-                       val birthDate: String?,
-                       val gender: String?,
-                       val telephone: String?)
+                     val password: String,
+                     val samePass: String,
+                     val birthDate: String?,
+                     val gender: String?,
+                     val telephone: String?)
 
-data class LoginAPI(val email: String,
-                       val password: String)
+data class LoginAPI(val email: String, val password: String)

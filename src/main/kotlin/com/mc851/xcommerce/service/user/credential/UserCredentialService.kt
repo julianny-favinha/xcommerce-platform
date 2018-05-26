@@ -1,10 +1,10 @@
-package com.mc851.xcommerce.service.user
+package com.mc851.xcommerce.service.user.credential
 
 import com.mc851.xcommerce.dao.credential.UserCredentialDao
-import com.mc851.xcommerce.dao.token.TokenDao
-import com.mc851.xcommerce.model.UserCredential
-import com.mc851.xcommerce.service.user.PasswordUtils.Companion.checkpw
-import com.mc851.xcommerce.service.user.PasswordUtils.Companion.hashpw
+import com.mc851.xcommerce.dao.user.token.TokenDao
+import com.mc851.xcommerce.model.internal.UserCredential
+import com.mc851.xcommerce.service.user.credential.PasswordUtils.Companion.checkpw
+import com.mc851.xcommerce.service.user.credential.PasswordUtils.Companion.hashpw
 import org.apache.commons.validator.routines.EmailValidator
 import java.time.LocalDateTime
 import java.util.UUID

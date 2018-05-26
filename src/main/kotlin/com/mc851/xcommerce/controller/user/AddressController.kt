@@ -1,7 +1,8 @@
-package com.mc851.xcommerce.controller
+package com.mc851.xcommerce.controller.user
 
-import com.mc851.xcommerce.model.Address
-import com.mc851.xcommerce.service.AddressService
+import com.mc851.xcommerce.controller.utils.handleResponse
+import com.mc851.xcommerce.model.api.Address
+import com.mc851.xcommerce.service.user.AddressService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.model
+package com.mc851.xcommerce.model.api
 
 data class User(val id: Long,
                 val name: String,

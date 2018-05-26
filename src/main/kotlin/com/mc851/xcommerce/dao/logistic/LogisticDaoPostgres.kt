@@ -5,7 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate
 
 class Queries {
     companion object {
-        const val INSERT_EXTERNAL_ID = """INSERT INTO xcommerce.logistic_relation(external_id) VALUES (?) RETURNING id"""
+        const val INSERT_EXTERNAL_ID =
+            """INSERT INTO xcommerce.logistic_relation(external_id) VALUES (?) RETURNING id"""
         const val FIND_BY_ID = """SELECT external_id FROM xcommerce.logistic_relation WHERE id = ?"""
         const val FIND_BY_EXTERNAL_ID = """SELECT id FROM xcommerce.logistic_relation WHERE external_id = ?"""
     }
@@ -17,7 +18,7 @@ class LogisticDaoPostgres(private val jdbcTemplate: JdbcTemplate) : LogisticDao 
             ps.setLong(1, id)
         }, { rs, _ ->
             rs.getString("external_id")
-//            Obter todas as colunas
+            //            Obter todas as colunas
         }).firstOrNull()
 
     }

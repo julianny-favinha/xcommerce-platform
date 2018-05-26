@@ -5,11 +5,12 @@ import com.mc851.xcommerce.clients.user01.api.RegisterAPI
 import com.mc851.xcommerce.clients.user01.api.UpdateAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
 import com.mc851.xcommerce.dao.user.UserDao
-import com.mc851.xcommerce.model.SignIn
-import com.mc851.xcommerce.model.SignInResponse
-import com.mc851.xcommerce.model.SignUp
-import com.mc851.xcommerce.model.Update
-import com.mc851.xcommerce.model.User
+import com.mc851.xcommerce.model.api.SignIn
+import com.mc851.xcommerce.model.api.SignInResponse
+import com.mc851.xcommerce.model.api.SignUp
+import com.mc851.xcommerce.model.api.Update
+import com.mc851.xcommerce.model.api.User
+import com.mc851.xcommerce.service.user.credential.UserCredentialService
 
 class UserService(private val userClient: UserClient,
                   private val userDao: UserDao,

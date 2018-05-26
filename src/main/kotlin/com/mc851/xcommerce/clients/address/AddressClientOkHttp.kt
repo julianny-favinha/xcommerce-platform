@@ -2,9 +2,17 @@ package com.mc851.xcommerce.clients.address
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.mc851.xcommerce.clients.address.api.*
-import com.mc851.xcommerce.clients.product01.api.ProductApi
-import okhttp3.*
+import com.mc851.xcommerce.clients.address.api.AddressApi
+import com.mc851.xcommerce.clients.address.api.CepApi
+import com.mc851.xcommerce.clients.address.api.CityApi
+import com.mc851.xcommerce.clients.address.api.IdApi
+import com.mc851.xcommerce.clients.address.api.StateApi
+import okhttp3.HttpUrl
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 
 class AddressClientOkHttp : AddressClient {
 
@@ -30,15 +38,12 @@ class AddressClientOkHttp : AddressClient {
     override fun insertCep(cep: String, logradouro: String, bairro: String, idCidade: String): CepApi? {
         val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/cep/")!!.newBuilder()
 
-        val requestBody = MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("cep", cep)
-                .addFormDataPart("logradouro", logradouro)
-                .addFormDataPart("bairro", bairro)
-                .addFormDataPart("idCidade", idCidade)
-                .build()
+        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("cep", cep)
+            .addFormDataPart("logradouro", logradouro).addFormDataPart("bairro", bairro)
+            .addFormDataPart("idCidade", idCidade).build()
 
-        val request = Request.Builder().url(httpUrl.build().toString()).post(requestBody).addHeader("x-api-key", xapikey).build()
+        val request =
+            Request.Builder().url(httpUrl.build().toString()).post(requestBody).addHeader("x-api-key", xapikey).build()
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -69,7 +74,8 @@ class AddressClientOkHttp : AddressClient {
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), nome)
 
-        val request = Request.Builder().url(httpUrl.build().toString()).post(requestBody).addHeader("x-api-key", xapikey).build()
+        val request =
+            Request.Builder().url(httpUrl.build().toString()).post(requestBody).addHeader("x-api-key", xapikey).build()
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -97,13 +103,12 @@ class AddressClientOkHttp : AddressClient {
     override fun insertState(uf: String, nome: String): IdApi? {
         val httpUrl = HttpUrl.parse("https://node.thiagoelg.com/paises/br/estados/")!!.newBuilder()
 
-        val requestBody = MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("uf", uf)
-                .addFormDataPart("nome", nome)
+        val requestBody =
+            MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("uf", uf).addFormDataPart("nome", nome)
                 .build()
 
-        val request = Request.Builder().url(httpUrl.build().toString()).post(requestBody).addHeader("x-api-key", xapikey).build()
+        val request =
+            Request.Builder().url(httpUrl.build().toString()).post(requestBody).addHeader("x-api-key", xapikey).build()
 
         val response = okHttpClient.newCall(request).execute()
 

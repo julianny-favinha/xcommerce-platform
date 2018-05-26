@@ -1,14 +1,17 @@
-package com.mc851.xcommerce.service
+package com.mc851.xcommerce.service.payment
 
 import com.mc851.xcommerce.clients.PaymentClient
 import com.mc851.xcommerce.clients.payment.api.PaymentInBoleto
 import com.mc851.xcommerce.clients.payment.api.PaymentInCreditCard
 import com.mc851.xcommerce.clients.payment.api.StatusBoleto
-import com.mc851.xcommerce.model.BoletoPayment
-import com.mc851.xcommerce.model.CreditCardPayment
-import com.mc851.xcommerce.model.PaymentResult
+import com.mc851.xcommerce.model.internal.BoletoPayment
+import com.mc851.xcommerce.model.internal.CreditCardPayment
+import com.mc851.xcommerce.model.internal.PaymentResult
+import mu.KotlinLogging
 
 class PaymentService(private val paymentClient: PaymentClient) {
+
+    private val logger = KotlinLogging.logger {}
 
     fun payBoleto(boletoPayment: BoletoPayment): PaymentResult {
 
@@ -22,7 +25,7 @@ class PaymentService(private val paymentClient: PaymentClient) {
 
         val paymentResult = paymentClient.boletoPayment(paymentIn) ?: return PaymentResult.ERROR
 
-        System.out.println(paymentResult.toString())
+        logger.debug { paymentResult }
 
         return PaymentResult.AUTHORIZED
 
@@ -42,13 +45,13 @@ class PaymentService(private val paymentClient: PaymentClient) {
             (creditCardPayment.value / 100.0).toString(),
             creditCardPayment.instalments.toString())
 
-        val paymentResult = paymentClient.creditCardPayment(paymentIn) ?: return PaymentResult.ERROR
+        paymentClient.creditCardPayment(paymentIn) ?: return PaymentResult.ERROR
 
         return PaymentResult.AUTHORIZED
     }
 
     fun getPaymentStatus(code: String): StatusBoleto {
-        val statusBoletoPayment = paymentClient.statusBoletoPayment(code)
+        paymentClient.statusBoletoPayment(code)
         TODO("then what?")
     }
 

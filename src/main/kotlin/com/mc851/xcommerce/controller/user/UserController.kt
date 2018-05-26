@@ -1,11 +1,13 @@
-package com.mc851.xcommerce.controller
+package com.mc851.xcommerce.controller.user
 
+import com.mc851.xcommerce.controller.utils.handleErrorResponse
+import com.mc851.xcommerce.controller.utils.handleResponse
 import com.mc851.xcommerce.filters.RequestContext
-import com.mc851.xcommerce.model.SignIn
-import com.mc851.xcommerce.model.SignInResponse
-import com.mc851.xcommerce.model.SignUp
-import com.mc851.xcommerce.model.Update
-import com.mc851.xcommerce.model.User
+import com.mc851.xcommerce.model.api.SignIn
+import com.mc851.xcommerce.model.api.SignInResponse
+import com.mc851.xcommerce.model.api.SignUp
+import com.mc851.xcommerce.model.api.Update
+import com.mc851.xcommerce.model.api.User
 import com.mc851.xcommerce.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

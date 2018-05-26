@@ -1,7 +1,8 @@
-package com.mc851.xcommerce.controller
+package com.mc851.xcommerce.controller.product
 
-import com.mc851.xcommerce.model.Categories
-import com.mc851.xcommerce.service.CategoryService
+import com.mc851.xcommerce.controller.utils.handleResponse
+import com.mc851.xcommerce.model.api.Categories
+import com.mc851.xcommerce.service.product.CategoryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

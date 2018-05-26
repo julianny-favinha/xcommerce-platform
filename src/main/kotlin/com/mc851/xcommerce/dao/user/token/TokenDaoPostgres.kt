@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.dao.token
+package com.mc851.xcommerce.dao.user.token
 
 import org.springframework.jdbc.core.JdbcTemplate
 import java.sql.Timestamp

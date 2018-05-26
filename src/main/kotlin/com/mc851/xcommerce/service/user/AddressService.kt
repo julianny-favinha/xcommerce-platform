@@ -1,8 +1,8 @@
-package com.mc851.xcommerce.service
+package com.mc851.xcommerce.service.user
 
 import com.mc851.xcommerce.clients.address.AddressClient
 import com.mc851.xcommerce.clients.address.api.AddressApi
-import com.mc851.xcommerce.model.Address
+import com.mc851.xcommerce.model.api.Address
 
 class AddressService(val addressClient: AddressClient) {
 
@@ -13,8 +13,8 @@ class AddressService(val addressClient: AddressClient) {
 
     private fun convertAddress(addressApi: AddressApi): Address {
         return Address(logradouro = addressApi.logradouro,
-                neighborhood = addressApi.bairro,
-                city = addressApi.cidade,
-                state = addressApi.uf)
+            neighborhood = addressApi.bairro,
+            city = addressApi.cidade,
+            state = addressApi.uf)
     }
 }

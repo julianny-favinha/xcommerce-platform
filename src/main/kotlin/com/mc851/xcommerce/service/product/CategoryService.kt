@@ -1,10 +1,10 @@
-package com.mc851.xcommerce.service
+package com.mc851.xcommerce.service.product
 
 import com.mc851.xcommerce.clients.ProductClient
 import com.mc851.xcommerce.clients.product01.api.CategoryApi
 import com.mc851.xcommerce.dao.category.CategoryDao
-import com.mc851.xcommerce.model.Categories
-import com.mc851.xcommerce.model.Category
+import com.mc851.xcommerce.model.api.Categories
+import com.mc851.xcommerce.model.api.Category
 import java.util.UUID
 
 class CategoryService(private val productClient: ProductClient, private val categoryDao: CategoryDao) {

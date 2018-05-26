@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.service
+package com.mc851.xcommerce.service.logistic
 
 import com.mc851.xcommerce.clients.LogisticClient
 import com.mc851.xcommerce.clients.logistic.api.LogisticPriceInApi
@@ -6,16 +6,14 @@ import com.mc851.xcommerce.clients.logistic.api.LogisticRegisterInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticTrackInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticTrackOutApi
 import com.mc851.xcommerce.dao.logistic.LogisticDao
-import com.mc851.xcommerce.model.Product
-import com.mc851.xcommerce.model.ShipmentIn
-import com.mc851.xcommerce.model.ShipmentInIndividual
-import com.mc851.xcommerce.model.ShipmentOut
-import org.springframework.stereotype.Service
+import com.mc851.xcommerce.model.api.Product
+import com.mc851.xcommerce.model.api.ShipmentIn
+import com.mc851.xcommerce.model.api.ShipmentOut
+import com.mc851.xcommerce.model.internal.ShipmentIndividual
 
-@Service
 class LogisticService(val logisticClient: LogisticClient, val logisticDao: LogisticDao) {
 
-    fun getShipmentPrice(shipment: ShipmentInIndividual): ShipmentOut {
+    fun getShipmentPrice(shipment: ShipmentIndividual): ShipmentOut {
 
         val val_pac = LogisticPriceInApi(shipType = "PAC",
             cepDst = shipment.cepDst,
@@ -58,7 +56,7 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
         // calculate total sum
         for (prod in shipments.products) {
 
-            val shipIn = ShipmentInIndividual(prod, shipments.cepDst)
+            val shipIn = ShipmentIndividual(prod, shipments.cepDst)
             val ret = getShipmentPrice(shipIn)
 
             totalPrices["PAC"] = totalPrices["PAC"]!! + ret.prices["PAC"]!!

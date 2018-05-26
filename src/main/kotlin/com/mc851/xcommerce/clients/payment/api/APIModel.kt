@@ -17,7 +17,6 @@ data class PaymentInBoleto(val clientName: String,
                            val cep: String,
                            val value: String)
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class PaymentOutCreditCard(val operationHash: String, val result: String)
 
