@@ -25,6 +25,8 @@ import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.user.token.TokenDao
 import com.mc851.xcommerce.dao.user.token.TokenDaoPostgres
 import com.mc851.xcommerce.filters.TokenManager
+import com.mc851.xcommerce.service.cart.CartService
+import com.mc851.xcommerce.service.cart.validators.CheckoutValidator
 import com.mc851.xcommerce.service.logistic.LogisticService
 import com.mc851.xcommerce.service.payment.PaymentService
 import com.mc851.xcommerce.service.product.CategoryService
@@ -178,5 +180,15 @@ class BeanConfiguration {
     @Bean
     fun logisticService(logisticClient: LogisticClient, logisticDao: LogisticDao): LogisticService {
         return LogisticService(logisticClient, logisticDao)
+    }
+
+    @Bean
+    fun checkoutValidator() : CheckoutValidator {
+        return CheckoutValidator()
+    }
+
+    @Bean
+    fun cartService(checkoutValidator: CheckoutValidator, userService: UserService): CartService {
+        return CartService(checkoutValidator, userService)
     }
 }

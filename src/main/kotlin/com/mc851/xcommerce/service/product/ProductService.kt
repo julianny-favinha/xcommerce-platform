@@ -51,10 +51,10 @@ class ProductService(val productClient: ProductClient,
 
     private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product {
         return Product(id = id,
-            name = productApi.name,
-            category = category?.name,
+            name = productApi.name.toLowerCase().capitalize(),
+            category = category?.name?.toLowerCase()?.capitalize(),
             imageUrl = productApi.imageUrl,
-            brand = productApi.brand ?: "Sem Marca",
+            brand = productApi.brand?.toLowerCase()?.capitalize() ?: "Sem Marca",
             description = productApi.description,
             height = productApi.height,
             weight = productApi.weight,

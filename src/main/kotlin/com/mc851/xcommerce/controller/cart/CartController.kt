@@ -6,9 +6,11 @@ import com.mc851.xcommerce.model.api.Cart
 import com.mc851.xcommerce.model.api.CartItem
 import com.mc851.xcommerce.model.api.CheckoutIn
 import com.mc851.xcommerce.model.api.CheckoutOut
+import com.mc851.xcommerce.service.cart.CartService
 import com.mc851.xcommerce.service.product.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -22,11 +24,18 @@ class CartController {
     @Autowired
     lateinit var productService: ProductService
 
-    //    TODO
+    @Autowired
+    lateinit var cartService: CartService
+
     @PostMapping("/checkout")
     fun checkout(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext, @RequestBody request: CheckoutIn): ResponseEntity<CheckoutOut> {
-    //    val result = cartService.checkout(request, context.userId)
-      //  return handleCheckout(result)
+        val result = cartService.checkout(request, context.userId)
+        return handleResponse(result)
+    }
+
+    @GetMapping("/pre_checkout")
+    fun preCheckout(): ResponseEntity<String> {
+        return handleResponse(cartService.preCheckout())
     }
 
     @PostMapping("/reserve")
