@@ -39,11 +39,11 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
         val prices = emptyMap<String, Int>().toMutableMap()
 
         logisticApiPac?.let {
-            prices["PAC"] = it.preco * 100
+            prices["PAC"] = it.preco
         }
 
         logisticApiSedex?.let {
-            prices["Sedex"] = it.preco * 100
+            prices["Sedex"] = it.preco
         }
 
         return ShipmentOut(prices)
