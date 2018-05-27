@@ -2,9 +2,12 @@ package com.mc851.xcommerce.service.cart
 
 import com.mc851.xcommerce.model.api.CheckoutIn
 import com.mc851.xcommerce.model.api.CheckoutOut
+import com.mc851.xcommerce.model.api.CheckoutStatus
+import com.mc851.xcommerce.model.api.PaymentOut
 import com.mc851.xcommerce.model.internal.BoletoPayment
 import com.mc851.xcommerce.model.internal.CreditCardInfo
 import com.mc851.xcommerce.model.internal.CreditCardPayment
+import com.mc851.xcommerce.model.internal.PaymentResult
 import com.mc851.xcommerce.model.internal.PaymentType
 import com.mc851.xcommerce.model.internal.UserInfo
 import com.mc851.xcommerce.service.cart.validators.CheckoutValidator
@@ -21,7 +24,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
 
         val validationResult = checkoutValidator.validate(checkoutIn.cart, userId)
         if (!validationResult.status.success()) {
-            TODO()
+            TODO("Create validator and return checkout -> NOT_OK")
         }
 
         val products = checkoutIn.cart.cartItems.map {
@@ -35,6 +38,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
     private fun purchaseOrder(orderId: Long, userId: Long, checkout: CheckoutIn): CheckoutOut {
         val user = userService.findByUserId(userId) ?: throw IllegalStateException("User must exist!")
         val userInfo = UserInfo(user.cpf, user.name, "BLABLBA", "13083-852")
+        //TODO("Deal with address")
         val order = orderService.retrieveOrder(orderId)
 
         val paymentResult = when (checkout.paymentInfo.paymentType) {
@@ -43,6 +47,19 @@ class CartService(private val checkoutValidator: CheckoutValidator,
                 order.freightPrice + order.productsPrice,
                 checkout.paymentInfo.installments)
             PaymentType.BOLETO -> boletoPayment(userInfo, order.freightPrice + order.productsPrice)
+        }
+
+        // TODO("Must return something better than PaymentResult")
+
+        return when (paymentResult) {
+            PaymentResult.PENDING -> CheckoutOut(order.id,
+                CheckoutStatus.OK,
+                PaymentOut("1302913901239120312930193213210392109"))
+            PaymentResult.FAILED, PaymentResult.ERROR -> {
+                cancelOrder(orderId)
+                CheckoutOut(null, CheckoutStatus.NOT_OK, null)
+            }
+            PaymentResult.AUTHORIZED -> CheckoutOut(order.id, CheckoutStatus.OK, null)
         }
 
     }
@@ -56,4 +73,5 @@ class CartService(private val checkoutValidator: CheckoutValidator,
     private fun boletoPayment(userInfo: UserInfo, value: Long) =
         paymentService.payBoleto(BoletoPayment(userInfo, value))
 
+    private fun cancelOrder(orderId: Long) = orderService.cancelOrder(orderId)
 }

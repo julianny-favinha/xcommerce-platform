@@ -12,13 +12,14 @@ data class PaymentInfo(val paymentType: PaymentType, val creditCardInfo: CreditC
 
 data class ShipmentInfo(val cepDst: String, val shipmentType: ShipmentType)
 
-data class CheckoutOut(val orderId: Long, val status: CheckoutStatus, val paymentDetails: PaymentOut?)
+data class CheckoutOut(val orderId: Long?, val status: CheckoutStatus, val paymentDetails: PaymentOut?)
 
 data class PaymentOut(val barCode: String)
 
 enum class CheckoutStatus(val _id: Int) {
     OK(1),
-    NOT_OK(2);
+    PENDING(2),
+    NOT_OK(3);
 
     @JsonValue
     fun getId() = _id

@@ -11,6 +11,8 @@ interface OrderDao {
 
     fun findOrderById(orderId: Long): Order
 
+    fun cancelOrder(orderId: Long): Boolean
+
 }
 
 interface OrderItemDao {
@@ -18,5 +20,7 @@ interface OrderItemDao {
     fun createOrderItem(orderItemValu: OrderItemValue): Long
 
     fun findOrderItemsByOrderId(orderId: Long): List<OrderItem>
+
+    fun cancelOrderItem(orderItemId: Long): Boolean
 
 }

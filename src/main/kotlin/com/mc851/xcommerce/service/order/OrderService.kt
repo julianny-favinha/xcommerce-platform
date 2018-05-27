@@ -34,6 +34,13 @@ class OrderService(private val logisticService: LogisticService,
         return orderDao.findOrderById(orderId)
     }
 
+    fun cancelOrder(orderId: Long): Boolean {
+        orderItemDao.findOrderItemsByOrderId(orderId).map {
+            orderItemDao.cancelOrderItem(it.id)
+        }
+        return orderDao.cancelOrder(orderId)
+    }
+
     fun registerOrderItem(products: List<Product>, orderId: Long) {
 
         products.map {

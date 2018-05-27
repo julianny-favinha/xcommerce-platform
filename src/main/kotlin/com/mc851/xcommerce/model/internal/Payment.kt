@@ -13,6 +13,7 @@ data class UserInfo(val cpf: String, val name: String, val address: String, val 
 
 enum class PaymentResult {
     AUTHORIZED,
-    UNAUTHORIZED,
+    FAILED,
+    PENDING,
     ERROR
 }
