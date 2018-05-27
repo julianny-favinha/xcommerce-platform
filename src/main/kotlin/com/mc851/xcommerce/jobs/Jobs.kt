@@ -10,12 +10,12 @@ class Jobs {
 
     @Scheduled(fixedRate = 60000)
     fun preShipmentJob() {
-        TODO()
+        System.out.println("Time in task: " + (System.currentTimeMillis() / 1000))
     }
 
     @Scheduled(fixedRate = 60000)
     fun releaseJob() {
-        TODO()
+        System.out.println("Time in task: " + (System.currentTimeMillis() / 1000))
     }
 
 }

@@ -56,6 +56,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             PaymentType.BOLETO -> boletoPayment(userInfo, order.freightPrice + order.productsPrice)
         }
 
+        log.debug { "Payment result $paymentResult for $order "}
         paymentResult.code?.let { orderService.registerPayment(orderId, paymentResult.code) }
         orderService.updatePaymentStatus(orderId, paymentResult.status.paymentStatus)
 
