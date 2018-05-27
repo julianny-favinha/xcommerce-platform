@@ -21,7 +21,6 @@ interface OrderDao {
 
     fun updateShipmentStatus(orderId: Long, shipmentStatus: Long): Boolean
 
-
 }
 
 interface OrderItemDao {

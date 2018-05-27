@@ -65,7 +65,6 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             PaymentResult.AUTHORIZED -> CheckoutOut(order.id, CheckoutStatus.OK, null)
         }
 
-
     }
 
     private fun creditCardPayment(creditCardInfo: CreditCardInfo?,

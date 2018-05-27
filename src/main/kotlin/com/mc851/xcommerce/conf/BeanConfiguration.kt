@@ -18,6 +18,8 @@ import com.mc851.xcommerce.dao.credential.UserCredentialDao
 import com.mc851.xcommerce.dao.credential.UserCredentialDaoPostgres
 import com.mc851.xcommerce.dao.logistic.LogisticDao
 import com.mc851.xcommerce.dao.logistic.LogisticDaoPostgres
+import com.mc851.xcommerce.dao.order.OrderDao
+import com.mc851.xcommerce.dao.order.OrderItemDao
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.dao.user.UserDao
@@ -28,6 +30,7 @@ import com.mc851.xcommerce.filters.TokenManager
 import com.mc851.xcommerce.service.cart.CartService
 import com.mc851.xcommerce.service.cart.validators.CheckoutValidator
 import com.mc851.xcommerce.service.logistic.LogisticService
+import com.mc851.xcommerce.service.order.OrderService
 import com.mc851.xcommerce.service.payment.PaymentService
 import com.mc851.xcommerce.service.product.CategoryService
 import com.mc851.xcommerce.service.product.ProductService
@@ -183,12 +186,20 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun checkoutValidator() : CheckoutValidator {
+    fun checkoutValidator(): CheckoutValidator {
         return CheckoutValidator()
     }
 
     @Bean
-    fun cartService(checkoutValidator: CheckoutValidator, userService: UserService): CartService {
-        return CartService(checkoutValidator, userService)
+    fun orderService(logisticService: LogisticService, orderDao: OrderDao, orderItemDao: OrderItemDao): OrderService {
+        return OrderService(logisticService, orderDao, orderItemDao)
+    }
+
+    @Bean
+    fun cartService(checkoutValidator: CheckoutValidator,
+                    orderService: OrderService,
+                    paymentService: PaymentService,
+                    userService: UserService): CartService {
+        return CartService(checkoutValidator, orderService, paymentService, userService)
     }
 }
