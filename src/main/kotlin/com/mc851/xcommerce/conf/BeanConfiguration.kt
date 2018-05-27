@@ -19,7 +19,9 @@ import com.mc851.xcommerce.dao.credential.UserCredentialDaoPostgres
 import com.mc851.xcommerce.dao.logistic.LogisticDao
 import com.mc851.xcommerce.dao.logistic.LogisticDaoPostgres
 import com.mc851.xcommerce.dao.order.OrderDao
+import com.mc851.xcommerce.dao.order.OrderDaoPostgres
 import com.mc851.xcommerce.dao.order.OrderItemDao
+import com.mc851.xcommerce.dao.order.OrderItemDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
 import com.mc851.xcommerce.dao.user.UserDao
@@ -45,6 +47,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import org.springframework.core.env.Environment
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.scheduling.annotation.EnableScheduling
 import javax.sql.DataSource
 
 @Configuration
@@ -107,6 +110,16 @@ class BeanConfiguration {
     @Bean
     fun logisticDao(jdbcTemplate: JdbcTemplate): LogisticDao {
         return LogisticDaoPostgres(jdbcTemplate)
+    }
+
+    @Bean
+    fun orderDao(jdbcTemplate: JdbcTemplate): OrderDao {
+        return OrderDaoPostgres(jdbcTemplate)
+    }
+
+    @Bean
+    fun orderItemDao(jdbcTemplate: JdbcTemplate): OrderItemDao {
+        return OrderItemDaoPostgres(jdbcTemplate)
     }
 
     // Client
