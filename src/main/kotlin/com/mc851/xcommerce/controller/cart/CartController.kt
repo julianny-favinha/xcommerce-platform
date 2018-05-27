@@ -1,5 +1,6 @@
 package com.mc851.xcommerce.controller.cart
 
+import com.mc851.xcommerce.controller.utils.handleErrorResponse
 import com.mc851.xcommerce.controller.utils.handleResponse
 import com.mc851.xcommerce.filters.RequestContext
 import com.mc851.xcommerce.model.api.Cart
@@ -10,7 +11,6 @@ import com.mc851.xcommerce.service.cart.CartService
 import com.mc851.xcommerce.service.product.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -30,7 +30,7 @@ class CartController {
     @PostMapping("/checkout")
     fun checkout(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext, @RequestBody request: CheckoutIn): ResponseEntity<CheckoutOut> {
         val result = cartService.checkout(request, context.userId)
-        return handleResponse(result)
+        return handleErrorResponse(result)
     }
 
     @PostMapping("/reserve")

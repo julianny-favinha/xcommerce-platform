@@ -4,6 +4,7 @@ import com.mc851.xcommerce.controller.utils.handleResponse
 import com.mc851.xcommerce.model.api.Highlights
 import com.mc851.xcommerce.model.api.Product
 import com.mc851.xcommerce.model.api.Search
+import com.mc851.xcommerce.model.api.SearchIn
 import com.mc851.xcommerce.service.product.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -34,8 +35,8 @@ class ProductController {
     }
 
     @PostMapping("/search")
-    fun search(@RequestBody text: String): ResponseEntity<Search> {
-        val result = productService.search(text)
+    fun search(@RequestBody text: SearchIn): ResponseEntity<Search> {
+        val result = productService.search(text.query)
         return handleResponse(result)
     }
 
