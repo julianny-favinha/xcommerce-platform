@@ -36,8 +36,8 @@ class OrderService(private val logisticService: LogisticService,
         return orderDao.findOrderById(orderId)
     }
 
-    fun registerPayment(orderId: Long, paymentId: Long) {
-        orderDao.registerPayment(orderId, paymentId)
+    fun registerPayment(orderId: Long, paymentCode: String) {
+        orderDao.registerPayment(orderId, paymentCode)
     }
 
     fun updatePaymentStatus(orderId: Long, afterStatus: PaymentStatus) {

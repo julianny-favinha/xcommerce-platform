@@ -27,7 +27,7 @@ class OrderDaoPostgres(jdbcTemplate: JdbcTemplate) : OrderDao {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun registerPayment(orderId: Long, paymentId: Long): Boolean {
+    override fun registerPayment(orderId: Long, paymentCode: String): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

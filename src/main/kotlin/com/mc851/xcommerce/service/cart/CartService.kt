@@ -7,20 +7,25 @@ import com.mc851.xcommerce.model.api.PaymentOut
 import com.mc851.xcommerce.model.internal.BoletoPayment
 import com.mc851.xcommerce.model.internal.CreditCardInfo
 import com.mc851.xcommerce.model.internal.CreditCardPayment
-import com.mc851.xcommerce.model.internal.PaymentResult
+import com.mc851.xcommerce.model.internal.PaymentResultStatus
 import com.mc851.xcommerce.model.internal.PaymentType
 import com.mc851.xcommerce.model.internal.UserInfo
 import com.mc851.xcommerce.service.cart.validators.CheckoutValidator
 import com.mc851.xcommerce.service.order.OrderService
 import com.mc851.xcommerce.service.payment.PaymentService
 import com.mc851.xcommerce.service.user.UserService
+import mu.KotlinLogging
 
 class CartService(private val checkoutValidator: CheckoutValidator,
                   private val orderService: OrderService,
                   private val paymentService: PaymentService,
                   private val userService: UserService) {
 
+    private val log = KotlinLogging.logger {}
+
     fun checkout(checkoutIn: CheckoutIn, userId: Long): CheckoutOut {
+
+        log.debug { "Starting checkout with $checkoutIn for user $userId" }
 
         val validationResult = checkoutValidator.validate(checkoutIn.cart, userId)
         if (!validationResult.status.success()) {
@@ -41,6 +46,8 @@ class CartService(private val checkoutValidator: CheckoutValidator,
         //TODO("Deal with address")
         val order = orderService.retrieveOrder(orderId)
 
+        log.debug { "Starting payment for order $order for checkout $checkout" }
+
         val paymentResult = when (checkout.paymentInfo.paymentType) {
             PaymentType.CREDIT_CARD -> creditCardPayment(checkout.paymentInfo.creditCardInfo,
                 userInfo,
@@ -48,21 +55,17 @@ class CartService(private val checkoutValidator: CheckoutValidator,
                 checkout.paymentInfo.installments)
             PaymentType.BOLETO -> boletoPayment(userInfo, order.freightPrice + order.productsPrice)
         }
-        // TODO("Must return something better than PaymentResult, with payment Id, Payment Result, and Details")
-        val paymentId = 1L
 
-        orderService.registerPayment(orderId, paymentId)
-        orderService.updatePaymentStatus(orderId, paymentResult.paymentStatus)
+        paymentResult.code?.let { orderService.registerPayment(orderId, paymentResult.code) }
+        orderService.updatePaymentStatus(orderId, paymentResult.status.paymentStatus)
 
-        return when (paymentResult) {
-            PaymentResult.PENDING -> CheckoutOut(order.id,
-                CheckoutStatus.OK,
-                PaymentOut("1302913901239120312930193213210392109"))
-            PaymentResult.FAILED, PaymentResult.ERROR -> {
+        return when (paymentResult.status) {
+            PaymentResultStatus.PENDING -> CheckoutOut(order.id, CheckoutStatus.OK, PaymentOut(paymentResult.code!!))
+            PaymentResultStatus.FAILED, PaymentResultStatus.ERROR -> {
                 cancelOrder(orderId)
-                CheckoutOut(null, CheckoutStatus.NOT_OK, null)
+                CheckoutOut(CheckoutStatus.NOT_OK)
             }
-            PaymentResult.AUTHORIZED -> CheckoutOut(order.id, CheckoutStatus.OK, null)
+            PaymentResultStatus.AUTHORIZED -> CheckoutOut(order.id, CheckoutStatus.OK)
         }
 
     }

@@ -7,11 +7,9 @@ import com.mc851.xcommerce.clients.payment.api.StatusBoleto
 import com.mc851.xcommerce.model.internal.BoletoPayment
 import com.mc851.xcommerce.model.internal.CreditCardPayment
 import com.mc851.xcommerce.model.internal.PaymentResult
-import mu.KotlinLogging
+import com.mc851.xcommerce.model.internal.PaymentResultStatus
 
 class PaymentService(private val paymentClient: PaymentClient) {
-
-    private val logger = KotlinLogging.logger {}
 
     fun payBoleto(boletoPayment: BoletoPayment): PaymentResult {
 
@@ -23,12 +21,13 @@ class PaymentService(private val paymentClient: PaymentClient) {
             userInfo.cep,
             (boletoPayment.value / 100.0).toString())
 
-        val paymentResult = paymentClient.boletoPayment(paymentIn) ?: return PaymentResult.ERROR
+        val paymentResponse = paymentClient.boletoPayment(paymentIn) ?: return PaymentResult(PaymentResultStatus.ERROR)
 
-        logger.debug { paymentResult }
-
-        return PaymentResult.AUTHORIZED
-
+        return when (paymentResponse.result) {
+            "AUTHORIZED" -> PaymentResult(PaymentResultStatus.PENDING, paymentResponse.code)
+            "UNAUTHORIZED" -> PaymentResult(PaymentResultStatus.FAILED)
+            else -> PaymentResult(PaymentResultStatus.ERROR)
+        }
     }
 
     fun payCreditCard(creditCardPayment: CreditCardPayment): PaymentResult {
@@ -45,9 +44,14 @@ class PaymentService(private val paymentClient: PaymentClient) {
             (creditCardPayment.value / 100.0).toString(),
             creditCardPayment.instalments.toString())
 
-        paymentClient.creditCardPayment(paymentIn) ?: return PaymentResult.ERROR
+        val paymentResponse =
+            paymentClient.creditCardPayment(paymentIn) ?: return PaymentResult(PaymentResultStatus.ERROR)
 
-        return PaymentResult.AUTHORIZED
+        return when (paymentResponse.result) {
+            "AUTHORIZED" -> PaymentResult(PaymentResultStatus.AUTHORIZED)
+            "UNAUTHORIZED" -> PaymentResult(PaymentResultStatus.FAILED)
+            else -> PaymentResult(PaymentResultStatus.ERROR)
+        }
     }
 
     fun getPaymentStatus(code: String): StatusBoleto {

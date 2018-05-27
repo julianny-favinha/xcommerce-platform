@@ -12,7 +12,10 @@ data class PaymentInfo(val paymentType: PaymentType, val creditCardInfo: CreditC
 
 data class ShipmentInfo(val cepDst: String, val shipmentType: ShipmentType)
 
-data class CheckoutOut(val orderId: Long?, val status: CheckoutStatus, val paymentDetails: PaymentOut?)
+data class CheckoutOut(val orderId: Long?, val status: CheckoutStatus, val paymentDetails: PaymentOut?) {
+    constructor(status: CheckoutStatus) : this(null, status, null)
+    constructor(orderId: Long, status: CheckoutStatus): this(orderId, status, null)
+}
 
 data class PaymentOut(val barCode: String)
 

@@ -13,7 +13,7 @@ interface OrderDao {
 
     fun cancelOrder(orderId: Long): Boolean
 
-    fun registerPayment(orderId: Long, paymentId: Long): Boolean
+    fun registerPayment(orderId: Long, paymentCode: String): Boolean
 
     fun registerShipment(orderId: Long, shipmentId: Long): Boolean
 

@@ -11,9 +11,13 @@ data class CreditCardInfo(val holderName: String, val month: Long, val year: Lon
 
 data class UserInfo(val cpf: String, val name: String, val address: String, val cep: String)
 
-enum class PaymentResult(val paymentStatus: PaymentStatus) {
+enum class PaymentResultStatus(val paymentStatus: PaymentStatus) {
     AUTHORIZED(PaymentStatus.OK),
     FAILED(PaymentStatus.ERROR),
     PENDING(PaymentStatus.PENDING),
     ERROR(PaymentStatus.ERROR);
+}
+
+data class PaymentResult(val status: PaymentResultStatus, val code: String?) {
+    constructor(status: PaymentResultStatus) : this(status, null)
 }

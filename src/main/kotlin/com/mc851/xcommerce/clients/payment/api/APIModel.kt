@@ -21,7 +21,7 @@ data class PaymentInBoleto(val clientName: String,
 data class PaymentOutCreditCard(val operationHash: String, val result: String)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class PaymentOutBoleto(val errorMessage: String?, val code: String, val documentRep: String)
+data class PaymentOutBoleto(val errorMessage: String?, val code: String, val result: String, val documentRep: String)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class StatusBoleto(val status: String)

@@ -6,11 +6,16 @@ import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
 @EnableScheduling
-class PreShipmentJob {
+class Jobs {
 
-    @Scheduled(fixedRate = 1000)
-    fun execute() {
-        System.out.println("Fixed rate task - " + System.currentTimeMillis() / 1000)
+    @Scheduled(fixedRate = 60000)
+    fun preShipmentJob() {
+        TODO()
+    }
+
+    @Scheduled(fixedRate = 60000)
+    fun releaseJob() {
+        TODO()
     }
 
 }
