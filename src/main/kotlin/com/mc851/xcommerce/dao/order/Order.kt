@@ -13,6 +13,15 @@ interface OrderDao {
 
     fun cancelOrder(orderId: Long): Boolean
 
+    fun registerPayment(orderId: Long, paymentId: Long): Boolean
+
+    fun registerShipment(orderId: Long, shipmentId: Long): Boolean
+
+    fun updatePaymentStatus(orderId: Long, paymentStatus: Long): Boolean
+
+    fun updateShipmentStatus(orderId: Long, shipmentStatus: Long): Boolean
+
+
 }
 
 interface OrderItemDao {

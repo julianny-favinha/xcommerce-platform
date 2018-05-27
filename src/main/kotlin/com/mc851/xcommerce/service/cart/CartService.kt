@@ -48,8 +48,11 @@ class CartService(private val checkoutValidator: CheckoutValidator,
                 checkout.paymentInfo.installments)
             PaymentType.BOLETO -> boletoPayment(userInfo, order.freightPrice + order.productsPrice)
         }
+        // TODO("Must return something better than PaymentResult, with payment Id, Payment Result, and Details")
+        val paymentId = 1L
 
-        // TODO("Must return something better than PaymentResult")
+        orderService.registerPayment(orderId, paymentId)
+        orderService.updatePaymentStatus(orderId, paymentResult.paymentStatus)
 
         return when (paymentResult) {
             PaymentResult.PENDING -> CheckoutOut(order.id,
@@ -61,6 +64,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             }
             PaymentResult.AUTHORIZED -> CheckoutOut(order.id, CheckoutStatus.OK, null)
         }
+
 
     }
 

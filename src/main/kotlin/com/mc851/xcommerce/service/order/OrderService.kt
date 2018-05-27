@@ -8,6 +8,8 @@ import com.mc851.xcommerce.model.api.ShipmentInfo
 import com.mc851.xcommerce.model.internal.Order
 import com.mc851.xcommerce.model.internal.OrderItemValue
 import com.mc851.xcommerce.model.internal.OrderValue
+import com.mc851.xcommerce.model.internal.PaymentStatus
+import com.mc851.xcommerce.model.internal.ShipmentStatus
 import com.mc851.xcommerce.service.logistic.LogisticService
 
 class OrderService(private val logisticService: LogisticService,
@@ -24,7 +26,7 @@ class OrderService(private val logisticService: LogisticService,
 
         val orderValue = OrderValue(freightPrice = freightPrice, productsPrice = price, userId = userId)
 
-        val orderId =  orderDao.createOrder(orderValue)
+        val orderId = orderDao.createOrder(orderValue)
 
         registerOrderItem(products, orderId)
         return orderId
@@ -34,6 +36,22 @@ class OrderService(private val logisticService: LogisticService,
         return orderDao.findOrderById(orderId)
     }
 
+    fun registerPayment(orderId: Long, paymentId: Long) {
+        orderDao.registerPayment(orderId, paymentId)
+    }
+
+    fun updatePaymentStatus(orderId: Long, afterStatus: PaymentStatus) {
+        orderDao.updatePaymentStatus(orderId, afterStatus.getId().toLong())
+    }
+
+    fun registerShipment(orderId: Long, shipmentId: Long) {
+        orderDao.registerShipment(orderId, shipmentId)
+    }
+
+    fun updateShipmentStatus(orderId: Long, afterStatus: ShipmentStatus) {
+        orderDao.updateShipmentStatus(orderId, afterStatus.getId().toLong())
+    }
+
     fun cancelOrder(orderId: Long): Boolean {
         orderItemDao.findOrderItemsByOrderId(orderId).map {
             orderItemDao.cancelOrderItem(it.id)
@@ -41,14 +59,13 @@ class OrderService(private val logisticService: LogisticService,
         return orderDao.cancelOrder(orderId)
     }
 
-    fun registerOrderItem(products: List<Product>, orderId: Long) {
+    private fun registerOrderItem(products: List<Product>, orderId: Long) {
 
         products.map {
             OrderItemValue(orderId, it.id, it.name, it.price.toLong())
         }.forEach {
             orderItemDao.createOrderItem(it)
         }
-
 
     }
 }
