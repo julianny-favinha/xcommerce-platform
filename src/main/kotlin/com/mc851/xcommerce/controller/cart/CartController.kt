@@ -33,11 +33,6 @@ class CartController {
         return handleResponse(result)
     }
 
-    @GetMapping("/pre_checkout")
-    fun preCheckout(): ResponseEntity<String> {
-        return handleResponse(cartService.preCheckout())
-    }
-
     @PostMapping("/reserve")
     fun reserve(@RequestBody request: CartItem): ResponseEntity<Boolean> {
         val result = productService.reserveProducts(mapOf(request.product to request.quantity))

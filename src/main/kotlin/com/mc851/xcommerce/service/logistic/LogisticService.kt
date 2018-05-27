@@ -10,8 +10,23 @@ import com.mc851.xcommerce.model.api.Product
 import com.mc851.xcommerce.model.api.ShipmentIn
 import com.mc851.xcommerce.model.api.ShipmentOut
 import com.mc851.xcommerce.model.internal.ShipmentIndividual
+import com.mc851.xcommerce.model.internal.ShipmentType
 
 class LogisticService(val logisticClient: LogisticClient, val logisticDao: LogisticDao) {
+
+    fun getShipmentPrice(shipment: ShipmentIndividual, shipmentType: ShipmentType): Long {
+
+        val logisticIn = LogisticPriceInApi(shipType = shipmentType.name,
+            cepDst = shipment.cepDst,
+            packWeight = shipment.product.weight,
+            packType = "Caixa",
+            packLen = shipment.product.length.toDouble(),
+            packHeight = shipment.product.height.toDouble(),
+            packWidth = shipment.product.width.toDouble())
+
+        return logisticClient.calculateShipment(logisticIn)?.preco?.toLong()
+               ?: throw IllegalStateException("Shipment price not found")
+    }
 
     fun getShipmentPrice(shipment: ShipmentIndividual): ShipmentOut {
 
@@ -47,6 +62,13 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
         return ShipmentOut(prices)
     }
 
+    fun getShipmentPriceAll(shipments: ShipmentIn, shipmentType: ShipmentType): Long {
+        return shipments.products.map {
+            val shipIn = ShipmentIndividual(it, shipments.cepDst)
+            getShipmentPrice(shipIn, shipmentType)
+        }.sum()
+    }
+
     fun getShipmentPriceAll(shipments: ShipmentIn): ShipmentOut? {
 
         var totalPrices = emptyMap<String, Int>().toMutableMap()
@@ -70,7 +92,6 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
     fun register(product: Product, cepDst: String): String {
         var registerIn = LogisticRegisterInApi(product.id.toInt(),
             "PAC",
-            "13465-450",
             cepDst,
             product.weight.toDouble(),
             "Caixa",

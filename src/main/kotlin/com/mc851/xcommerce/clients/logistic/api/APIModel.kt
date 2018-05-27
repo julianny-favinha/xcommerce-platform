@@ -35,7 +35,6 @@ data class LogisticTrackOutApi(val status: String,
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class LogisticRegisterInApi(val idProduto: Int,
                                  val tipoEntrega: String,
-                                 val cepOrigem: String,
                                  val cepDestino: String,
                                  val peso: Double,
                                  val tipoPacote: String,
@@ -43,6 +42,7 @@ data class LogisticRegisterInApi(val idProduto: Int,
                                  val largura: Double,
                                  val comprimento: Double) {
     val apiKey = "b09f7e40-36a7-5c00-9d62-84112b847952"
+    val cepOrigem = "13465-450"
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
