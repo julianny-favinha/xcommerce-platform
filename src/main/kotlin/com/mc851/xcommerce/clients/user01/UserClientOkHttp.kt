@@ -6,6 +6,7 @@ import com.mc851.xcommerce.clients.UserClient
 import com.mc851.xcommerce.clients.user01.api.RegisterAPI
 import com.mc851.xcommerce.clients.user01.api.UpdateAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
+import mu.KotlinLogging
 import okhttp3.HttpUrl
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -15,15 +16,23 @@ import okhttp3.RequestBody
 class UserClientOkHttp : UserClient {
     private val okHttpClient = OkHttpClient()
     private val objectMapper = jacksonObjectMapper()
-    private val json = MediaType.parse("application/json")
+    private val mediaType = MediaType.parse("application/json")
+
+    private val log = KotlinLogging.logger {}
 
     override fun register(registerAPI: RegisterAPI): String? {
-        val body = RequestBody.create(json, objectMapper.writeValueAsString(registerAPI))
+        val json = objectMapper.writeValueAsString(registerAPI)
+        val url = "http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/register"
 
-        val request = Request.Builder().url("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/register")
+        log.info { "Requesting $json to $url"}
+
+        val body = RequestBody.create(mediaType, json)
+        val request = Request.Builder().url(url)
             .addHeader("api_key", "abc").post(body).build()
 
         val response = okHttpClient.newCall(request).execute()
+
+        log.info { "Response: $response "}
 
         if (!response.isSuccessful) {
             return null
@@ -49,7 +58,7 @@ class UserClientOkHttp : UserClient {
     }
 
     override fun update(id: String, updateAPI: UpdateAPI) {
-        val body = RequestBody.create(json, objectMapper.writeValueAsString(updateAPI))
+        val body = RequestBody.create(mediaType, objectMapper.writeValueAsString(updateAPI))
 
         val request =
             Request.Builder().url("""http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/update/$id""")

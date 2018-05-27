@@ -11,10 +11,13 @@ import com.mc851.xcommerce.model.api.SignUp
 import com.mc851.xcommerce.model.api.Update
 import com.mc851.xcommerce.model.api.User
 import com.mc851.xcommerce.service.user.credential.UserCredentialService
+import mu.KotlinLogging
 
 class UserService(private val userClient: UserClient,
                   private val userDao: UserDao,
                   private val userCredentialService: UserCredentialService) {
+
+    private val log = KotlinLogging.logger {}
 
     fun signUp(signUp: SignUp): SignInResponse? {
         val register = RegisterAPI(name = signUp.name,
@@ -26,11 +29,17 @@ class UserService(private val userClient: UserClient,
             gender = signUp.gender,
             telephone = signUp.telephone)
 
+        log.info { "attempting to create user to $register" }
+
         val id = userClient.register(register) ?: return null
         val userInfo = userClient.getUserById(id) ?: throw IllegalStateException("Couldn't find User created! Bizarre!")
 
+        log.info { "user created with externalID: $id"  }
+
         val userId = createUserRelation(id)
         userCredentialService.addCredential(signUp.email, signUp.password, userId)
+
+
 
         val user = convertUser(userInfo, userId)
         val token = userCredentialService.retrieveToken(userId)

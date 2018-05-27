@@ -25,7 +25,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
 
     fun checkout(checkoutIn: CheckoutIn, userId: Long): CheckoutOut {
 
-        log.debug { "Starting checkout with $checkoutIn for user $userId" }
+        log.info { "Starting checkout with $checkoutIn for user $userId" }
 
         val validationResult = checkoutValidator.validate(checkoutIn.cart, userId)
         if (!validationResult.status.success()) {
@@ -46,7 +46,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
         //TODO("Deal with address")
         val order = orderService.retrieveOrder(orderId)
 
-        log.debug { "Starting payment for order $order for checkout $checkout" }
+        log.info { "Starting payment for order $order for checkout $checkout" }
 
         val paymentResult = when (checkout.paymentInfo.paymentType) {
             PaymentType.CREDIT_CARD -> creditCardPayment(checkout.paymentInfo.creditCardInfo,
@@ -56,7 +56,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             PaymentType.BOLETO -> boletoPayment(userInfo, order.freightPrice + order.productsPrice)
         }
 
-        log.debug { "Payment result $paymentResult for $order "}
+        log.info { "Payment result $paymentResult for $order "}
         paymentResult.code?.let { orderService.registerPayment(orderId, paymentResult.code) }
         orderService.updatePaymentStatus(orderId, paymentResult.status.paymentStatus)
 
