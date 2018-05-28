@@ -7,6 +7,7 @@ import com.mc851.xcommerce.model.api.Category
 import com.mc851.xcommerce.model.api.Highlights
 import com.mc851.xcommerce.model.api.Product
 import com.mc851.xcommerce.model.api.Search
+import mu.KotlinLogging
 import java.math.BigDecimal
 import java.util.UUID
 
@@ -14,13 +15,15 @@ class ProductService(val productClient: ProductClient,
                      val productDao: ProductDao,
                      val categoryService: CategoryService) {
 
+    private val log = KotlinLogging.logger {}
+
     fun getHighlights(): Highlights? {
         val productApi = productClient.listAllProducts(true)
         if (productApi.isEmpty()) return null
 
         val categoryByExternalId = categoryService.getByIds(productApi.mapNotNull { it.categoryId })
 
-        System.out.println("products" + productApi.toString())
+        log.info { categoryByExternalId }
 
         return Highlights(highlights = productApi.map {
             val id = createRelation(it)
@@ -52,7 +55,7 @@ class ProductService(val productClient: ProductClient,
     private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product {
         return Product(id = id,
             name = productApi.name.toLowerCase().capitalize(),
-            category = category?.name?.toLowerCase()?.capitalize(),
+            category = category?.name?.toLowerCase()?.capitalize() ?: "",
             imageUrl = productApi.imageUrl,
             brand = productApi.brand?.toLowerCase()?.capitalize() ?: "Sem Marca",
             description = productApi.description,

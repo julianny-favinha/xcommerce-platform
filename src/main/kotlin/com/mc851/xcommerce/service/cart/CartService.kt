@@ -41,7 +41,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
     }
 
     private fun purchaseOrder(orderId: Long, userId: Long, checkout: CheckoutIn): CheckoutOut {
-        val user = userService.findByUserId(userId) ?: throw IllegalStateException("User must exist!")
+        val user = userService.findByUserId(userId)
         val userInfo = UserInfo(user.cpf, user.name, "BLABLBA", "13083-852")
         //TODO("Deal with address")
         val order = orderService.retrieveOrder(orderId)
@@ -56,7 +56,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             PaymentType.BOLETO -> boletoPayment(userInfo, order.freightPrice + order.productsPrice)
         }
 
-        log.info { "Payment result $paymentResult for $order "}
+        log.info { "Payment result $paymentResult for $order " }
         paymentResult.code?.let { orderService.registerPayment(orderId, paymentResult.code) }
         orderService.updatePaymentStatus(orderId, paymentResult.status.paymentStatus)
 
