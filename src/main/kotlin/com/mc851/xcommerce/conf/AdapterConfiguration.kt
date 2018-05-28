@@ -17,7 +17,7 @@ class AdapterConfiguration : WebMvcConfigurer {
     lateinit var tokenManager: TokenManager
 
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(tokenManager).addPathPatterns("/cart/checkout/**")
+        registry.addInterceptor(tokenManager)
         super.addInterceptors(registry)
     }
 }

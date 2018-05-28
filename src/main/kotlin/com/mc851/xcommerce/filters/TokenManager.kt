@@ -9,21 +9,26 @@ import javax.servlet.http.HttpServletResponse
 class TokenManager(private val userCredentialService: UserCredentialService) : HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        if(!request.requestURI.startsWith("/cart/checkout")){
+            addContext(request)
+            return true
+        }
+
+
         val header: String? = request.getHeader("x-auth-token")
+
 
         if (header == null) {
             response.status = HttpStatus.UNAUTHORIZED.value()
             return false
         }
 
-        return when {
-            checkAuth(header, request) -> true
-            else -> {
-                response.status = HttpStatus.UNAUTHORIZED.value()
-                false
-            }
+        if (!checkAuth(header, request)){
+            response.status = HttpStatus.UNAUTHORIZED.value()
+            return false
         }
 
+        return true
     }
 
     private fun checkAuth(header: String, request: HttpServletRequest): Boolean {
@@ -33,6 +38,11 @@ class TokenManager(private val userCredentialService: UserCredentialService) : H
         request.setAttribute(RequestContext.CONTEXT, context)
 
         return auth
+    }
+
+    private fun addContext(request: HttpServletRequest) {
+        val context = RequestContext()
+        request.setAttribute(RequestContext.CONTEXT, context)
     }
 
 }
