@@ -23,11 +23,9 @@ class ProductService(val productClient: ProductClient,
 
         val categoryByExternalId = categoryService.getByIds(productApi.mapNotNull { it.categoryId })
 
-        log.info { categoryByExternalId }
-
         return Highlights(highlights = productApi.map {
             val id = createRelation(it)
-            val category = categoryByExternalId[it.id]
+            val category = categoryByExternalId[it.categoryId]
             convertProduct(id, it, category)
         })
     }
@@ -47,7 +45,7 @@ class ProductService(val productClient: ProductClient,
 
         return Search(result = products.map {
             val id = createRelation(it)
-            val category = categoryByExternalId[it.id]
+            val category = categoryByExternalId[it.categoryId]
             convertProduct(id, it, category)
         })
     }

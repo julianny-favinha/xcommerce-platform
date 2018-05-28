@@ -29,7 +29,7 @@ class CartController {
 
     @PostMapping("/checkout")
     fun checkout(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext, @RequestBody request: CheckoutIn): ResponseEntity<CheckoutOut> {
-        val result = cartService.checkout(request, context.userId)
+        val result = cartService.checkout(request, context.userId!!)
         return handleErrorResponse(result)
     }
 

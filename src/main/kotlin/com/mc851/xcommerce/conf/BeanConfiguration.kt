@@ -28,6 +28,7 @@ import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.user.token.TokenDao
 import com.mc851.xcommerce.dao.user.token.TokenDaoPostgres
+import com.mc851.xcommerce.filters.ContextFilter
 import com.mc851.xcommerce.filters.TokenManager
 import com.mc851.xcommerce.service.cart.CartService
 import com.mc851.xcommerce.service.cart.validators.CheckoutValidator
@@ -61,6 +62,11 @@ class BeanConfiguration {
     @Bean
     fun tokenManager(userCredentialService: UserCredentialService): TokenManager {
         return TokenManager(userCredentialService)
+    }
+
+    @Bean
+    fun requestFilter(): ContextFilter {
+        return ContextFilter()
     }
 
     // DataSource

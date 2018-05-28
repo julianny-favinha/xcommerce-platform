@@ -1,5 +1,6 @@
 package com.mc851.xcommerce.conf
 
+import com.mc851.xcommerce.filters.ContextFilter
 import com.mc851.xcommerce.filters.RequestContext
 import com.mc851.xcommerce.filters.TokenManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,8 +17,12 @@ class AdapterConfiguration : WebMvcConfigurer {
     @Autowired
     lateinit var tokenManager: TokenManager
 
+    @Autowired
+    lateinit var requestFilter: ContextFilter
+
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(tokenManager)
+        registry.addInterceptor(requestFilter)
+        registry.addInterceptor(tokenManager).addPathPatterns("/cart/checkout/**")
         super.addInterceptors(registry)
     }
 }

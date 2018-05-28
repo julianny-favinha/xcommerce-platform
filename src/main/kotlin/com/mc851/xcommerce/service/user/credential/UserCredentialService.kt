@@ -30,8 +30,8 @@ class UserCredentialService(private val userCredentialDao: UserCredentialDao, pr
         return if (checkpw(password, userCredential.password)) userCredential.userId else null
     }
 
-    fun retrieveUser(token: String): Long? {
-        return tokenDao.findUserIdByToken(token)
+    fun retrieveUser(token: String): Long {
+        return tokenDao.findUserIdByToken(token) ?: throw IllegalStateException("User not found for token")
     }
 
     fun retrieveToken(userId: Long): String {

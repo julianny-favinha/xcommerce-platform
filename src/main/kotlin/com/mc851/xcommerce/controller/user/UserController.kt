@@ -28,7 +28,7 @@ class UserController {
 
     @PutMapping("/update")
     fun update(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext, @RequestBody update: Update): ResponseEntity<User> {
-        val response = userService.update(context.userId, update)
+        val response = userService.update(context.userId!!, update)
         return handleResponse(response)
     }
 
@@ -46,7 +46,7 @@ class UserController {
 
     @GetMapping("")
     fun getUser(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext): ResponseEntity<User> {
-        val response = userService.findByUserId(context.userId)
+        val response = userService.findByUserId(context.userId!!)
         return handleErrorResponse(response)
     }
 
