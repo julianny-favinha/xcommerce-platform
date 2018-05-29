@@ -3,11 +3,11 @@ package com.mc851.xcommerce.service.payment
 import com.mc851.xcommerce.clients.PaymentClient
 import com.mc851.xcommerce.clients.payment.api.PaymentInBoleto
 import com.mc851.xcommerce.clients.payment.api.PaymentInCreditCard
-import com.mc851.xcommerce.clients.payment.api.StatusBoleto
 import com.mc851.xcommerce.model.internal.BoletoPayment
 import com.mc851.xcommerce.model.internal.CreditCardPayment
 import com.mc851.xcommerce.model.internal.PaymentResult
 import com.mc851.xcommerce.model.internal.PaymentResultStatus
+import com.mc851.xcommerce.model.internal.PaymentStatus
 
 class PaymentService(private val paymentClient: PaymentClient) {
 
@@ -54,9 +54,15 @@ class PaymentService(private val paymentClient: PaymentClient) {
         }
     }
 
-    fun getPaymentStatus(code: String): StatusBoleto {
-        paymentClient.statusBoletoPayment(code)
-        TODO("then what?")
+    fun getPaymentStatus(code: String): PaymentStatus? {
+        val statusBoletoPayment = paymentClient.statusBoletoPayment(code) ?: return null
+
+        return when (statusBoletoPayment.status) {
+            "PENDING_PAYMENT" -> PaymentStatus.PENDING
+            "OK" -> PaymentStatus.OK
+            "EXPIRED" -> PaymentStatus.EXPIRED
+            else -> PaymentStatus.ERROR
+        }
     }
 
 }

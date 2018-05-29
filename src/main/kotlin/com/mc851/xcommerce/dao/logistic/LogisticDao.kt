@@ -1,9 +1,8 @@
 package com.mc851.xcommerce.dao.logistic
 
 interface LogisticDao {
-    fun findById(id: Long): String?
+    fun findById(id: Long): List<String>
 
-    fun insertExternalId(externalId: String): Long?
+    fun insertExternalIds(externalId: List<String>): Long?
 
-    fun findByExternalId(externalId: String): Long?
 }

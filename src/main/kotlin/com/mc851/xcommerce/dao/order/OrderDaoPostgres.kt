@@ -23,6 +23,10 @@ class OrderDaoPostgres(jdbcTemplate: JdbcTemplate) : OrderDao {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun findOrderByStatus(paymentStatus: Int, shipmentStatus: Int): List<Order> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun cancelOrder(orderId: Long): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -35,11 +39,11 @@ class OrderDaoPostgres(jdbcTemplate: JdbcTemplate) : OrderDao {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun updatePaymentStatus(orderId: Long, paymentStatus: Long): Boolean {
+    override fun updatePaymentStatus(orderId: Long, paymentStatus: Int): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun updateShipmentStatus(orderId: Long, shipmentStatus: Long): Boolean {
+    override fun updateShipmentStatus(orderId: Long, shipmentStatus: Int): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

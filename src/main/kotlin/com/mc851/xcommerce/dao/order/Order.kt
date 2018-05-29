@@ -11,15 +11,17 @@ interface OrderDao {
 
     fun findOrderById(orderId: Long): Order
 
+    fun findOrderByStatus(paymentStatus: Int, shipmentStatus: Int): List<Order>
+
     fun cancelOrder(orderId: Long): Boolean
 
     fun registerPayment(orderId: Long, paymentCode: String): Boolean
 
     fun registerShipment(orderId: Long, shipmentId: Long): Boolean
 
-    fun updatePaymentStatus(orderId: Long, paymentStatus: Long): Boolean
+    fun updatePaymentStatus(orderId: Long, paymentStatus: Int): Boolean
 
-    fun updateShipmentStatus(orderId: Long, shipmentStatus: Long): Boolean
+    fun updateShipmentStatus(orderId: Long, shipmentStatus: Int): Boolean
 
 }
 

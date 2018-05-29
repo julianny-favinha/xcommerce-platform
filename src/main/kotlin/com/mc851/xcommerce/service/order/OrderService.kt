@@ -6,6 +6,7 @@ import com.mc851.xcommerce.model.api.Product
 import com.mc851.xcommerce.model.api.ShipmentIn
 import com.mc851.xcommerce.model.api.ShipmentInfo
 import com.mc851.xcommerce.model.internal.Order
+import com.mc851.xcommerce.model.internal.OrderItem
 import com.mc851.xcommerce.model.internal.OrderItemValue
 import com.mc851.xcommerce.model.internal.OrderValue
 import com.mc851.xcommerce.model.internal.PaymentStatus
@@ -24,7 +25,8 @@ class OrderService(private val logisticService: LogisticService,
         val freightPrice =
             logisticService.getShipmentPriceAll(ShipmentIn(products, shipmentInfo.cepDst), shipmentInfo.shipmentType)
 
-        val orderValue = OrderValue(freightPrice = freightPrice, productsPrice = price, userId = userId)
+        val orderValue =
+            OrderValue(freightPrice = freightPrice, productsPrice = price, userId = userId, shipmentInfo = shipmentInfo)
 
         val orderId = orderDao.createOrder(orderValue)
 
@@ -41,7 +43,7 @@ class OrderService(private val logisticService: LogisticService,
     }
 
     fun updatePaymentStatus(orderId: Long, afterStatus: PaymentStatus) {
-        orderDao.updatePaymentStatus(orderId, afterStatus.getId().toLong())
+        orderDao.updatePaymentStatus(orderId, afterStatus.getId())
     }
 
     fun registerShipment(orderId: Long, shipmentId: Long) {
@@ -49,7 +51,7 @@ class OrderService(private val logisticService: LogisticService,
     }
 
     fun updateShipmentStatus(orderId: Long, afterStatus: ShipmentStatus) {
-        orderDao.updateShipmentStatus(orderId, afterStatus.getId().toLong())
+        orderDao.updateShipmentStatus(orderId, afterStatus.getId())
     }
 
     fun cancelOrder(orderId: Long): Boolean {
@@ -57,6 +59,14 @@ class OrderService(private val logisticService: LogisticService,
             orderItemDao.cancelOrderItem(it.id)
         }
         return orderDao.cancelOrder(orderId)
+    }
+
+    fun findOrdersByStatus(paymentStatus: PaymentStatus, shipmentStatus: ShipmentStatus): List<Order> {
+        return orderDao.findOrderByStatus(paymentStatus.getId(), shipmentStatus.getId())
+    }
+
+    fun findOrderItems(orderId: Long): List<OrderItem> {
+        return orderItemDao.findOrderItemsByOrderId(orderId)
     }
 
     private fun registerOrderItem(products: List<Product>, orderId: Long) {

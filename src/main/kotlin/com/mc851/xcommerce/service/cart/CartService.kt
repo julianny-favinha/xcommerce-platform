@@ -43,7 +43,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
     private fun purchaseOrder(orderId: Long, userId: Long, checkout: CheckoutIn): CheckoutOut {
         val user = userService.findByUserId(userId)
         val userInfo = UserInfo(user.cpf, user.name, "BLABLBA", "13083-852")
-        //TODO("Deal with address")
+        //TODO("Deal with address and cep")
         val order = orderService.retrieveOrder(orderId)
 
         log.info { "Starting payment for order $order for checkout $checkout" }

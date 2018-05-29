@@ -10,6 +10,7 @@ import com.mc851.xcommerce.model.api.Product
 import com.mc851.xcommerce.model.api.ShipmentIn
 import com.mc851.xcommerce.model.api.ShipmentOut
 import com.mc851.xcommerce.model.internal.ShipmentIndividual
+import com.mc851.xcommerce.model.internal.ShipmentStatus
 import com.mc851.xcommerce.model.internal.ShipmentType
 
 class LogisticService(val logisticClient: LogisticClient, val logisticDao: LogisticDao) {
@@ -89,9 +90,9 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
     }
 
     //  Register a track
-    fun register(product: Product, cepDst: String): String {
-        var registerIn = LogisticRegisterInApi(product.id.toInt(),
-            "PAC",
+    fun register(product: Product, cepDst: String, shipmentType: ShipmentType): String? {
+        val registerIn = LogisticRegisterInApi(product.id.toInt(),
+            shipmentType.name,
             cepDst,
             product.weight.toDouble(),
             "Caixa",
@@ -99,9 +100,34 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
             product.width.toDouble(),
             product.length.toDouble())
         val logisticApiRegister = logisticClient.register(registerIn)
-                                  ?: throw IllegalStateException("Shipment registration was not possible.")
-        logisticDao.insertExternalId(logisticApiRegister.codigoRastreio)
-        return logisticApiRegister.codigoRastreio
+        return logisticApiRegister?.codigoRastreio
+    }
+
+    fun registerAll(products: List<Product>, cepDst: String, shipmentType: ShipmentType): Long? {
+        val externalIds = products.mapNotNull {
+            register(it, cepDst, shipmentType)
+        }
+
+        if (externalIds.size != products.size) {
+            return null
+        }
+
+        return logisticDao.insertExternalIds(externalIds) ?: throw IllegalStateException("Couldn't insert external Ids")
+    }
+
+    fun trackOrder(id: Long): ShipmentStatus {
+        val trackStatus = logisticDao.findById(id).mapNotNull {
+            getTrack(it)
+        }.map { it.historicoRastreio.sortedWith(compareByDescending { it.hora }).first() }.map { it.mensagem }
+
+        if (trackStatus.all { it == "Entregue" }) {
+            return ShipmentStatus.DELIVERED
+        } else if (trackStatus.all { it == "Em Transito" || it == "Saiu para Entrega" }) {
+            return ShipmentStatus.SHIPPED
+        }
+
+        return ShipmentStatus.PREPARING_FOR_SHIPMENT
+
     }
 
     //  Get order tracking given a track code
