@@ -7,13 +7,11 @@ import com.mc851.xcommerce.model.internal.OrderValue
 
 interface OrderDao {
 
-    fun createOrder(orderValue: OrderValue): Long
+    fun createOrder(orderValue: OrderValue): Long?
 
-    fun findOrderById(orderId: Long): Order
+    fun findOrderById(orderId: Long): Order?
 
     fun findOrderByStatus(paymentStatus: Int, shipmentStatus: Int): List<Order>
-
-    fun cancelOrder(orderId: Long): Boolean
 
     fun registerPayment(orderId: Long, paymentCode: String): Boolean
 
@@ -27,10 +25,8 @@ interface OrderDao {
 
 interface OrderItemDao {
 
-    fun createOrderItem(orderItemValu: OrderItemValue): Long
+    fun createOrderItem(orderItemValue: OrderItemValue): Long?
 
     fun findOrderItemsByOrderId(orderId: Long): List<OrderItem>
-
-    fun cancelOrderItem(orderItemId: Long): Boolean
 
 }

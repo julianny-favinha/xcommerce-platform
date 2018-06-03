@@ -1,4 +1,4 @@
-package com.mc851.xcommerce.clients.address
+package com.mc851.xcommerce.clients
 
 import com.mc851.xcommerce.clients.address.api.AddressApi
 import com.mc851.xcommerce.clients.address.api.CepApi

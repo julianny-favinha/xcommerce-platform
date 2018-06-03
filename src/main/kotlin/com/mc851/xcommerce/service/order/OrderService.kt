@@ -28,14 +28,14 @@ class OrderService(private val logisticService: LogisticService,
         val orderValue =
             OrderValue(freightPrice = freightPrice, productsPrice = price, userId = userId, shipmentInfo = shipmentInfo)
 
-        val orderId = orderDao.createOrder(orderValue)
+        val orderId = orderDao.createOrder(orderValue) ?: TODO("deal with it")
 
         registerOrderItem(products, orderId)
         return orderId
     }
 
     fun retrieveOrder(orderId: Long): Order {
-        return orderDao.findOrderById(orderId)
+        return orderDao.findOrderById(orderId) ?: TODO ("deal with it")
     }
 
     fun registerPayment(orderId: Long, paymentCode: String) {
@@ -55,10 +55,7 @@ class OrderService(private val logisticService: LogisticService,
     }
 
     fun cancelOrder(orderId: Long): Boolean {
-        orderItemDao.findOrderItemsByOrderId(orderId).map {
-            orderItemDao.cancelOrderItem(it.id)
-        }
-        return orderDao.cancelOrder(orderId)
+        return orderDao.updatePaymentStatus(orderId, PaymentStatus.CANCELED.getId())
     }
 
     fun findOrdersByStatus(paymentStatus: PaymentStatus, shipmentStatus: ShipmentStatus): List<Order> {

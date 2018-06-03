@@ -3,10 +3,11 @@ package com.mc851.xcommerce.model.internal
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
-enum class PaymentStatus(val _id: Int) {
+enum class PaymentStatus(private val _id: Int) {
     PENDING(1),
     OK(2),
     EXPIRED(3),
+    CANCELED(4),
     ERROR(Integer.MAX_VALUE);
 
     @JsonValue

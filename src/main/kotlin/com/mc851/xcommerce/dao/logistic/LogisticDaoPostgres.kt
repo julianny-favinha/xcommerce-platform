@@ -2,7 +2,6 @@ package com.mc851.xcommerce.dao.logistic
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.mc851.xcommerce.dao.product.Queries
 import org.springframework.jdbc.core.JdbcTemplate
 
 class Queries {
