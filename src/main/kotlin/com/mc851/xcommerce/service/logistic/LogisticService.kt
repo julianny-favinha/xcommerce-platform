@@ -1,7 +1,7 @@
 package com.mc851.xcommerce.service.logistic
 
 import com.mc851.xcommerce.clients.LogisticClient
-import com.mc851.xcommerce.clients.logistic.api.LogisticPriceInApi
+import com.mc851.xcommerce.clients.logistic.api.LogisticInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticRegisterInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticTrackInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticTrackOutApi
@@ -16,7 +16,7 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
 
     fun getShipmentPrice(shipment: ShipmentIndividual, shipmentType: ShipmentType): Long {
 
-        val logisticIn = LogisticPriceInApi(shipType = shipmentType.name,
+        val logisticIn = LogisticInApi(shipType = shipmentType.name,
             cepDst = shipment.cepDst,
             packWeight = shipment.product.weight,
             packType = "Caixa",
@@ -28,9 +28,9 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
                ?: throw IllegalStateException("Shipment price not found")
     }
 
-    fun getShipmentPrice(shipment: ShipmentIndividual): ShipmentOut {
+    fun getShipment(shipment: ShipmentIndividual): ShipmentOut {
 
-        val val_pac = LogisticPriceInApi(shipType = "PAC",
+        val val_pac = LogisticInApi(shipType = "PAC",
             cepDst = shipment.cepDst,
             packWeight = shipment.product.weight,
             packType = "Caixa",
@@ -38,7 +38,7 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
             packHeight = shipment.product.height.toDouble(),
             packWidth = shipment.product.width.toDouble())
 
-        val val_sedex = LogisticPriceInApi(shipType = "SEDEX",
+        val val_sedex = LogisticInApi(shipType = "SEDEX",
             cepDst = shipment.cepDst,
             packWeight = shipment.product.weight,
             packType = "Caixa",
@@ -50,16 +50,19 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
         val logisticApiSedex = logisticClient.calculateShipment(val_sedex)
 
         val prices = emptyMap<String, Int>().toMutableMap()
+        val prazos = emptyMap<String, Int>().toMutableMap()
 
         logisticApiPac?.let {
             prices["PAC"] = it.preco
+            prazos["PAC"] = it.prazo
         }
 
         logisticApiSedex?.let {
             prices["Sedex"] = it.preco
+            prazos["Sedex"] = it.prazo
         }
 
-        return ShipmentOut(prices)
+        return ShipmentOut(prices, prazos)
     }
 
     fun getShipmentPriceAll(shipments: ShipmentIn, shipmentType: ShipmentType): Long {
@@ -69,23 +72,31 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
         }.sum()
     }
 
-    fun getShipmentPriceAll(shipments: ShipmentIn): ShipmentOut? {
+    fun getShipmentAll(shipments: ShipmentIn): ShipmentOut? {
 
         var totalPrices = emptyMap<String, Int>().toMutableMap()
         totalPrices["PAC"] = 0
         totalPrices["Sedex"] = 0
 
+        var prazos = emptyMap<String, Int>().toMutableMap()
+        prazos["PAC"] = 0
+        prazos["Sedex"] = 0
+
         // calculate total sum
         for (prod in shipments.products) {
 
             val shipIn = ShipmentIndividual(prod, shipments.cepDst)
-            val ret = getShipmentPrice(shipIn)
+            val ret = getShipment(shipIn)
+            System.out.println("ret.prazos = " + ret.prazos.toString())
 
             totalPrices["PAC"] = totalPrices["PAC"]!! + ret.prices["PAC"]!!
             totalPrices["Sedex"] = totalPrices["Sedex"]!! + ret.prices["Sedex"]!!
+
+            prazos["PAC"] = prazos["PAC"]!! + ret.prazos["PAC"]!!
+            prazos["Sedex"] = prazos["Sedex"]!! + ret.prazos["Sedex"]!!
         }
 
-        return ShipmentOut(totalPrices)
+        return ShipmentOut(totalPrices, prazos)
     }
 
     //  Register a track
