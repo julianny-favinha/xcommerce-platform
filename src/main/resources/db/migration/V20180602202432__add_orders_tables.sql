@@ -1,6 +1,6 @@
 SET SCHEMA 'xcommerce';
 
-CREATE TABLE order (
+CREATE TABLE `order` (
     id SERIAL PRIMARY KEY,
     user_id BIGINT,
     freight_price INTEGER,
