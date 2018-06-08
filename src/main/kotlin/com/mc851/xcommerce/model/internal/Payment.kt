@@ -7,7 +7,7 @@ data class CreditCardPayment(val creditCard: CreditCardInfo,
 
 data class BoletoPayment(val userInfo: UserInfo, val value: Long)
 
-data class CreditCardInfo(val holderName: String, val month: Long, val year: Long, val cvv: Long, val cardNumber: Long)
+data class CreditCardInfo(val holderName: String, val month: Long, val year: Long, val cvv: String, val cardNumber: String)
 
 data class UserInfo(val cpf: String, val name: String, val address: String, val cep: String)
 

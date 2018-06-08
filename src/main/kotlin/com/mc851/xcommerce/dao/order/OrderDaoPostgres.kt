@@ -3,25 +3,23 @@ package com.mc851.xcommerce.dao.order
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.model.api.ShipmentInfo
-import com.mc851.xcommerce.model.internal.PaymentStatus
-import com.mc851.xcommerce.model.internal.ShipmentStatus
-import com.mc851.xcommerce.model.internal.Order
-import com.mc851.xcommerce.model.internal.OrderValue
-import com.mc851.xcommerce.model.internal.OrderItem
-import com.mc851.xcommerce.model.internal.OrderItemValue
+import com.mc851.xcommerce.model.internal.*
 import org.springframework.jdbc.core.JdbcTemplate
 import java.sql.ResultSet
 
 class OrderDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderDao {
     companion object {
-        const val CREATE_ORDER = """INSERT INTO xcommerce.order(user_id, freight_price, products_price, payment_code, payment_status,
-                                     shipment_id, shipment_status, shipment_info) VALUES (?, ?, ?, NULL, 1, NULL, 1, ?) RETURNING id"""
 
+        const val CREATE_ORDER = """INSERT INTO xcommerce.order(user_id, freight_price, products_price, payment_code, payment_status, payment_type,
+                                     shipment_id, shipment_status, shipment_info, created_at) VALUES (?, ?, ?, NULL, 1, ?, NULL, 1, ?, now()) RETURNING id"""
         const val FIND_ORDER_BY_ID = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status,
-                                      shipment_id, shipment_status, shipment_info FROM xcommerce.order WHERE id = ?"""
+                                      shipment_id, shipment_status, shipment_info, created_at FROM xcommerce.order WHERE id = ?"""
 
         const val FIND_ORDERS_BY_STATUS = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status,
-                                      shipment_id, shipment_status, shipment_info FROM xcommerce.order WHERE payment_status = ? AND shipment_status = ?"""
+                                      shipment_id, shipment_status, shipment_info, created_at FROM xcommerce.order WHERE payment_status = ? AND shipment_status = ?"""
+
+        const val FIND_ORDERS_BY_USER = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status,
+                                      shipment_id, shipment_status, shipment_info, created_at FROM xcommerce.order WHERE user_id = ?"""
 
         const val REGISTER_PAYMENT_CODE = """UPDATE xcommerce.order SET payment_code = ? WHERE id = ? RETURNING id"""
 
@@ -30,6 +28,7 @@ class OrderDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderDao {
         const val UPDATE_PAYMENT_STATUS = """UPDATE xcommerce.order SET payment_status = ? WHERE id = ? RETURNING id"""
 
         const val UPDATE_SHIPMENT_STATUS = """UPDATE xcommerce.order SET shipment_status = ? WHERE id = ? RETURNING id"""
+
     }
 
     private fun orderRowMapper(rs: ResultSet): Order {
@@ -39,9 +38,11 @@ class OrderDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderDao {
                 rs.getLong("user_id"),
                 rs.getString("payment_code"),
                 PaymentStatus.forValue(rs.getInt("payment_status")),
+                PaymentType.forValue(rs.getInt("payment_type")),
                 rs.getLong("shipment_id"),
                 ShipmentStatus.forValue(rs.getInt("shipment_status")),
-                ShipmentInfoConverter.fromJson(rs.getString("shipment_info")))
+                ShipmentInfoConverter.fromJson(rs.getString("shipment_info")),
+                rs.getTimestamp("created_at"))
     }
 
     override fun createOrder(orderValue: OrderValue): Long? {
@@ -49,7 +50,8 @@ class OrderDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderDao {
             ps.setLong(1, orderValue.userId)
             ps.setLong(2, orderValue.freightPrice)
             ps.setLong(3, orderValue.productsPrice)
-            ps.setString(4, ShipmentInfoConverter.toJson(orderValue.shipmentInfo))
+            ps.setInt(4, orderValue.paymentType.getId())
+            ps.setString(5, ShipmentInfoConverter.toJson(orderValue.shipmentInfo))
         }, { rs, _ ->
             rs.getLong("id")
         }).firstOrNull()
@@ -65,6 +67,12 @@ class OrderDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderDao {
         return jdbcTemplate.query(FIND_ORDERS_BY_STATUS, { ps ->
             ps.setInt(1, paymentStatus)
             ps.setInt(1, shipmentStatus)
+        }, { rs, _ -> orderRowMapper(rs) })
+    }
+
+    override fun findOrdersByUser(userId: Long): List<Order> {
+        return jdbcTemplate.query(FIND_ORDERS_BY_USER, { ps ->
+            ps.setLong(1, userId)
         }, { rs, _ -> orderRowMapper(rs) })
     }
 
@@ -123,7 +131,8 @@ class OrderItemDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderItemDa
             ps.setString(3, orderItemValue.productName)
             ps.setLong(4, orderItemValue.productPrice)
         }, { rs, _ ->
-            rs.getLong("id") }).firstOrNull()
+            rs.getLong("id")
+        }).firstOrNull()
     }
 
     override fun findOrderItemsByOrderId(orderId: Long): List<OrderItem> {

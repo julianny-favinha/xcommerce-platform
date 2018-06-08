@@ -27,32 +27,33 @@ class CartService(private val checkoutValidator: CheckoutValidator,
 
         log.info { "Starting checkout with $checkoutIn for user $userId" }
 
-        val validationResult = checkoutValidator.validate(checkoutIn.cart, userId)
+        val validationResult = checkoutValidator.validate(checkoutIn, userId)
         if (!validationResult.status.success()) {
-            TODO("Create validator and return checkout -> NOT_OK")
+            return CheckoutOut(CheckoutStatus.BAD_INPUT)
         }
 
         val products = checkoutIn.cart.cartItems.map {
             it.product
         }
 
-        val orderId = orderService.registerOrder(products, userId, checkoutIn.shipmentInfo)
+        val orderId = orderService.registerOrder(products, userId, checkoutIn.shipmentInfo, checkoutIn.paymentInfo.paymentType)
+                ?: return CheckoutOut(CheckoutStatus.FAILED)
         return purchaseOrder(orderId, userId, checkoutIn)
     }
 
     private fun purchaseOrder(orderId: Long, userId: Long, checkout: CheckoutIn): CheckoutOut {
-        val user = userService.findByUserId(userId)
+        val user = userService.findByUserId(userId) ?: throw IllegalStateException("What?")
         val userInfo = UserInfo(user.cpf, user.name, "BLABLBA", "13083-852")
         //TODO("Deal with address and cep")
-        val order = orderService.retrieveOrder(orderId)
+        val order = orderService.retrieveOrder(orderId) ?: throw IllegalStateException("Ahm?")
 
         log.info { "Starting payment for order $order for checkout $checkout" }
 
         val paymentResult = when (checkout.paymentInfo.paymentType) {
             PaymentType.CREDIT_CARD -> creditCardPayment(checkout.paymentInfo.creditCardInfo,
-                userInfo,
-                order.freightPrice + order.productsPrice,
-                checkout.paymentInfo.installments)
+                    userInfo,
+                    order.freightPrice + order.productsPrice,
+                    checkout.paymentInfo.installments)
             PaymentType.BOLETO -> boletoPayment(userInfo, order.freightPrice + order.productsPrice)
         }
 
@@ -64,7 +65,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             PaymentResultStatus.PENDING -> CheckoutOut(order.id, CheckoutStatus.OK, PaymentOut(paymentResult.code!!))
             PaymentResultStatus.FAILED, PaymentResultStatus.ERROR -> {
                 cancelOrder(orderId)
-                CheckoutOut(CheckoutStatus.NOT_OK)
+                CheckoutOut(CheckoutStatus.FAILED)
             }
             PaymentResultStatus.AUTHORIZED -> CheckoutOut(order.id, CheckoutStatus.OK)
         }
@@ -75,10 +76,10 @@ class CartService(private val checkoutValidator: CheckoutValidator,
                                   userInfo: UserInfo,
                                   value: Long,
                                   installment: Long?) =
-        paymentService.payCreditCard(CreditCardPayment(creditCardInfo!!, userInfo, value, installment!!))
+            paymentService.payCreditCard(CreditCardPayment(creditCardInfo!!, userInfo, value, installment!!))
 
     private fun boletoPayment(userInfo: UserInfo, value: Long) =
-        paymentService.payBoleto(BoletoPayment(userInfo, value))
+            paymentService.payBoleto(BoletoPayment(userInfo, value))
 
     private fun cancelOrder(orderId: Long) = orderService.cancelOrder(orderId)
 }

@@ -1,6 +1,6 @@
 package com.mc851.xcommerce.service.user
 
-import com.mc851.xcommerce.clients.address.AddressClient
+import com.mc851.xcommerce.clients.AddressClient
 import com.mc851.xcommerce.clients.address.api.AddressApi
 import com.mc851.xcommerce.model.api.Address
 

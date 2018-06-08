@@ -2,6 +2,7 @@ package com.mc851.xcommerce.controller.order
 
 import com.mc851.xcommerce.controller.utils.handleResponse
 import com.mc851.xcommerce.filters.RequestContext
+import com.mc851.xcommerce.model.api.Orders
 import com.mc851.xcommerce.model.internal.Order
 import com.mc851.xcommerce.service.order.OrderService
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,8 +20,8 @@ class OrderController {
     lateinit var orderService: OrderService
 
     @GetMapping("")
-    fun getOrders(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext): ResponseEntity<Order> {
-        val orders = orderService.
-        return handleResponse(price)
+    fun getOrders(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext): ResponseEntity<Orders> {
+        val orders = orderService.findUserOrders(context.userId!!)
+        return handleResponse(orders)
     }
 }

@@ -13,6 +13,8 @@ interface OrderDao {
 
     fun findOrderByStatus(paymentStatus: Int, shipmentStatus: Int): List<Order>
 
+    fun findOrdersByUser(userId: Long): List<Order>
+
     fun registerPayment(orderId: Long, paymentCode: String): Boolean
 
     fun registerShipment(orderId: Long, shipmentId: Long): Boolean

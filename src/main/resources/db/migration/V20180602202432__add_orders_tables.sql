@@ -6,10 +6,12 @@ CREATE TABLE order (
     freight_price INTEGER,
     products_price INTEGER,
     payment_code TEXT,
+    payment_type INTEGER,
     payment_status INTEGER,
     shipment_id BIGINT,
     shipment_status INTEGER,
-    shipment_info JSON
+    shipment_info JSON,
+    created_at TIMESTAMP
 );
 
 ALTER TABLE order ADD CONSTRAINT user_order_fk FOREIGN KEY (user_id) REFERENCES user_relation(id);

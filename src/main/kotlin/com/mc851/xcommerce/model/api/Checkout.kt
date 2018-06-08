@@ -22,7 +22,8 @@ data class PaymentOut(val barCode: String)
 enum class CheckoutStatus(val _id: Int) {
     OK(1),
     PENDING(2),
-    NOT_OK(3);
+    BAD_INPUT(3),
+    FAILED(4);
 
     @JsonValue
     fun getId() = _id

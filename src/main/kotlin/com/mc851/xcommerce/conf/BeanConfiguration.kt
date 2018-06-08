@@ -1,11 +1,6 @@
 package com.mc851.xcommerce.conf
 
-import com.mc851.xcommerce.clients.CreditClient
-import com.mc851.xcommerce.clients.LogisticClient
-import com.mc851.xcommerce.clients.PaymentClient
-import com.mc851.xcommerce.clients.ProductClient
-import com.mc851.xcommerce.clients.UserClient
-import com.mc851.xcommerce.clients.address.AddressClient
+import com.mc851.xcommerce.clients.*
 import com.mc851.xcommerce.clients.address.AddressClientOkHttp
 import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.logistic.LogisticClientOkHttp
@@ -205,13 +200,13 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun checkoutValidator(): CheckoutValidator {
-        return CheckoutValidator()
+    fun checkoutValidator(userService: UserService, addressService: AddressService, productService: ProductService): CheckoutValidator {
+        return CheckoutValidator(userService, productService, addressService)
     }
 
     @Bean
-    fun orderService(logisticService: LogisticService, orderDao: OrderDao, orderItemDao: OrderItemDao): OrderService {
-        return OrderService(logisticService, orderDao, orderItemDao)
+    fun orderService(logisticService: LogisticService, orderDao: OrderDao, orderItemDao: OrderItemDao, productService: ProductService): OrderService {
+        return OrderService(logisticService, orderDao, orderItemDao, productService)
     }
 
     @Bean

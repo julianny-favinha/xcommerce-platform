@@ -2,6 +2,7 @@ package com.mc851.xcommerce.clients.address
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.mc851.xcommerce.clients.AddressClient
 import com.mc851.xcommerce.clients.address.api.AddressApi
 import com.mc851.xcommerce.clients.address.api.CepApi
 import com.mc851.xcommerce.clients.address.api.CityApi
