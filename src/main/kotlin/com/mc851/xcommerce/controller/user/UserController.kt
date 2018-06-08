@@ -46,7 +46,7 @@ class UserController {
 
     @GetMapping("")
     fun getUser(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext): ResponseEntity<User> {
-        val response = userService.findByUserId(context.userId!!)
+        val response = userService.findByUserId(context.userId!!) ?: throw IllegalStateException("Can't find user, strange")
         return handleErrorResponse(response)
     }
 

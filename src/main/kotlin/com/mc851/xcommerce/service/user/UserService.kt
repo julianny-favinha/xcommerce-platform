@@ -71,10 +71,10 @@ class UserService(private val userClient: UserClient,
         return convertUser(userInfo, id)
     }
 
-    fun findByUserId(id: Long): User {
-        val externalId = userDao.findById(id) ?: throw IllegalStateException("User not found!")
+    fun findByUserId(id: Long): User? {
+        val externalId = userDao.findById(id) ?: return null
 
-        val userInfo = userClient.getUserById(externalId) ?: throw IllegalStateException("User not found!")
+        val userInfo = userClient.getUserById(externalId) ?: return null
 
         return convertUser(userInfo, id)
     }
