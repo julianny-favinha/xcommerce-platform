@@ -2,7 +2,7 @@ package com.mc851.xcommerce.clients.logistic.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-data class LogisticPriceInApi(val shipType: String,
+data class LogisticInApi(val shipType: String,
                               val cepDst: String,
                               val packWeight: Long,
                               val packType: String,
@@ -12,7 +12,7 @@ data class LogisticPriceInApi(val shipType: String,
     val cepFrom = "13465-450"
 }
 
-data class LogisticPriceOutAPI(val preco: Int)
+data class LogisticOutAPI(val preco: Int, val prazo: Int)
 
 data class History(val hora: String, val local: String, val mensagem: String)
 

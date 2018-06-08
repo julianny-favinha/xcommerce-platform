@@ -1,15 +1,13 @@
 package com.mc851.xcommerce.service.user
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.UserClient
 import com.mc851.xcommerce.clients.user01.api.RegisterAPI
 import com.mc851.xcommerce.clients.user01.api.UpdateAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
 import com.mc851.xcommerce.dao.user.UserDao
-import com.mc851.xcommerce.model.api.SignIn
-import com.mc851.xcommerce.model.api.SignInResponse
-import com.mc851.xcommerce.model.api.SignUp
-import com.mc851.xcommerce.model.api.Update
-import com.mc851.xcommerce.model.api.User
+import com.mc851.xcommerce.model.api.*
 import com.mc851.xcommerce.service.user.credential.UserCredentialService
 import mu.KotlinLogging
 
@@ -20,14 +18,15 @@ class UserService(private val userClient: UserClient,
     private val log = KotlinLogging.logger {}
 
     fun signUp(signUp: SignUp): SignInResponse? {
-        val register = RegisterAPI(name = signUp.name,
-            email = signUp.email,
-            password = "private",
-            samePass = "private",
-            birthDate = signUp.birthDate,
-            cpf = signUp.cpf,
-            gender = signUp.gender,
-            telephone = signUp.telephone)
+        val register = RegisterAPI(name = signUp.user.name,
+                email = signUp.user.email,
+                password = "private",
+                samePass = "private",
+                birthDate = signUp.user.birthDate,
+                cpf = signUp.user.cpf,
+                address = AddressConverter.toJson(signUp.user.address),
+                gender = signUp.user.gender,
+                telephone = signUp.user.telephone)
 
         log.info { "attempting to create user to $register" }
 
@@ -37,7 +36,7 @@ class UserService(private val userClient: UserClient,
         log.info { "user created with externalID: $id"  }
 
         val userId = createUserRelation(id)
-        userCredentialService.addCredential(signUp.email, signUp.password, userId)
+        userCredentialService.addCredential(signUp.user.email, signUp.user.password, userId)
 
 
 
@@ -60,12 +59,12 @@ class UserService(private val userClient: UserClient,
         val externalId = userDao.findById(id) ?: throw IllegalStateException("User not found!")
 
         val updateInfo = UpdateAPI(name = update.name,
-            password = update.password,
-            samePass = update.password,
-            birthDate = update.birthDate,
-            gender = update.gender,
-            telephone = update.telephone)
-
+                password = update.password,
+                samePass = update.password,
+                birthDate = update.birthDate,
+                gender = update.gender,
+                telephone = update.telephone,
+                address = AddressConverter.toJson(update.address))
         userClient.update(externalId, updateInfo)
         val userInfo = userClient.getUserById(externalId) ?: throw IllegalStateException("Updated user not found!")
 
@@ -82,16 +81,29 @@ class UserService(private val userClient: UserClient,
 
     private fun convertUser(userAPI: UserAPI, userId: Long): User {
         return User(id = userId,
-            name = userAPI.name,
-            email = userAPI.email,
-            birthDate = userAPI.birthDate,
-            cpf = userAPI.cpf,
-            gender = userAPI.gender,
-            telephone = userAPI.telephone)
+                name = userAPI.name,
+                email = userAPI.email,
+                password = userAPI.password,
+                birthDate = userAPI.birthDate,
+                cpf = userAPI.cpf,
+                gender = userAPI.gender,
+                telephone = userAPI.telephone,
+                address = AddressConverter.fromJson(userAPI.address))
     }
 
     private fun createUserRelation(externalId: String): Long {
         return userDao.findByExternalId(externalId) ?: userDao.insertExternalId(externalId)
                ?: throw IllegalStateException("Can't insert user!")
+    }
+
+    object AddressConverter {
+
+        internal fun toJson(address: AddressFull): String {
+            return jacksonObjectMapper().writeValueAsString(address)
+        }
+
+        internal fun fromJson(rawAddress: String): AddressFull {
+            return jacksonObjectMapper().readValue(rawAddress)
+        }
     }
 }

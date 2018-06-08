@@ -3,8 +3,8 @@ package com.mc851.xcommerce.clients.logistic
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.LogisticClient
-import com.mc851.xcommerce.clients.logistic.api.LogisticPriceInApi
-import com.mc851.xcommerce.clients.logistic.api.LogisticPriceOutAPI
+import com.mc851.xcommerce.clients.logistic.api.LogisticInApi
+import com.mc851.xcommerce.clients.logistic.api.LogisticOutAPI
 import com.mc851.xcommerce.clients.logistic.api.LogisticRegisterInApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticRegisterOutApi
 import com.mc851.xcommerce.clients.logistic.api.LogisticTrackInApi
@@ -21,15 +21,15 @@ class LogisticClientOkHttp : LogisticClient {
     private val objectMapper = jacksonObjectMapper()
     private val json = MediaType.parse("application/json")
 
-    override fun calculateShipment(logisticPriceIn: LogisticPriceInApi): LogisticPriceOutAPI? {
+    override fun calculateShipment(logisticPriceIn: LogisticInApi): LogisticOutAPI? {
 
         val httpUrl = HttpUrl.parse("https://hidden-basin-50728.herokuapp.com/calculafrete")!!.newBuilder()
 
         httpUrl.addQueryParameter("tipoEntrega", logisticPriceIn.shipType)
         httpUrl.addQueryParameter("cepOrigem", logisticPriceIn.cepFrom)
-        httpUrl.addQueryParameter("cepDestino", logisticPriceIn.cepDst.toString())
+        httpUrl.addQueryParameter("cepDestino", logisticPriceIn.cepDst)
         httpUrl.addQueryParameter("peso", logisticPriceIn.packWeight.toString())
-        httpUrl.addQueryParameter("tipoPacote", logisticPriceIn.packType.toString())
+        httpUrl.addQueryParameter("tipoPacote", logisticPriceIn.packType)
         httpUrl.addQueryParameter("comprimento", logisticPriceIn.packLen.toString())
         httpUrl.addQueryParameter("altura", logisticPriceIn.packHeight.toString())
         httpUrl.addQueryParameter("largura", logisticPriceIn.packWidth.toString())
