@@ -12,9 +12,10 @@ class AddressService(val addressClient: AddressClient) {
     }
 
     private fun convertAddress(addressApi: AddressApi): Address {
-        return Address(logradouro = addressApi.logradouro,
-            neighborhood = addressApi.bairro,
-            city = addressApi.cidade,
-            state = addressApi.uf)
+        return Address(cep = addressApi.cep,
+                logradouro = addressApi.logradouro,
+                neighborhood = addressApi.bairro,
+                city = addressApi.cidade,
+                state = addressApi.uf)
     }
 }
