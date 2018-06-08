@@ -43,8 +43,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
 
     private fun purchaseOrder(orderId: Long, userId: Long, checkout: CheckoutIn): CheckoutOut {
         val user = userService.findByUserId(userId) ?: throw IllegalStateException("What?")
-        val userInfo = UserInfo(user.cpf, user.name, "BLABLBA", "13083-852")
-        //TODO("Deal with address and cep")
+        val userInfo = UserInfo(user.cpf, user.name, user.address.address.logradouro, checkout.shipmentInfo.cepDst)
         val order = orderService.retrieveOrder(orderId) ?: throw IllegalStateException("Ahm?")
 
         log.info { "Starting payment for order $order for checkout $checkout" }
