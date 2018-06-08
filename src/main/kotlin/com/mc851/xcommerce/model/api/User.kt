@@ -10,7 +10,16 @@ data class User(val id: Long,
                 val gender: String?,
                 val telephone: String?)
 
-data class SignUp(val user: User)
+data class UserSignUp(val name: String,
+                val email: String,
+                val password: String,
+                val birthDate: String?,
+                val cpf: String,
+                val address: AddressFull,
+                val gender: String?,
+                val telephone: String?)
+
+data class SignUp(val user: UserSignUp)
 
 data class Update(val name: String,
                   val password: String,
