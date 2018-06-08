@@ -1,15 +1,13 @@
 package com.mc851.xcommerce.service.user
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.mc851.xcommerce.clients.UserClient
 import com.mc851.xcommerce.clients.user01.api.RegisterAPI
 import com.mc851.xcommerce.clients.user01.api.UpdateAPI
 import com.mc851.xcommerce.clients.user01.api.UserAPI
 import com.mc851.xcommerce.dao.user.UserDao
-import com.mc851.xcommerce.model.api.SignIn
-import com.mc851.xcommerce.model.api.SignInResponse
-import com.mc851.xcommerce.model.api.SignUp
-import com.mc851.xcommerce.model.api.Update
-import com.mc851.xcommerce.model.api.User
+import com.mc851.xcommerce.model.api.*
 import com.mc851.xcommerce.service.user.credential.UserCredentialService
 import mu.KotlinLogging
 
@@ -26,7 +24,7 @@ class UserService(private val userClient: UserClient,
                 samePass = "private",
                 birthDate = signUp.user.birthDate,
                 cpf = signUp.user.cpf,
-                address = signUp.user.address,
+                address = AddressConverter.toJson(signUp.user.address),
                 gender = signUp.user.gender,
                 telephone = signUp.user.telephone)
 
@@ -66,7 +64,7 @@ class UserService(private val userClient: UserClient,
                 birthDate = update.birthDate,
                 gender = update.gender,
                 telephone = update.telephone,
-                address = update.address)
+                address = AddressConverter.toJson(update.address))
         userClient.update(externalId, updateInfo)
         val userInfo = userClient.getUserById(externalId) ?: throw IllegalStateException("Updated user not found!")
 
@@ -90,11 +88,22 @@ class UserService(private val userClient: UserClient,
                 cpf = userAPI.cpf,
                 gender = userAPI.gender,
                 telephone = userAPI.telephone,
-                address = userAPI.address)
+                address = AddressConverter.fromJson(userAPI.address))
     }
 
     private fun createUserRelation(externalId: String): Long {
         return userDao.findByExternalId(externalId) ?: userDao.insertExternalId(externalId)
                ?: throw IllegalStateException("Can't insert user!")
+    }
+
+    object AddressConverter {
+
+        internal fun toJson(address: AddressFull): String {
+            return jacksonObjectMapper().writeValueAsString(address)
+        }
+
+        internal fun fromJson(rawAddress: String): AddressFull {
+            return jacksonObjectMapper().readValue(rawAddress)
+        }
     }
 }
