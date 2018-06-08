@@ -20,14 +20,15 @@ class UserService(private val userClient: UserClient,
     private val log = KotlinLogging.logger {}
 
     fun signUp(signUp: SignUp): SignInResponse? {
-        val register = RegisterAPI(name = signUp.name,
-            email = signUp.email,
-            password = "private",
-            samePass = "private",
-            birthDate = signUp.birthDate,
-            cpf = signUp.cpf,
-            gender = signUp.gender,
-            telephone = signUp.telephone)
+        val register = RegisterAPI(name = signUp.user.name,
+                email = signUp.user.email,
+                password = "private",
+                samePass = "private",
+                birthDate = signUp.user.birthDate,
+                cpf = signUp.user.cpf,
+                address = signUp.user.address,
+                gender = signUp.user.gender,
+                telephone = signUp.user.telephone)
 
         log.info { "attempting to create user to $register" }
 
@@ -37,7 +38,7 @@ class UserService(private val userClient: UserClient,
         log.info { "user created with externalID: $id"  }
 
         val userId = createUserRelation(id)
-        userCredentialService.addCredential(signUp.email, signUp.password, userId)
+        userCredentialService.addCredential(signUp.user.email, signUp.user.password, userId)
 
 
 
@@ -60,12 +61,12 @@ class UserService(private val userClient: UserClient,
         val externalId = userDao.findById(id) ?: throw IllegalStateException("User not found!")
 
         val updateInfo = UpdateAPI(name = update.name,
-            password = update.password,
-            samePass = update.password,
-            birthDate = update.birthDate,
-            gender = update.gender,
-            telephone = update.telephone)
-
+                password = update.password,
+                samePass = update.password,
+                birthDate = update.birthDate,
+                gender = update.gender,
+                telephone = update.telephone,
+                address = update.address)
         userClient.update(externalId, updateInfo)
         val userInfo = userClient.getUserById(externalId) ?: throw IllegalStateException("Updated user not found!")
 
@@ -82,12 +83,14 @@ class UserService(private val userClient: UserClient,
 
     private fun convertUser(userAPI: UserAPI, userId: Long): User {
         return User(id = userId,
-            name = userAPI.name,
-            email = userAPI.email,
-            birthDate = userAPI.birthDate,
-            cpf = userAPI.cpf,
-            gender = userAPI.gender,
-            telephone = userAPI.telephone)
+                name = userAPI.name,
+                email = userAPI.email,
+                password = userAPI.password,
+                birthDate = userAPI.birthDate,
+                cpf = userAPI.cpf,
+                gender = userAPI.gender,
+                telephone = userAPI.telephone,
+                address = userAPI.address)
     }
 
     private fun createUserRelation(externalId: String): Long {
