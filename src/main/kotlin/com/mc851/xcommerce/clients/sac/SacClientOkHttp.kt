@@ -64,7 +64,7 @@ class SacClientOkHttp : SacClient {
     override fun addTicket(userId: Long, message: MessageAPI) : CodeAPI?{
         val body = RequestBody.create(mediaType, objectMapper.writeValueAsString(message))
 
-        val url = siteUrl + siteId + "/" + userId.toString()
+        val url = siteUrl +  siteId + "/" + userId.toString()
         val request = Request.Builder().url(url).post(body).build()
         val response = okHttpClient.newCall(request).execute()
 

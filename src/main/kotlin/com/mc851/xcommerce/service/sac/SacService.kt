@@ -6,6 +6,9 @@ import com.mc851.xcommerce.clients.sac.api.TicketsAPI
 import com.mc851.xcommerce.model.api.MessageIn
 import com.mc851.xcommerce.model.api.MessageOut
 import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
 class SacService(val sacClient: SacClient) {
 
@@ -28,7 +31,7 @@ class SacService(val sacClient: SacClient) {
     }
 
     fun sendMessage(userId: Long, message: MessageIn): Boolean {
-        val timestamp = Timestamp(System.currentTimeMillis())
+        val timestamp = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()).dropLast(3)
 
         val messageApi = MessageAPI(
                 timestamp = timestamp,

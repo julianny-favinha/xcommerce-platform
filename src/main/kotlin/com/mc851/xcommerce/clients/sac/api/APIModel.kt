@@ -10,6 +10,6 @@ data class TicketAPI(val ticketId: Long,
                   val statusId: Long,
                   val messages: List<MessageAPI>)
 
-data class MessageAPI(val timestamp: Timestamp, val sender: String, val message: String)
+data class MessageAPI(val timestamp: String, val sender: String, val message: String)
 
 data class CodeAPI(val systemMessage: String)
