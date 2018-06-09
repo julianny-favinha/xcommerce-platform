@@ -66,7 +66,7 @@ class OrderDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderDao {
     override fun findOrderByStatus(paymentStatus: Int, shipmentStatus: Int): List<Order> {
         return jdbcTemplate.query(FIND_ORDERS_BY_STATUS, { ps ->
             ps.setInt(1, paymentStatus)
-            ps.setInt(1, shipmentStatus)
+            ps.setInt(2, shipmentStatus)
         }, { rs, _ -> orderRowMapper(rs) })
     }
 
