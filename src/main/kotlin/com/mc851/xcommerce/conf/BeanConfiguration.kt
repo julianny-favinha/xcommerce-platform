@@ -6,6 +6,7 @@ import com.mc851.xcommerce.clients.credit.CreditClientOkHttp
 import com.mc851.xcommerce.clients.logistic.LogisticClientOkHttp
 import com.mc851.xcommerce.clients.payment.PaymentClientOkHttp
 import com.mc851.xcommerce.clients.product01.ProductClientOkHttp
+import com.mc851.xcommerce.clients.sac.SacClientOkHttp
 import com.mc851.xcommerce.clients.user01.UserClientOkHttp
 import com.mc851.xcommerce.dao.category.CategoryDao
 import com.mc851.xcommerce.dao.category.CategoryDaoPostgres
@@ -32,6 +33,7 @@ import com.mc851.xcommerce.service.order.OrderService
 import com.mc851.xcommerce.service.payment.PaymentService
 import com.mc851.xcommerce.service.product.CategoryService
 import com.mc851.xcommerce.service.product.ProductService
+import com.mc851.xcommerce.service.sac.SacService
 import com.mc851.xcommerce.service.user.AddressService
 import com.mc851.xcommerce.service.user.CreditService
 import com.mc851.xcommerce.service.user.UserService
@@ -140,6 +142,11 @@ class BeanConfiguration {
     }
 
     @Bean
+    fun sacClient(): SacClient{
+        return SacClientOkHttp()
+    }
+
+    @Bean
     fun creditClient(): CreditClient {
         return CreditClientOkHttp()
     }
@@ -177,6 +184,11 @@ class BeanConfiguration {
                     userDao: UserDao,
                     userCredentialService: UserCredentialService): UserService {
         return UserService(userClient, userDao, userCredentialService)
+    }
+
+    @Bean
+    fun sacService(sacClient: SacClient): SacService {
+        return SacService(sacClient)
     }
 
     @Bean
