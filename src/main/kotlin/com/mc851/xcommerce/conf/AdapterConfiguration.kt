@@ -22,7 +22,7 @@ class AdapterConfiguration : WebMvcConfigurer {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(requestFilter)
-        registry.addInterceptor(tokenManager).addPathPatterns("/cart/checkout/**")
+        registry.addInterceptor(tokenManager).addPathPatterns("/cart/checkout/**").addPathPatterns("/sac/**")
         super.addInterceptors(registry)
     }
 }

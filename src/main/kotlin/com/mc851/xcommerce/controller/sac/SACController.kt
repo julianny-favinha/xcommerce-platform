@@ -1,8 +1,9 @@
 package com.mc851.xcommerce.controller.sac
 
 import com.mc851.xcommerce.controller.utils.handleResponse
-import com.mc851.xcommerce.model.api.Message
-import com.mc851.xcommerce.model.api.Ticket
+import com.mc851.xcommerce.filters.RequestContext
+import com.mc851.xcommerce.model.api.MessageIn
+import com.mc851.xcommerce.model.api.MessageOut
 import com.mc851.xcommerce.service.sac.SacService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -15,6 +16,21 @@ class SACController {
     @Autowired
     lateinit var sacService: SacService
 
+    @GetMapping("")
+    fun retrieveAll(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext) : ResponseEntity<List<MessageOut>> {
+        val userId = context.userId!!
+        val response = sacService.getMessages(userId)
+        return handleResponse(response)
+    }
+
+    @PostMapping("/send")
+    fun sendMessage(@ModelAttribute(RequestContext.CONTEXT) context: RequestContext, @RequestBody message: MessageIn) : ResponseEntity<Boolean>{
+        val userId = context.userId!!
+        val response = sacService.sendMessage(userId, message)
+        return handleResponse(response)
+    }
+
+    /*
     // ok
     @GetMapping("/{userId}")
     fun getByUserId(@PathVariable(name = "userId", required = true) id: Long): ResponseEntity<List<Ticket>>{
@@ -77,5 +93,5 @@ class SACController {
         val response = sacService.deleteTicket(userId, ticketId)
         return handleResponse(response)
     }
-
+    */
 }

@@ -6,7 +6,6 @@ import com.mc851.xcommerce.clients.SacClient
 import com.mc851.xcommerce.clients.sac.api.CodeAPI
 import com.mc851.xcommerce.clients.sac.api.MessageAPI
 import com.mc851.xcommerce.clients.sac.api.TicketsAPI
-import mu.KotlinLogging
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,13 +20,15 @@ class SacClientOkHttp : SacClient {
     private val siteId = "4753e50089193cefab74f76310e1fb40b2859307"
     private val siteUrl = "https://centralatendimento-mc857.azurewebsites.net/tickets/"
 
-    private val log = KotlinLogging.logger {}
-
     override fun findTicketByUserId(userId: Long) : TicketsAPI?{
         val url = siteUrl + siteId + "/" + userId.toString()
 
         val request = Request.Builder().url(url).build()
         val response = okHttpClient.newCall(request).execute()
+
+        if(!response.isSuccessful){
+            return null
+        }
 
         return objectMapper.readValue(response.body()!!.byteStream())
     }
@@ -76,6 +77,10 @@ class SacClientOkHttp : SacClient {
         val url = siteUrl + siteId + "/" + userId.toString() + "/ticket/" + ticketId.toString()
         val request = Request.Builder().url(url).put(body).build()
         val response = okHttpClient.newCall(request).execute()
+
+        if(!response.isSuccessful){
+            return null
+        }
 
         return objectMapper.readValue(response.body()!!.byteStream())
     }

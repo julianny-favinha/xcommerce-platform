@@ -2,46 +2,54 @@ package com.mc851.xcommerce.service.sac
 
 import com.mc851.xcommerce.clients.SacClient
 import com.mc851.xcommerce.clients.sac.api.MessageAPI
-import com.mc851.xcommerce.clients.sac.api.TicketAPI
 import com.mc851.xcommerce.clients.sac.api.TicketsAPI
-import com.mc851.xcommerce.model.api.Message
-import com.mc851.xcommerce.model.api.Ticket
+import com.mc851.xcommerce.model.api.MessageIn
+import com.mc851.xcommerce.model.api.MessageOut
 import java.sql.Timestamp
 
 class SacService(val sacClient: SacClient) {
 
-    private val closed = 1
-    private val deleted = 2
+    private fun convertListMessages(tickets: TicketsAPI): List<MessageOut> {
+        val messages = mutableListOf<MessageOut>()
 
-    private fun convertTicket(ticket: TicketAPI): Ticket {
-        val message = mutableListOf<Message>()
+        val ticket = tickets.ticketList[0]
 
         for(m in ticket.messages){
-            message.add(Message(timestamp = m.timestamp, sender = m.sender, message = m.message))
+            messages.add(MessageOut(timestamp = m.timestamp, sender = m.sender, message = m.message))
         }
 
-        return Ticket(
-                ticketId = ticket.ticketId,
-                userId = ticket.clienteId,
-                compraId = ticket.compraId,
-                statusId = ticket.statusId,
-                messages = message
+        return messages.sortedWith(compareByDescending { it.timestamp })
+    }
+
+    fun getMessages(userId: Long): List<MessageOut>? {
+        val tickets = sacClient.findTicketByUserId(userId) ?: return emptyList()
+
+        return convertListMessages(tickets)
+    }
+
+    fun sendMessage(userId: Long, message: MessageIn): Boolean {
+        val timestamp = Timestamp(System.currentTimeMillis())
+
+        val messageApi = MessageAPI(
+                timestamp = timestamp,
+                sender = message.sender,
+                message = message.message
         )
-    }
 
-    private fun convertListTicket(tickets: TicketsAPI): List<Ticket> {
-        val converted = mutableListOf<Ticket>()
+        val tickets = sacClient.findTicketByUserId(userId)
 
-        for(t in tickets.ticketList){
-            // check if ticket has been deleted
-            if(!t.statusId.equals(deleted)){
-                converted.add(convertTicket(t))
-            }
+        if(tickets == null){
+            val ticket = sacClient.addTicket(userId, messageApi) ?: return false
+            sacClient.addMessageToTicket(userId, ticket.systemMessage.toLong(), messageApi) ?: return false
+        } else {
+            val ticketId = tickets.ticketList[0].ticketId
+            sacClient.addMessageToTicket(userId, ticketId, messageApi) ?: return false
         }
 
-        return converted
+        return true
     }
 
+    /*
     fun getByUserId(userId: Long) : List<Ticket>? {
         val tickets = sacClient.findTicketByUserId(userId) ?: return null
 
@@ -69,21 +77,6 @@ class SacService(val sacClient: SacClient) {
         )
 
         val ticketId = sacClient.addTicketToCompra(userId, compraId, messageApi) ?: return null
-
-        val tickets = sacClient.findTicketByTicketId(userId, ticketId.systemMessage.toLong()) ?: return null
-
-        return convertListTicket(tickets)
-    }
-
-    fun addTicket(userId: Long, message: Message) : List<Ticket>? {
-
-        val messageApi = MessageAPI(
-                timestamp = message.timestamp,
-                sender = message.sender,
-                message = message.message
-        )
-
-        val ticketId = sacClient.addTicket(userId, messageApi) ?: return null
 
         val tickets = sacClient.findTicketByTicketId(userId, ticketId.systemMessage.toLong()) ?: return null
 
@@ -133,4 +126,5 @@ class SacService(val sacClient: SacClient) {
         // return tickets before its deletion
         return convertListTicket(tickets)
     }
+    */
 }
