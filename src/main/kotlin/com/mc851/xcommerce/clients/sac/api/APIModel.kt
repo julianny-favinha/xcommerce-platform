@@ -2,7 +2,8 @@ package com.mc851.xcommerce.clients.sac.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-data class TicketsAPI(val ticketSize: Int?, val ticketList: List<TicketAPI>?)
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class TicketsAPI(val ticketsList: List<TicketAPI>)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TicketAPI(val ticketId: String,
