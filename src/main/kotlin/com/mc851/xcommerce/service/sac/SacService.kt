@@ -52,7 +52,7 @@ class SacService(val sacClient: SacClient) {
             sacClient.addMessageToTicket(userId, ticket.systemMessage.toLong(), messageApi)
         } else {
             val ticketId = tickets.ticketList[0].ticketId
-            sacClient.addMessageToTicket(userId, ticketId, messageApi) ?: return false
+            sacClient.addMessageToTicket(userId, ticketId.toLong(), messageApi) ?: return false
         }
 
         return true
