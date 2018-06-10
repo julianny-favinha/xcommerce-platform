@@ -1,13 +1,12 @@
 package com.mc851.xcommerce.clients.sac.api
 
-import java.sql.Timestamp
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 data class TicketsAPI(val ticketSize: Int, val ticketList: List<TicketAPI>)
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class TicketAPI(val ticketId: Long,
                   val clienteId: Long,
-                  val compraId: Long,
-                  val statusId: Long,
                   val messages: List<MessageAPI>)
 
 data class MessageAPI(val timestamp: String, val sender: String, val message: String)
