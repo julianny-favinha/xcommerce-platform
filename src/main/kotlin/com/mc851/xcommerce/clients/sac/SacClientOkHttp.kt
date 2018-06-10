@@ -37,7 +37,9 @@ class SacClientOkHttp : SacClient {
             return null
         }
 
-        return objectMapper.readValue(response.body()!!.byteStream())
+        val body = response.body()
+        log.debug { body }
+        return objectMapper.readValue(body!!.byteStream())
     }
 
     override fun findTicketByCompraId(userId: Long, compraId: Long) : TicketsAPI?{

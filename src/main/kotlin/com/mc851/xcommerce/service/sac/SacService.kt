@@ -22,7 +22,7 @@ class SacService(val sacClient: SacClient) {
 
         for(m in ticket.messagesList){
             messages.add(MessageOut(timestamp = m.timestamp, sender = m.sender, message = m.message))
-        }
+        }   
 
         return messages.sortedWith(compareByDescending { it.timestamp })
     }
