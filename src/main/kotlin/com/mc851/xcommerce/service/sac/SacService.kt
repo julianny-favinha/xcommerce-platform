@@ -20,7 +20,7 @@ class SacService(val sacClient: SacClient) {
 
         val ticket = tickets.ticketList[0]
 
-        for(m in ticket.messages){
+        for(m in ticket.messagesList){
             messages.add(MessageOut(timestamp = m.timestamp, sender = m.sender, message = m.message))
         }
 
