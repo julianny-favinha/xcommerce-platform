@@ -28,7 +28,9 @@ class SacClientOkHttp : SacClient {
     }
 
     override fun findTicketByUserId(userId: Long) : TicketsAPI?{
+        log.info { "find ticket by user " }
         val url = siteUrl + siteId + "/" + add_mark(userId)
+        log.info { url }
 
         val request = Request.Builder().url(url).build()
         val response = okHttpClient.newCall(request).execute()
@@ -38,7 +40,7 @@ class SacClientOkHttp : SacClient {
         }
 
         val body = response.body()
-        log.debug { body }
+        log.info { body }
         return objectMapper.readValue(body!!.byteStream())
     }
 
@@ -75,6 +77,7 @@ class SacClientOkHttp : SacClient {
     }
 
     override fun addTicket(userId: Long, message: MessageAPI) : CodeAPI?{
+        log.info { "add ticket " }
         val json = objectMapper.writeValueAsString(message)
         log.info { json }
         val body = RequestBody.create(mediaType, json)
@@ -88,6 +91,7 @@ class SacClientOkHttp : SacClient {
     }
 
     override fun addMessageToTicket(userId: Long, ticketId: Long, message: MessageAPI) : TicketsAPI?{
+        log.info { "add message to ticket" }
         val json = objectMapper.writeValueAsString(message)
         log.info { json }
         val body = RequestBody.create(mediaType, json)

@@ -18,11 +18,11 @@ class SacService(val sacClient: SacClient) {
     private fun convertListMessages(tickets: TicketsAPI): List<MessageOut> {
         val messages = mutableListOf<MessageOut>()
 
-        val ticket = tickets.ticketList[0]
+        val ticket = tickets.ticketList!![0]
 
         for(m in ticket.messagesList){
             messages.add(MessageOut(timestamp = m.timestamp, sender = m.sender, message = m.message))
-        }   
+        }
 
         return messages.sortedWith(compareByDescending { it.timestamp })
     }
@@ -30,6 +30,9 @@ class SacService(val sacClient: SacClient) {
     fun getMessages(userId: Long): List<MessageOut>? {
         val tickets = sacClient.findTicketByUserId(userId) ?: return emptyList()
 
+        if(tickets.ticketList == null || tickets.ticketSize == 0) {
+            return emptyList()
+        }
         return convertListMessages(tickets)
     }
 
@@ -51,7 +54,7 @@ class SacService(val sacClient: SacClient) {
             val ticket = sacClient.addTicket(userId, messageApi) ?: return false
             sacClient.addMessageToTicket(userId, ticket.systemMessage.toLong(), messageApi)
         } else {
-            val ticketId = tickets.ticketList[0].ticketId
+            val ticketId = tickets.ticketList!![0].ticketId
             sacClient.addMessageToTicket(userId, ticketId.toLong(), messageApi) ?: return false
         }
 
