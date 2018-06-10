@@ -23,8 +23,12 @@ class SacClientOkHttp : SacClient {
     private val siteId = "4753e50089193cefab74f76310e1fb40b2859307"
     private val siteUrl = "https://centralatendimento-mc857.azurewebsites.net/tickets/"
 
+    companion object {
+        fun add_mark(userId: Long): String = userId.toString() + "creditado"
+    }
+
     override fun findTicketByUserId(userId: Long) : TicketsAPI?{
-        val url = siteUrl + siteId + "/" + userId.toString()
+        val url = siteUrl + siteId + "/" + add_mark(userId)
 
         val request = Request.Builder().url(url).build()
         val response = okHttpClient.newCall(request).execute()
@@ -37,7 +41,7 @@ class SacClientOkHttp : SacClient {
     }
 
     override fun findTicketByCompraId(userId: Long, compraId: Long) : TicketsAPI?{
-        val url = siteUrl + siteId + "/" + userId.toString() + "/compra/" + compraId.toString()
+        val url = siteUrl + siteId + "/" + add_mark(userId) + "/compra/" + compraId.toString()
 
         val request = Request.Builder().url(url).build()
         val response = okHttpClient.newCall(request).execute()
@@ -59,7 +63,7 @@ class SacClientOkHttp : SacClient {
         log.info { json }
         val body = RequestBody.create(mediaType, json)
 
-        val url = siteUrl + siteId + "/" + userId.toString() + "/compra/" + compraId.toString()
+        val url = siteUrl + siteId + "/" + add_mark(userId) + "/compra/" + compraId.toString()
         log.info { url }
 
         val request = Request.Builder().url(url).post(body).build()
@@ -73,7 +77,7 @@ class SacClientOkHttp : SacClient {
         log.info { json }
         val body = RequestBody.create(mediaType, json)
 
-        val url = siteUrl +  siteId + "/" + userId.toString()
+        val url = siteUrl +  siteId + "/" + add_mark(userId)
         log.info { url }
         val request = Request.Builder().url(url).post(body).build()
         val response = okHttpClient.newCall(request).execute()
@@ -86,7 +90,7 @@ class SacClientOkHttp : SacClient {
         log.info { json }
         val body = RequestBody.create(mediaType, json)
 
-        val url = siteUrl + siteId + "/" + userId.toString() + "/ticket/" + ticketId.toString()
+        val url = siteUrl + siteId + "/" + add_mark(userId) + "/ticket/" + ticketId.toString()
         log.info { url }
         val request = Request.Builder().url(url).put(body).build()
         val response = okHttpClient.newCall(request).execute()
@@ -101,7 +105,7 @@ class SacClientOkHttp : SacClient {
     override fun changeTicketCode(userId: Long, ticketId: Long, code: Int, message: MessageAPI) : CodeAPI? {
         val body = RequestBody.create(mediaType, objectMapper.writeValueAsString(message))
 
-        val url = siteUrl + siteId + "/" + userId.toString() + "/ticket/" + ticketId.toString() + "?code=" + code
+        val url = siteUrl + siteId + "/" + add_mark(userId) + "/ticket/" + ticketId.toString() + "?code=" + code
         val request = Request.Builder().url(url).delete(body).build()
         val response = okHttpClient.newCall(request).execute()
 
