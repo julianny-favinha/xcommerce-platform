@@ -90,7 +90,7 @@ class SacClientOkHttp : SacClient {
         return objectMapper.readValue(response.body()!!.byteStream())
     }
 
-    override fun addMessageToTicket(userId: Long, ticketId: Long, message: MessageAPI) : TicketsAPI?{
+    override fun addMessageToTicket(userId: Long, ticketId: Long, message: MessageAPI) : CodeAPI?{
         log.info { "add message to ticket" }
         val json = objectMapper.writeValueAsString(message)
         log.info { json }

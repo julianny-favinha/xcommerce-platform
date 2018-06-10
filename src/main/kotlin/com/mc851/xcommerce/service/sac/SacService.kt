@@ -34,7 +34,7 @@ class SacService(val sacClient: SacClient) {
     }
 
     fun sendMessage(userId: Long, message: MessageIn): Boolean {
-        val timestamp = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()).dropLast(3)
+        val timestamp = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now())
 
         val messageApi = MessageAPI(
                 timestamp = timestamp,
