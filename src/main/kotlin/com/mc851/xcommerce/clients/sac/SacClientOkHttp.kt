@@ -6,6 +6,7 @@ import com.mc851.xcommerce.clients.SacClient
 import com.mc851.xcommerce.clients.sac.api.CodeAPI
 import com.mc851.xcommerce.clients.sac.api.MessageAPI
 import com.mc851.xcommerce.clients.sac.api.TicketsAPI
+import mu.KotlinLogging
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -15,8 +16,10 @@ class SacClientOkHttp : SacClient {
 
     private val okHttpClient = OkHttpClient()
     private val objectMapper = jacksonObjectMapper()
-    private val mediaType = MediaType.parse("application/json")
+    private val log = KotlinLogging.logger {}
 
+
+    private val mediaType = MediaType.parse("application/json")
     private val siteId = "4753e50089193cefab74f76310e1fb40b2859307"
     private val siteUrl = "https://centralatendimento-mc857.azurewebsites.net/tickets/"
 
@@ -52,9 +55,13 @@ class SacClientOkHttp : SacClient {
     }
 
     override fun addTicketToCompra(userId: Long, compraId: Long, message: MessageAPI) : CodeAPI?{
-        val body = RequestBody.create(mediaType, objectMapper.writeValueAsString(message))
+        val json = objectMapper.writeValueAsString(message)
+        log.info { json }
+        val body = RequestBody.create(mediaType, json)
 
         val url = siteUrl + siteId + "/" + userId.toString() + "/compra/" + compraId.toString()
+        log.info { url }
+
         val request = Request.Builder().url(url).post(body).build()
         val response = okHttpClient.newCall(request).execute()
 
@@ -62,9 +69,12 @@ class SacClientOkHttp : SacClient {
     }
 
     override fun addTicket(userId: Long, message: MessageAPI) : CodeAPI?{
-        val body = RequestBody.create(mediaType, objectMapper.writeValueAsString(message))
+        val json = objectMapper.writeValueAsString(message)
+        log.info { json }
+        val body = RequestBody.create(mediaType, json)
 
         val url = siteUrl +  siteId + "/" + userId.toString()
+        log.info { url }
         val request = Request.Builder().url(url).post(body).build()
         val response = okHttpClient.newCall(request).execute()
 
@@ -72,9 +82,12 @@ class SacClientOkHttp : SacClient {
     }
 
     override fun addMessageToTicket(userId: Long, ticketId: Long, message: MessageAPI) : TicketsAPI?{
-        val body = RequestBody.create(mediaType, objectMapper.writeValueAsString(message))
+        val json = objectMapper.writeValueAsString(message)
+        log.info { json }
+        val body = RequestBody.create(mediaType, json)
 
         val url = siteUrl + siteId + "/" + userId.toString() + "/ticket/" + ticketId.toString()
+        log.info { url }
         val request = Request.Builder().url(url).put(body).build()
         val response = okHttpClient.newCall(request).execute()
 

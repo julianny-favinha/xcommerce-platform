@@ -5,12 +5,15 @@ import com.mc851.xcommerce.clients.sac.api.MessageAPI
 import com.mc851.xcommerce.clients.sac.api.TicketsAPI
 import com.mc851.xcommerce.model.api.MessageIn
 import com.mc851.xcommerce.model.api.MessageOut
+import mu.KotlinLogging
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
 class SacService(val sacClient: SacClient) {
+
+    private val log = KotlinLogging.logger {}
 
     private fun convertListMessages(tickets: TicketsAPI): List<MessageOut> {
         val messages = mutableListOf<MessageOut>()
@@ -40,6 +43,9 @@ class SacService(val sacClient: SacClient) {
         )
 
         val tickets = sacClient.findTicketByUserId(userId)
+
+        log.info { tickets }
+        log.info { messageApi }
 
         if(tickets == null){
             val ticket = sacClient.addTicket(userId, messageApi) ?: return false
