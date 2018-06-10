@@ -1,6 +1,6 @@
 SET SCHEMA 'xcommerce';
 
-CREATE TABLE order (
+CREATE TABLE "order" (
     id SERIAL PRIMARY KEY,
     user_id BIGINT,
     freight_price INTEGER,
@@ -14,8 +14,8 @@ CREATE TABLE order (
     created_at TIMESTAMP
 );
 
-ALTER TABLE order ADD CONSTRAINT user_order_fk FOREIGN KEY (user_id) REFERENCES user_relation(id);
-ALTER TABLE order ADD CONSTRAINT logistic_order_fk FOREIGN (shipment_id) REFERENCES logistic_relation(id);
+ALTER TABLE "order" ADD CONSTRAINT user_order_fk FOREIGN KEY (user_id) REFERENCES user_relation(id);
+ALTER TABLE "order" ADD CONSTRAINT logistic_order_fk FOREIGN KEY (shipment_id) REFERENCES logistic_relation(id);
 
 CREATE TABLE order_item (
   id SERIAL PRIMARY KEY,
@@ -25,5 +25,5 @@ CREATE TABLE order_item (
   product_price BIGINT
 );
 
-ALTER TABLE order_item ADD CONSTRAINT order_item_order_fk FOREIGN (order_id) REFERENCES order(id);
-ALTER TABLE order_item add constraint order_item_product_fk FOREIGN (product_id) references product_relation(id);
+ALTER TABLE order_item ADD CONSTRAINT order_item_order_fk FOREIGN KEY (order_id) REFERENCES "order"(id);
+ALTER TABLE order_item add constraint order_item_product_fk FOREIGN KEY (product_id) references product_relation(id);
