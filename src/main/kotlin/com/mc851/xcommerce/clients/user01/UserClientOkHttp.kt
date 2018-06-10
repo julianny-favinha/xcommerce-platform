@@ -27,7 +27,7 @@ class UserClientOkHttp : UserClient {
         log.info { "Requesting $json to $url"}
 
         val body = RequestBody.create(mediaType, json)
-        val request = Request.Builder().url(url)
+            val request = Request.Builder().url(url)
             .addHeader("api_key", "abc").post(body).build()
 
         val response = okHttpClient.newCall(request).execute()

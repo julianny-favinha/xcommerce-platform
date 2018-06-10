@@ -7,8 +7,8 @@ data class TicketsAPI(val ticketsList: List<TicketAPI>)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TicketAPI(val ticketId: String,
-                  val clienteId: String,
-                  val messagesList: List<MessageAPI>)
+                     val clienteId: String,
+                     val messagesList: List<MessageAPI>)
 
 data class MessageAPI(val timestamp: String, val sender: String, val message: String)
 
