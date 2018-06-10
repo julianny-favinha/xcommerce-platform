@@ -16,7 +16,7 @@ interface SacClient {
 
     fun addTicket(userId: Long, message: MessageAPI) : CodeAPI?
 
-    fun addMessageToTicket(userId: Long, ticketId: Long, message: MessageAPI) : TicketsAPI?
+    fun addMessageToTicket(userId: Long, ticketId: Long, message: MessageAPI) : CodeAPI?
 
     fun changeTicketCode(userId: Long, ticketId: Long, code: Int, message: MessageAPI): CodeAPI?
 }
