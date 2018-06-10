@@ -18,9 +18,9 @@ class PasswordUtils {
         }
 
         fun checkpw(target: String, check: String): Boolean {
-            val saltBytes = Base64.getDecoder().decode(target.substring(0, 24))
-            val hash = concatenateAndGenerateHash(check, saltBytes)
-            return equalsNoShortCircuit(target, hash)
+            val saltBytes = Base64.getDecoder().decode(check.substring(0, 24))
+            val hash = concatenateAndGenerateHash(target, saltBytes)
+            return equalsNoShortCircuit(hash, check)
         }
 
         private fun concatenateAndGenerateHash(pw: String, saltBytes: ByteArray): String {
