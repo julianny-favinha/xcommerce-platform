@@ -72,10 +72,13 @@ class UserService(private val userClient: UserClient,
     }
 
     fun findByUserId(id: Long): User? {
+        log.info { "Attempt to find user $id"}
         val externalId = userDao.findById(id) ?: return null
 
+        log.info { "For this external $externalId attempt to find info"}
         val userInfo = userClient.getUserById(externalId) ?: return null
 
+        log.info { "Found $userInfo"}
         return convertUser(userInfo, id)
     }
 

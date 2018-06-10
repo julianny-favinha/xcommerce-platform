@@ -7,15 +7,15 @@ import com.mc851.xcommerce.model.internal.ValidationStatus
 import com.mc851.xcommerce.service.product.ProductService
 import com.mc851.xcommerce.service.user.AddressService
 import com.mc851.xcommerce.service.user.UserService
+import mu.KotlinLogging
 import java.util.*
 
 class CheckoutValidator(private val userService: UserService, private val productService: ProductService, private val addressService: AddressService) {
 
+    private val log = KotlinLogging.logger { }
+
     fun validate(checkout: CheckoutIn, userId: Long): ValidationResult {
-        val user = userService.findByUserId(userId)
-        if (user != null) {
-            return ValidationResult(ValidationStatus.INVALID_USER)
-        }
+        userService.findByUserId(userId) ?: return ValidationResult(ValidationStatus.INVALID_USER)
 
         checkout.cart.cartItems.forEach { cartItem ->
             productService.getById(cartItem.product.id) ?: return ValidationResult(ValidationStatus.INVALID_PRODUCTS)

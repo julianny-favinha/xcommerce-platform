@@ -11,14 +11,14 @@ class OrderDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderDao {
     companion object {
 
         const val CREATE_ORDER = """INSERT INTO xcommerce.order(user_id, freight_price, products_price, payment_code, payment_status, payment_type,
-                                     shipment_id, shipment_status, shipment_info, created_at) VALUES (?, ?, ?, NULL, 1, ?, NULL, 1, ?, now()) RETURNING id"""
-        const val FIND_ORDER_BY_ID = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status,
+                                     shipment_id, shipment_status, shipment_info, created_at) VALUES (?, ?, ?, NULL, 1, ?, NULL, 1, ?::json, now()) RETURNING id"""
+        const val FIND_ORDER_BY_ID = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status, payment_type,
                                       shipment_id, shipment_status, shipment_info, created_at FROM xcommerce.order WHERE id = ?"""
 
-        const val FIND_ORDERS_BY_STATUS = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status,
+        const val FIND_ORDERS_BY_STATUS = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status, payment_type,
                                       shipment_id, shipment_status, shipment_info, created_at FROM xcommerce.order WHERE payment_status = ? AND shipment_status = ?"""
 
-        const val FIND_ORDERS_BY_USER = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status,
+        const val FIND_ORDERS_BY_USER = """SELECT id, freight_price, products_price, user_id, payment_code, payment_status, payment_type,
                                       shipment_id, shipment_status, shipment_info, created_at FROM xcommerce.order WHERE user_id = ?"""
 
         const val REGISTER_PAYMENT_CODE = """UPDATE xcommerce.order SET payment_code = ? WHERE id = ? RETURNING id"""

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import com.mc851.xcommerce.model.internal.CreditCardInfo
 import com.mc851.xcommerce.model.internal.PaymentType
 import com.mc851.xcommerce.model.internal.ShipmentType
+import com.mc851.xcommerce.model.internal.ValidationStatus
 
 data class CheckoutIn(val cart: Cart, val paymentInfo: PaymentInfo, val shipmentInfo: ShipmentInfo)
 
@@ -12,9 +13,11 @@ data class PaymentInfo(val paymentType: PaymentType, val creditCardInfo: CreditC
 
 data class ShipmentInfo(val cepDst: String, val shipmentType: ShipmentType)
 
-data class CheckoutOut(val orderId: Long?, val status: CheckoutStatus, val paymentDetails: PaymentOut?) {
-    constructor(status: CheckoutStatus) : this(null, status, null)
-    constructor(orderId: Long, status: CheckoutStatus): this(orderId, status, null)
+data class CheckoutOut(val orderId: Long?, val status: CheckoutStatus, val paymentDetails: PaymentOut?, val validation_status: ValidationStatus?) {
+    constructor(status: CheckoutStatus) : this(null, status, null, null)
+    constructor(orderId: Long, status: CheckoutStatus): this(orderId, status, null, null)
+    constructor(status: CheckoutStatus, validation_status: ValidationStatus): this(null, status, null, validation_status)
+    constructor(orderId: Long, status: CheckoutStatus, paymentDetails: PaymentOut): this(orderId, status, paymentDetails, null)
 }
 
 data class PaymentOut(val barCode: String)

@@ -29,7 +29,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
 
         val validationResult = checkoutValidator.validate(checkoutIn, userId)
         if (!validationResult.status.success()) {
-            return CheckoutOut(CheckoutStatus.BAD_INPUT)
+            return CheckoutOut(CheckoutStatus.BAD_INPUT, validationResult.status)
         }
 
         val products = checkoutIn.cart.cartItems.map {

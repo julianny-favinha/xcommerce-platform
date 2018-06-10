@@ -35,9 +35,11 @@ class Jobs {
         }
 
         orders.forEach { order ->
+            order.paymentCode?.let {
             val paymentStatus = paymentService.getPaymentStatus(order.paymentCode)
             paymentStatus?.let {
                 orderService.updatePaymentStatus(order.id, it)
+            }
             }
         }
     }
