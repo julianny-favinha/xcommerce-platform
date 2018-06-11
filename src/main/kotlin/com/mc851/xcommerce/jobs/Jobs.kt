@@ -6,6 +6,7 @@ import com.mc851.xcommerce.service.logistic.LogisticService
 import com.mc851.xcommerce.service.order.OrderService
 import com.mc851.xcommerce.service.payment.PaymentService
 import com.mc851.xcommerce.service.product.ProductService
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -27,12 +28,16 @@ class Jobs {
     @Autowired
     lateinit var paymentService: PaymentService
 
+    private val log = KotlinLogging.logger {}
+
     @Scheduled(fixedRate = 30000)
     fun verifyBoletoPamentJob() {
         val orders = orderService.findOrdersByStatus(PaymentStatus.PENDING, ShipmentStatus.NOT_STARTED)
         if (orders.isEmpty()) {
             return
         }
+
+        log.info { "orders found: $orders " }
 
         orders.forEach { order ->
             order.paymentCode?.let {
@@ -50,6 +55,8 @@ class Jobs {
         if (orders.isEmpty()) {
             return
         }
+        
+        log.info { "orders found: $orders " }
 
         orders.forEach { order ->
 
