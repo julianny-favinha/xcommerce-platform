@@ -30,19 +30,16 @@ class Jobs {
 
     private val log = KotlinLogging.logger {}
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 7000)
     fun verifyBoletoPamentJob() {
         val orders = orderService.findOrdersByStatus(PaymentStatus.PENDING, ShipmentStatus.NOT_STARTED)
         if (orders.isEmpty()) {
             return
         }
 
-        log.info { "orders found: $orders" }
 
         orders.forEach { order ->
-            log.info { "order sendo processada $order"}
             order.paymentCode?.let {
-                log.info { "payment code existe ${order.paymentCode} "}
                 val paymentStatus = paymentService.getPaymentStatus(order.paymentCode)
                 paymentStatus?.let {
                     log.info { "paymentStatus exsite $paymentStatus" }
@@ -52,14 +49,13 @@ class Jobs {
         }
     }
 
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(fixedRate = 18000)
     fun preShipmentJob() {
         val orders = orderService.findOrdersByStatus(PaymentStatus.OK, ShipmentStatus.NOT_STARTED)
         if (orders.isEmpty()) {
             return
         }
 
-        log.info { "orders found: $orders " }
 
         orders.forEach { order ->
 
@@ -73,6 +69,22 @@ class Jobs {
             shipmentId?.let {
                 orderService.registerShipment(order.id, it)
                 orderService.updateShipmentStatus(order.id, ShipmentStatus.PREPARING_FOR_SHIPMENT)
+            }
+        }
+    }
+
+    @Scheduled(fixedRate = 11000)
+    fun shipmentJob() {
+        val orders = orderService.findOrdersByStatus(PaymentStatus.OK, ShipmentStatus.PREPARING_FOR_SHIPMENT) + orderService.findOrdersByStatus(PaymentStatus.OK, ShipmentStatus.SHIPPED)
+        if (orders.isEmpty()) {
+            return
+        }
+
+        orders.forEach { order ->
+
+            val trackOrder = logisticService.trackOrder(order.id)
+            if(order.shipmentStatus != trackOrder){
+                orderService.updateShipmentStatus(order.id, trackOrder)
             }
         }
     }
