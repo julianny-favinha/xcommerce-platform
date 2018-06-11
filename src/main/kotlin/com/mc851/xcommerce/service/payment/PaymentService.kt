@@ -9,9 +9,12 @@ import com.mc851.xcommerce.model.internal.PaymentResult
 import com.mc851.xcommerce.model.internal.PaymentResultStatus
 import com.mc851.xcommerce.model.internal.PaymentStatus
 import com.mc851.xcommerce.service.user.CreditService
+import mu.KotlinLogging
 
 class PaymentService(private val paymentClient: PaymentClient,
                      private val creditService: CreditService) {
+
+    private val log = KotlinLogging.logger { }
 
     fun payBoleto(boletoPayment: BoletoPayment): PaymentResult {
 
@@ -63,6 +66,7 @@ class PaymentService(private val paymentClient: PaymentClient,
     fun getPaymentStatus(code: String): PaymentStatus? {
         val statusBoletoPayment = paymentClient.statusBoletoPayment(code) ?: return null
 
+        log.info { "status do Boleto: $statusBoletoPayment" }
         return when (statusBoletoPayment.status) {
             "PENDING_PAYMENT" -> PaymentStatus.PENDING
             "OK" -> PaymentStatus.OK

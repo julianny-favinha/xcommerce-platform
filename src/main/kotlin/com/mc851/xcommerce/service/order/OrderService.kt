@@ -10,6 +10,7 @@ import com.mc851.xcommerce.model.internal.*
 import com.mc851.xcommerce.service.logistic.LogisticService
 import com.mc851.xcommerce.service.product.ProductService
 import com.mc851.xcommerce.service.user.UserService
+import mu.KotlinLogging
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
@@ -19,6 +20,8 @@ class OrderService(private val logisticService: LogisticService,
                    private val orderDao: OrderDao,
                    private val orderItemDao: OrderItemDao,
                    private val productService: ProductService) {
+
+    private val log = KotlinLogging.logger { }
 
     fun registerOrder(products: List<Product>, userId: Long, shipmentInfo: ShipmentInfo, paymentType: PaymentType): Long? {
         val price = products.map {
@@ -46,7 +49,8 @@ class OrderService(private val logisticService: LogisticService,
     }
 
     fun updatePaymentStatus(orderId: Long, afterStatus: PaymentStatus) {
-        orderDao.updatePaymentStatus(orderId, afterStatus.getId())
+        val result = orderDao.updatePaymentStatus(orderId, afterStatus.getId())
+        log.info { "Result of update $result" }
     }
 
     fun registerShipment(orderId: Long, shipmentId: Long) {

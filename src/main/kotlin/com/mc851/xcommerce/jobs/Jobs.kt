@@ -37,7 +37,7 @@ class Jobs {
             return
         }
 
-        log.info { "orders found: $orders " }
+        log.info { "orders found: $orders" }
 
         orders.forEach { order ->
             order.paymentCode?.let {
@@ -55,7 +55,7 @@ class Jobs {
         if (orders.isEmpty()) {
             return
         }
-        
+
         log.info { "orders found: $orders " }
 
         orders.forEach { order ->
