@@ -4,9 +4,9 @@ import com.mc851.xcommerce.clients.CreditClient
 import com.mc851.xcommerce.clients.credit.api.PaymentApi
 import com.mc851.xcommerce.model.api.User
 
-class CreditService(val creditClient: CreditClient) {
-    fun validateUser(user: User, value: Long): Boolean {
-        val (score, _) = creditClient.getScoreByCpf(user.cpf) ?: return true
+class CreditService(private val creditClient: CreditClient) {
+    fun validateUser(cpf: String, value: Long): Boolean {
+        val (score, _) = creditClient.getScoreByCpf(cpf) ?: return true
         System.out.println(score.toString())
         if (value < 1000L) {
             return when (score) {

@@ -8,6 +8,7 @@ import com.mc851.xcommerce.model.api.MessageOut
 import mu.KotlinLogging
 import java.sql.Timestamp
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
@@ -34,7 +35,7 @@ class SacService(val sacClient: SacClient) {
     }
 
     fun sendMessage(userId: Long, message: MessageIn): Boolean {
-        val timestamp = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now())
+        val timestamp = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")))
 
         val messageApi = MessageAPI(
                 timestamp = timestamp,

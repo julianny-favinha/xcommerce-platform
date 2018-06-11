@@ -192,8 +192,8 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun paymentService(paymentClient: PaymentClient): PaymentService {
-        return PaymentService(paymentClient)
+    fun paymentService(paymentClient: PaymentClient, creditService: CreditService): PaymentService {
+        return PaymentService(paymentClient, creditService)
     }
 
     @Bean

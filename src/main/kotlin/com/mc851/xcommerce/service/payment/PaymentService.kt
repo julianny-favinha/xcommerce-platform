@@ -8,12 +8,16 @@ import com.mc851.xcommerce.model.internal.CreditCardPayment
 import com.mc851.xcommerce.model.internal.PaymentResult
 import com.mc851.xcommerce.model.internal.PaymentResultStatus
 import com.mc851.xcommerce.model.internal.PaymentStatus
+import com.mc851.xcommerce.service.user.CreditService
 
-class PaymentService(private val paymentClient: PaymentClient) {
+class PaymentService(private val paymentClient: PaymentClient,
+                     private val creditService: CreditService) {
 
     fun payBoleto(boletoPayment: BoletoPayment): PaymentResult {
 
         val userInfo = boletoPayment.userInfo
+
+        if (!creditService.validateUser(userInfo.cpf, boletoPayment.value)) { return PaymentResult(PaymentResultStatus.FAILED) }
 
         val paymentIn = PaymentInBoleto(userInfo.name,
             userInfo.cpf,
@@ -34,6 +38,8 @@ class PaymentService(private val paymentClient: PaymentClient) {
 
         val creditCard = creditCardPayment.creditCard
         val userInfo = creditCardPayment.userInfo
+
+        if (!creditService.validateUser(userInfo.cpf, creditCardPayment.value)) { return PaymentResult(PaymentResultStatus.FAILED) }
 
         val paymentIn = PaymentInCreditCard(creditCard.holderName,
             userInfo.cpf,
