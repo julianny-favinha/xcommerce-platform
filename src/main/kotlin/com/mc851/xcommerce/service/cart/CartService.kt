@@ -64,7 +64,7 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             PaymentResultStatus.PENDING -> CheckoutOut(order.id, CheckoutStatus.OK, PaymentOut(paymentResult.code!!))
             PaymentResultStatus.FAILED, PaymentResultStatus.ERROR -> {
                 cancelOrder(orderId)
-                CheckoutOut(CheckoutStatus.FAILED)
+                CheckoutOut(order.id, CheckoutStatus.FAILED)
             }
             PaymentResultStatus.AUTHORIZED -> CheckoutOut(order.id, CheckoutStatus.OK)
         }

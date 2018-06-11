@@ -12,6 +12,7 @@ import com.mc851.xcommerce.model.api.ShipmentOut
 import com.mc851.xcommerce.model.internal.ShipmentIndividual
 import com.mc851.xcommerce.model.internal.ShipmentStatus
 import com.mc851.xcommerce.model.internal.ShipmentType
+import kotlin.math.max
 
 class LogisticService(val logisticClient: LogisticClient, val logisticDao: LogisticDao) {
 
@@ -88,13 +89,12 @@ class LogisticService(val logisticClient: LogisticClient, val logisticDao: Logis
 
             val shipIn = ShipmentIndividual(prod, shipments.cepDst)
             val ret = getShipment(shipIn)
-            System.out.println("ret.prazos = " + ret.prazos.toString())
 
             totalPrices["PAC"] = totalPrices["PAC"]!! + ret.prices["PAC"]!!
             totalPrices["Sedex"] = totalPrices["Sedex"]!! + ret.prices["Sedex"]!!
 
-            prazos["PAC"] = prazos["PAC"]!! + ret.prazos["PAC"]!!
-            prazos["Sedex"] = prazos["Sedex"]!! + ret.prazos["Sedex"]!!
+            prazos["PAC"] = max(prazos["PAC"]!! , ret.prazos["PAC"]!!)
+            prazos["Sedex"] = max(prazos["Sedex"]!! , ret.prazos["Sedex"]!!)
         }
 
         return ShipmentOut(totalPrices, prazos)
