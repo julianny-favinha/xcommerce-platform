@@ -65,7 +65,7 @@ class PaymentClientOkHttp : PaymentClient {
     }
 
     override fun statusBoletoPayment(code: String): StatusBoleto? {
-        val httpUrl = HttpUrl.parse("https://payment-server-mc851.herokuapp.com/bankTicket")!!.newBuilder()
+        val httpUrl = HttpUrl.parse("https://payment-server-mc851.herokuapp.com/payments/bankTicket")!!.newBuilder()
         httpUrl.addPathSegment(code)
         httpUrl.addPathSegment("status")
 
