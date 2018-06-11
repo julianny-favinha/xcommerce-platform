@@ -9,7 +9,7 @@ data class PaymentInCreditCard(val clientCardName: String,
                                val year: String,
                                val securityCode: String,
                                val value: String,
-                               val installments: String)
+                               val instalments: String)
 
 data class PaymentInBoleto(val clientName: String,
                            val cpf: String,
