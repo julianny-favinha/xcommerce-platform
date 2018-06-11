@@ -40,11 +40,14 @@ class Jobs {
         log.info { "orders found: $orders" }
 
         orders.forEach { order ->
+            log.info { "order sendo processada $order"}
             order.paymentCode?.let {
-            val paymentStatus = paymentService.getPaymentStatus(order.paymentCode)
-            paymentStatus?.let {
-                orderService.updatePaymentStatus(order.id, it)
-            }
+                log.info { "payment code existe ${order.paymentCode} "}
+                val paymentStatus = paymentService.getPaymentStatus(order.paymentCode)
+                paymentStatus?.let {
+                    log.info { "paymentStatus exsite $paymentStatus" }
+                    orderService.updatePaymentStatus(order.id, it)
+                }
             }
         }
     }
