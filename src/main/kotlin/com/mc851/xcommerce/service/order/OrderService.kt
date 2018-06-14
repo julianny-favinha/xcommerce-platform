@@ -2,11 +2,9 @@ package com.mc851.xcommerce.service.order
 
 import com.mc851.xcommerce.dao.order.OrderDao
 import com.mc851.xcommerce.dao.order.OrderItemDao
-import com.mc851.xcommerce.model.api.Orders
-import com.mc851.xcommerce.model.api.Product
-import com.mc851.xcommerce.model.api.ShipmentIn
-import com.mc851.xcommerce.model.api.ShipmentInfo
+import com.mc851.xcommerce.model.api.*
 import com.mc851.xcommerce.model.internal.*
+import com.mc851.xcommerce.model.internal.Order
 import com.mc851.xcommerce.service.logistic.LogisticService
 import com.mc851.xcommerce.service.product.ProductService
 import com.mc851.xcommerce.service.user.UserService
@@ -82,7 +80,7 @@ class OrderService(private val logisticService: LogisticService,
 
 
         val productsByOrder = orders.map { it.id to orderItemDao.findOrderItemsByOrderId(it.id) }.map {
-            it.first to it.second.map { (productService.getById(it.productId) ?: throw IllegalStateException("Product not found!")) to it.quantity }.toMap()
+            it.first to it.second.map { (productService.getById(it.productId) ?: throw IllegalStateException("Product not found!")) to it.quantity }.map { CartItem( it.first, it.second ) }
         }.toMap()
 
         return Orders(orders.map {
