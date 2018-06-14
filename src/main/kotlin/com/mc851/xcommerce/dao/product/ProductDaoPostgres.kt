@@ -43,7 +43,7 @@ class ProductExpirationDaoPostgres(private val jdbcTemplate: JdbcTemplate) : Pro
         const val GET_QUANTITY = """SELECT quantity FROM xcommerce.product_expiration WHERE product_id = ?"""
         const val UPDATE_QUANTITY = """UPDATE xcommerce.product_expiration SET quantity = ? WHERE product_id = ?"""
         const val REMOVE_PRODUCT = """DELETE FROM xcommerce.product_expiration WHERE product_id = ?"""
-        const val FIND_EXPIRED = """SELECT product, quantity FROM xcommerce.product_expiration WHERE valid_until <= now()"""
+        const val FIND_EXPIRED = """SELECT product_id, quantity FROM xcommerce.product_expiration WHERE valid_until <= now()"""
     }
 
     override fun getExpired(): List<Pair<Long, Long>> {
