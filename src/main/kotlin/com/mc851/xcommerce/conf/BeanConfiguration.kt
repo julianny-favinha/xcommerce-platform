@@ -20,6 +20,8 @@ import com.mc851.xcommerce.dao.order.OrderItemDao
 import com.mc851.xcommerce.dao.order.OrderItemDaoPostgres
 import com.mc851.xcommerce.dao.product.ProductDao
 import com.mc851.xcommerce.dao.product.ProductDaoPostgres
+import com.mc851.xcommerce.dao.product.ProductExpirationDao
+import com.mc851.xcommerce.dao.product.ProductExpirationDaoPostgres
 import com.mc851.xcommerce.dao.user.UserDao
 import com.mc851.xcommerce.dao.user.UserDaoPostgres
 import com.mc851.xcommerce.dao.user.token.TokenDao
@@ -93,6 +95,11 @@ class BeanConfiguration {
     @Bean
     fun productDao(jdbcTemplate: JdbcTemplate): ProductDao {
         return ProductDaoPostgres(jdbcTemplate)
+    }
+
+    @Bean
+    fun productExpirationDao(jdbcTemplate: JdbcTemplate): ProductExpirationDao {
+        return ProductExpirationDaoPostgres(jdbcTemplate)
     }
 
     @Bean
@@ -170,8 +177,9 @@ class BeanConfiguration {
     @Bean
     fun productService(productClient: ProductClient,
                        productDao: ProductDao,
+                       productExpirationDao: ProductExpirationDao,
                        categoryService: CategoryService): ProductService {
-        return ProductService(productClient, productDao, categoryService)
+        return ProductService(productClient, productDao, categoryService, productExpirationDao)
     }
 
     @Bean
@@ -225,7 +233,8 @@ class BeanConfiguration {
     fun cartService(checkoutValidator: CheckoutValidator,
                     orderService: OrderService,
                     paymentService: PaymentService,
-                    userService: UserService): CartService {
-        return CartService(checkoutValidator, orderService, paymentService, userService)
+                    userService: UserService,
+                    productService: ProductService): CartService {
+        return CartService(checkoutValidator, orderService, paymentService, userService, productService)
     }
 }

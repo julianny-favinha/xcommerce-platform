@@ -119,9 +119,9 @@ object ShipmentInfoConverter {
 
 class OrderItemDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderItemDao {
     companion object {
-        const val CREATE_ORDER_ITEM = """INSERT INTO xcommerce.order_item(order_id, product_id, product_name, product_price) VALUES (?, ?, ?, ?) RETURNING id"""
+        const val CREATE_ORDER_ITEM = """INSERT INTO xcommerce.order_item(order_id, product_id, product_name, product_price, quantity) VALUES (?, ?, ?, ?, ?) RETURNING id"""
 
-        const val FIND_ITEMS_BY_ORDER_ID = """SELECT id, order_id, product_id, product_name, product_price FROM xcommerce.order_item WHERE order_id = ?"""
+        const val FIND_ITEMS_BY_ORDER_ID = """SELECT id, order_id, product_id, product_name, product_price, quantity FROM xcommerce.order_item WHERE order_id = ?"""
     }
 
     override fun createOrderItem(orderItemValue: OrderItemValue): Long? {
@@ -130,6 +130,7 @@ class OrderItemDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderItemDa
             ps.setLong(2, orderItemValue.productId)
             ps.setString(3, orderItemValue.productName)
             ps.setLong(4, orderItemValue.productPrice)
+            ps.setLong(5, orderItemValue.quantity)
         }, { rs, _ ->
             rs.getLong("id")
         }).firstOrNull()
@@ -143,7 +144,8 @@ class OrderItemDaoPostgres(private val jdbcTemplate: JdbcTemplate) : OrderItemDa
                     rs.getLong("order_id"),
                     rs.getLong("product_id"),
                     rs.getString("product_name"),
-                    rs.getLong("product_price"))
+                    rs.getLong("product_price"),
+                    rs.getLong("quantity"))
         })
     }
 

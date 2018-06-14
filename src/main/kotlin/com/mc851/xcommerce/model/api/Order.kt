@@ -7,7 +7,7 @@ import com.mc851.xcommerce.model.internal.ShipmentType
 
 data class Orders(val orders: List<Order>)
 
-data class Order(val products: List<Product>,
+data class Order(val productsByQuantity: Map<Product, Long>,
                  val orderId: Long,
                  val totalPrice: Long,
                  val freightPrice: Long,

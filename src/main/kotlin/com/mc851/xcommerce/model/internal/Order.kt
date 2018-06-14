@@ -17,10 +17,11 @@ data class Order(val id: Long,
                  val shipmentInfo: ShipmentInfo,
                  val createdAt: Timestamp)
 
-data class OrderItemValue(val orderId: Long, val productId: Long, val productName: String, val productPrice: Long)
+data class OrderItemValue(val orderId: Long, val productId: Long, val productName: String, val productPrice: Long, val quantity: Long)
 
 data class OrderItem(val id: Long,
                      val orderId: Long,
                      val productId: Long,
                      val productName: String,
-                     val productPrice: Long)
+                     val productPrice: Long,
+                     val quantity: Long)

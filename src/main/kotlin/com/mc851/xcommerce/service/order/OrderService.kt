@@ -23,10 +23,14 @@ class OrderService(private val logisticService: LogisticService,
 
     private val log = KotlinLogging.logger { }
 
-    fun registerOrder(products: List<Product>, userId: Long, shipmentInfo: ShipmentInfo, paymentType: PaymentType): Long? {
-        val price = products.map {
-            it.price
-        }.sum().toLong()
+    fun registerOrder(productsByQuantity: Map<Product, Long>, userId: Long, shipmentInfo: ShipmentInfo, paymentType: PaymentType): Long? {
+        val price = productsByQuantity.map {
+            it.key.price * it.value
+        }.sum()
+
+        val products = productsByQuantity.map {
+            it.key
+        }
 
         val freightPrice =
                 logisticService.getShipmentPriceAll(ShipmentIn(products, shipmentInfo.cepDst), shipmentInfo.shipmentType)
@@ -36,7 +40,7 @@ class OrderService(private val logisticService: LogisticService,
 
         val orderId = orderDao.createOrder(orderValue) ?: TODO("deal with it")
 
-        registerOrderItem(products, orderId)
+        registerOrderItem(productsByQuantity, orderId)
         return orderId
     }
 
@@ -78,7 +82,7 @@ class OrderService(private val logisticService: LogisticService,
 
 
         val productsByOrder = orders.map { it.id to orderItemDao.findOrderItemsByOrderId(it.id) }.map {
-            it.first to it.second.mapNotNull { productService.getById(it.productId) }
+            it.first to it.second.map { (productService.getById(it.productId) ?: throw IllegalStateException("Product not found!")) to it.quantity }.toMap()
         }.toMap()
 
         return Orders(orders.map {
@@ -92,14 +96,15 @@ class OrderService(private val logisticService: LogisticService,
                     it.paymentStatus,
                     it.paymentType,
                     it.paymentCode,
+
                     it.createdAt.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
         })
     }
 
-    private fun registerOrderItem(products: List<Product>, orderId: Long) {
+    private fun registerOrderItem(products: Map<Product, Long>, orderId: Long) {
 
         products.map {
-            OrderItemValue(orderId, it.id, it.name, it.price.toLong())
+            OrderItemValue(orderId, it.key.id, it.key.name, it.key.price.toLong(), it.value)
         }.forEach {
             orderItemDao.createOrderItem(it)
         }

@@ -13,13 +13,15 @@ import com.mc851.xcommerce.model.internal.UserInfo
 import com.mc851.xcommerce.service.cart.validators.CheckoutValidator
 import com.mc851.xcommerce.service.order.OrderService
 import com.mc851.xcommerce.service.payment.PaymentService
+import com.mc851.xcommerce.service.product.ProductService
 import com.mc851.xcommerce.service.user.UserService
 import mu.KotlinLogging
 
 class CartService(private val checkoutValidator: CheckoutValidator,
                   private val orderService: OrderService,
                   private val paymentService: PaymentService,
-                  private val userService: UserService) {
+                  private val userService: UserService,
+                  private val productService: ProductService) {
 
     private val log = KotlinLogging.logger {}
 
@@ -32,12 +34,15 @@ class CartService(private val checkoutValidator: CheckoutValidator,
             return CheckoutOut(CheckoutStatus.BAD_INPUT, validationResult.status)
         }
 
-        val products = checkoutIn.cart.cartItems.map {
-            it.product
-        }
+        val productsByQuantity = checkoutIn.cart.cartItems.map {
+            it.product to it.quantity
+        }.toMap()
 
-        val orderId = orderService.registerOrder(products, userId, checkoutIn.shipmentInfo, checkoutIn.paymentInfo.paymentType)
+        val orderId = orderService.registerOrder(productsByQuantity, userId, checkoutIn.shipmentInfo, checkoutIn.paymentInfo.paymentType)
                 ?: return CheckoutOut(CheckoutStatus.FAILED)
+
+        productService.removeExpire(productsByQuantity)
+
         return purchaseOrder(orderId, userId, checkoutIn)
     }
 

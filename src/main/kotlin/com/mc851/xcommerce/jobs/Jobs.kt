@@ -91,7 +91,7 @@ class Jobs {
 
     @Scheduled(fixedRate = 10000)
     fun releaseJob() {
-        System.out.println("Time in task: " + (System.currentTimeMillis() / 1000))
+        productService.releaseExpire()
     }
 
 }
