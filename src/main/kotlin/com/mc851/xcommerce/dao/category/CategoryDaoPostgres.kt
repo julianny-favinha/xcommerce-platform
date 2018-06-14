@@ -1,6 +1,5 @@
 package com.mc851.xcommerce.dao.category
 
-import com.mc851.xcommerce.dao.product.Queries
 import org.springframework.jdbc.core.JdbcTemplate
 
 class Queries {
