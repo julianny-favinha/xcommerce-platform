@@ -25,7 +25,7 @@ class ProductService(val productClient: ProductClient,
 
         val categoryByExternalId = categoryService.getByIds(productApi.mapNotNull { it.categoryId })
 
-        return Highlights(highlights = productApi.map {
+        return Highlights(highlights = productApi.mapNotNull {
             val id = createRelation(it)
             val category = categoryByExternalId[it.categoryId]
             convertProduct(id, it, category)
@@ -45,26 +45,30 @@ class ProductService(val productClient: ProductClient,
         if (products.isEmpty()) return null
         val categoryByExternalId = categoryService.getByIds(products.mapNotNull { it.categoryId })
 
-        return Search(result = products.map {
+        return Search(result = products.mapNotNull {
             val id = createRelation(it)
             val category = categoryByExternalId[it.categoryId]
             convertProduct(id, it, category)
         })
     }
 
-    private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product {
-        return Product(id = id,
-            name = productApi.name.toLowerCase().capitalize(),
-            category = category?.name?.toLowerCase()?.capitalize() ?: "",
-            imageUrl = if (productApi.imageUrl.isNullOrEmpty()) null else productApi.imageUrl,
-            brand = productApi.brand?.toLowerCase()?.capitalize() ?: "Sem Marca",
-            description = productApi.description,
-            stock = productApi.stock.toLong(),
-            height = productApi.height,
-            weight = productApi.weight,
-            width = productApi.width,
-            length = productApi.length,
-            price = (productApi.price.multiply(BigDecimal.valueOf(100L))).toInt())
+    private fun convertProduct(id: Long, productApi: ProductApi, category: Category?): Product? {
+        return if (productApi.groupId == "2d535b83-7b2a-48f7-9e3e-08b3a0b9bf12") {
+            Product(id = id,
+                    name = productApi.name.toLowerCase().capitalize(),
+                    category = category?.name?.toLowerCase()?.capitalize() ?: "",
+                    imageUrl = if (productApi.imageUrl.isNullOrEmpty()) null else productApi.imageUrl,
+                    brand = productApi.brand?.toLowerCase()?.capitalize() ?: "Sem Marca",
+                    description = productApi.description,
+                    stock = productApi.stock.toLong(),
+                    height = productApi.height,
+                    weight = productApi.weight,
+                    width = productApi.width,
+                    length = productApi.length,
+                    price = (productApi.price.multiply(BigDecimal.valueOf(100L))).toInt())
+        } else {
+            null
+        }
     }
 
     private fun createRelation(product: ProductApi): Long {
