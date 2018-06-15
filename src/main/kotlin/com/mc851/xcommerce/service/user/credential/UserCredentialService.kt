@@ -11,7 +11,7 @@ import java.util.UUID
 
 class UserCredentialService(private val userCredentialDao: UserCredentialDao, private val tokenDao: TokenDao) {
     companion object {
-        private val EXPIRE_TIME = LocalDateTime.now().plusDays(3)
+        private val EXPIRE_TIME = LocalDateTime.now().plusDays(100)
     }
 
     fun addCredential(email: String, password: String, userId: Long): Boolean {

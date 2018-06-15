@@ -10,9 +10,9 @@ class Queries {
     companion object {
         const val INSERT_TOKEN =
             """INSERT INTO xcommerce.user_token(user_id, expire_at, token) VALUES (?, ?, ?) RETURNING token"""
-        const val FIND_TOKEN_BY_USER = """SELECT token FROM xcommerce.user_token WHERE user_id = ?"""
+        const val FIND_TOKEN_BY_USER = """SELECT token FROM xcommerce.user_token WHERE user_id = ? AND expire_at > now()"""
         const val CHECK_TOKEN = """SELECT token FROM xcommerce.user_token WHERE token = ? AND expire_at > ?"""
-        const val FIND_USER_BY_TOKEN = """SELECT user_id FROM xcommerce.user_token WHERE token = ?"""
+        const val FIND_USER_BY_TOKEN = """SELECT user_id FROM xcommerce.user_token WHERE token = ? AND expire_at > now()"""
     }
 }
 
