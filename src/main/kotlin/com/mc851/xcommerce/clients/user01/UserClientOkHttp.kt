@@ -28,7 +28,7 @@ class UserClientOkHttp : UserClient {
 
         val body = RequestBody.create(mediaType, json)
             val request = Request.Builder().url(url)
-            .addHeader("api_key", "abc").post(body).build()
+            .addHeader("api_key", "a1d23e6b7205bfa1e79e6ca9a1176251").post(body).build()
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -46,7 +46,7 @@ class UserClientOkHttp : UserClient {
             HttpUrl.parse("http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/clients")!!.newBuilder()
         httpUrl.addPathSegment(id)
 
-        val request = Request.Builder().url(httpUrl.build().toString()).addHeader("api_key", "abc").build()
+        val request = Request.Builder().url(httpUrl.build().toString()).addHeader("api_key", "a1d23e6b7205bfa1e79e6ca9a1176251").build()
 
         val response = okHttpClient.newCall(request).execute()
 
@@ -62,7 +62,7 @@ class UserClientOkHttp : UserClient {
 
         val request =
             Request.Builder().url("""http://us-central1-first-try-18f38.cloudfunctions.net/clientsAPI/update/$id""")
-                .addHeader("api_key", "abc").put(body).build()
+                .addHeader("api_key", "a1d23e6b7205bfa1e79e6ca9a1176251").put(body).build()
 
         okHttpClient.newCall(request).execute()
     }
