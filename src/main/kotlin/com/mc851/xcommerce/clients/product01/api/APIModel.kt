@@ -16,7 +16,7 @@ data class ProductApi(val id: String,
                       val length: Long,
                       val width: Long,
                       val height: Long,
-                      val groupId: String)
+                      val groupId: String?)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CategoryApi(val id: String, val name: String, val description: String?)
